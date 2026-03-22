@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recon 2026 - Technical Sponsor Brief</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    body {
+      margin: 0;
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      overflow: hidden;
+    }
+
+    .mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .clamp-title-lg {
+      font-size: clamp(40px, 6vw, 110px);
+      letter-spacing: -0.03em;
+      line-height: 0.95;
+      font-weight: 800;
+    }
+
+    .clamp-title-md {
+      font-size: clamp(30px, 4.5vw, 72px);
+      letter-spacing: -0.02em;
+      line-height: 1;
+      font-weight: 700;
+    }
+
+    .clamp-subtitle {
+      font-size: clamp(18px, 2vw, 36px);
+      font-weight: 600;
+    }
+
+    .clamp-body {
+      font-size: clamp(14px, 1.3vw, 22px);
+      line-height: 1.6;
+    }
+
+    #presentation {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+      background: radial-gradient(ellipse at center, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: all 600ms cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .slide.active {
+      opacity: 1;
+      z-index: 10;
+      pointer-events: auto;
+    }
+
+    .content-layer {
+      position: relative;
+      height: 100%;
+      padding: 5%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cyber-card {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.12) 0%, rgba(59, 130, 246, 0.08) 100%);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(12px);
+    }
+
+    .cyber-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.2), transparent);
+      animation: shimmer 3s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+
+    .grid-bg {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(139, 92, 246, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(139, 92, 246, 0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      z-index: 0;
+    }
+
+    #controls {
+      position: fixed;
+      bottom: 3%;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 12px 28px;
+      background: rgba(20, 20, 30, 0.9);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+      border-radius: 99px;
+      backdrop-filter: blur(20px);
+      transition: opacity 300ms;
+    }
+
+    #controls.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .nav-btn {
+      color: rgba(255, 255, 255, 0.6);
+      cursor: pointer;
+      transition: all 150ms;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-btn:hover {
+      color: #8B5CF6;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      transition: all 300ms;
+      cursor: pointer;
+    }
+
+    .dot.active {
+      background: #8B5CF6;
+      box-shadow: 0 0 12px rgba(139, 92, 246, 0.6);
+    }
+
+    .stat-box {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .stat-number {
+      font-size: clamp(48px, 7vw, 120px);
+      font-weight: 800;
+      line-height: 1;
+      background: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="controls">
+    <div id="slide-counter" class="text-xs text-white/50 mono tracking-wider">01 / 07</div>
+    <div id="dots-container" class="flex gap-2"></div>
+    <div class="w-px h-4 bg-white/20 mx-1"></div>
+    <button class="nav-btn" onclick="goToSlide(current - 1)"><i data-lucide="chevron-left" class="w-5 h-5"></i></button>
+    <button class="nav-btn" onclick="goToSlide(current + 1)"><i data-lucide="chevron-right" class="w-5 h-5"></i></button>
+  </div>
+
+  <div id="presentation">
+    <div class="grid-bg"></div>
+
+    <!-- SLIDE 1: Cover -->
+    <div class="slide active">
+      <div class="content-layer justify-center items-center text-center">
+        <div class="mb-8">
+          <div class="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-purple-600 to-blue-600 flex items-center justify-center mb-6 relative">
+            <i data-lucide="shield-alert" class="w-14 h-14"></i>
+            <div class="absolute inset-0 rounded-full bg-purple-600 opacity-50 animate-ping"></div>
+          </div>
+        </div>
+        <div class="mono text-sm text-purple-400 tracking-[0.3em] mb-4">SPONSOR BRIEF</div>
+        <h1 class="clamp-title-lg mb-6">RECON_2026</h1>
+        <p class="clamp-subtitle text-white/70 mb-4">India's Premier Campus CyberSecurity Conference</p>
+        <div class="mono text-sm text-white/50">APR 25-27 · VIT-AP AMARAVATI</div>
+      </div>
+    </div>
+
+    <!-- SLIDE 2: By The Numbers -->
+    <div class="slide">
+      <div class="content-layer">
+        <div class="mono text-xs text-purple-400 tracking-[0.3em] mb-12">SCALE & IMPACT</div>
+        <h2 class="clamp-title-md mb-12">By The Numbers</h2>
+        
+        <div class="grid grid-cols-3 gap-8">
+          <div class="cyber-card p-8">
+            <div class="stat-box">
+              <div class="stat-number">600+</div>
+              <div class="clamp-body text-white/70">Expected Participants</div>
+              <div class="text-sm text-white/50 mono">National reach</div>
+            </div>
+          </div>
+
+          <div class="cyber-card p-8">
+            <div class="stat-box">
+              <div class="stat-number">₹5L</div>
+              <div class="clamp-body text-white/70">Event Budget</div>
+              <div class="text-sm text-white/50 mono">IIT-M backed funding</div>
+            </div>
+          </div>
+
+          <div class="cyber-card p-8">
+            <div class="stat-box">
+              <div class="stat-number">72h</div>
+              <div class="clamp-body text-white/70">Continuous Hacking</div>
+              <div class="text-sm text-white/50 mono">3-day intensive</div>
+            </div>
+          </div>
+
+          <div class="cyber-card p-8">
+            <div class="stat-box">
+              <div class="stat-number">10+</div>
+              <div class="clamp-body text-white/70">Security Villages</div>
+              <div class="text-sm text-white/50 mono">Parallel tracks</div>
+            </div>
+          </div>
+
+          <div class="cyber-card p-8">
+            <div class="stat-box">
+              <div class="stat-number">2</div>
+              <div class="clamp-body text-white/70">Overnight CTFs</div>
+              <div class="text-sm text-white/50 mono">Elite competitions</div>
+            </div>
+          </div>
+
+          <div class="cyber-card p-8">
+            <div class="stat-box">
+              <div class="stat-number">250+</div>
+              <div class="clamp-body text-white/70">Outstation Hackers</div>
+              <div class="text-sm text-white/50 mono">Pan-India draw</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3: Participant Profile -->
+    <div class="slide">
+      <div class="content-layer">
+        <div class="mono text-xs text-purple-400 tracking-[0.3em] mb-12">AUDIENCE</div>
+        <h2 class="clamp-title-md mb-8">Who Attends RECON</h2>
+        
+        <div class="grid grid-cols-2 gap-6">
+          <div class="cyber-card p-8">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-12 h-12 rounded-lg bg-purple-600/20 flex items-center justify-center flex-shrink-0">
+                <i data-lucide="terminal" class="w-6 h-6 text-purple-400"></i>
+              </div>
+              <div>
+                <h3 class="text-2xl font-bold mb-2">Security Engineers</h3>
+                <p class="text-white/70 text-sm leading-relaxed">CTF veterans, bug bounty hunters, and offensive security practitioners with proven competitive records.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="cyber-card p-8">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-12 h-12 rounded-lg bg-blue-600/20 flex items-center justify-center flex-shrink-0">
+                <i data-lucide="graduation-cap" class="w-6 h-6 text-blue-400"></i>
+              </div>
+              <div>
+                <h3 class="text-2xl font-bold mb-2">Final Year Students</h3>
+                <p class="text-white/70 text-sm leading-relaxed">Actively seeking internships and full-time roles in AppSec, pentesting, and security research.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="cyber-card p-8">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-12 h-12 rounded-lg bg-green-600/20 flex items-center justify-center flex-shrink-0">
+                <i data-lucide="code-2" class="w-6 h-6 text-green-400"></i>
+              </div>
+              <div>
+                <h3 class="text-2xl font-bold mb-2">Full-Stack Hackers</h3>
+                <p class="text-white/70 text-sm leading-relaxed">Web exploitation, binary pwn, crypto, forensics, OSINT — participants span all security domains.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="cyber-card p-8">
+            <div class="flex items-start gap-4 mb-4">
+              <div class="w-12 h-12 rounded-lg bg-yellow-600/20 flex items-center justify-center flex-shrink-0">
+                <i data-lucide="trophy" class="w-6 h-6 text-yellow-400"></i>
+              </div>
+              <div>
+                <h3 class="text-2xl font-bold mb-2">High-Intent Talent</h3>
+                <p class="text-white/70 text-sm leading-relaxed">Not casual attendees — these are committed learners investing 72 hours in intensive skill-building.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-8 cyber-card p-6">
+          <div class="flex items-center gap-6">
+            <div class="text-5xl">🎯</div>
+            <div class="flex-1">
+              <div class="font-bold text-lg mb-1">Direct Hiring Pipeline</div>
+              <div class="text-white/70 text-sm">Sponsors can conduct on-site interviews, offer fast-track tokens, and collect portfolios from pre-vetted candidates.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4: Sponsorship Packages -->
+    <div class="slide">
+      <div class="content-layer">
+        <div class="mono text-xs text-purple-400 tracking-[0.3em] mb-12">PACKAGES</div>
+        <h2 class="clamp-title-md mb-10">Choose Your Tier</h2>
+
+        <div class="grid grid-cols-3 gap-6 h-[60vh]">
+          
+          <div class="cyber-card p-6 flex flex-col border-2 border-yellow-500/40">
+            <div class="flex items-center gap-3 mb-6">
+              <i data-lucide="crown" class="w-8 h-8 text-yellow-500"></i>
+              <div>
+                <div class="text-xs mono text-yellow-500 tracking-wider">TITLE SPONSOR</div>
+                <div class="text-sm text-white/60 mono">1 Exclusive Slot</div>
+              </div>
+            </div>
+            <ul class="space-y-3 text-sm flex-1">
+              <li class="flex gap-2"><div class="text-yellow-500 mt-1">▸</div><span>Naming rights: "Powered by [You]"</span></li>
+              <li class="flex gap-2"><div class="text-yellow-500 mt-1">▸</div><span>Main stage logo prominence</span></li>
+              <li class="flex gap-2"><div class="text-yellow-500 mt-1">▸</div><span>Prime stall location (largest)</span></li>
+              <li class="flex gap-2"><div class="text-yellow-500 mt-1">▸</div><span>Keynote slot (25 min)</span></li>
+              <li class="flex gap-2"><div class="text-yellow-500 mt-1">▸</div><span>Flagship sponsor challenge</span></li>
+              <li class="flex gap-2"><div class="text-yellow-500 mt-1">▸</div><span>App homepage banner</span></li>
+              <li class="flex gap-2"><div class="text-yellow-500 mt-1">▸</div><span>Recruitment desk priority</span></li>
+            </ul>
+          </div>
+
+          <div class="cyber-card p-6 flex flex-col border-2 border-blue-500/40">
+            <div class="flex items-center gap-3 mb-6">
+              <i data-lucide="star" class="w-8 h-8 text-blue-500"></i>
+              <div>
+                <div class="text-xs mono text-blue-500 tracking-wider">GOLD SPONSOR</div>
+                <div class="text-sm text-white/60 mono">Up to 4 Slots</div>
+              </div>
+            </div>
+            <ul class="space-y-3 text-sm flex-1">
+              <li class="flex gap-2"><div class="text-blue-500 mt-1">▸</div><span>Secondary stage placement</span></li>
+              <li class="flex gap-2"><div class="text-blue-500 mt-1">▸</div><span>Standard stall footprint</span></li>
+              <li class="flex gap-2"><div class="text-blue-500 mt-1">▸</div><span>Demo block (15 min)</span></li>
+              <li class="flex gap-2"><div class="text-blue-500 mt-1">▸</div><span>Mini challenge slot</span></li>
+              <li class="flex gap-2"><div class="text-blue-500 mt-1">▸</div><span>Sponsor wall inclusion</span></li>
+              <li class="flex gap-2"><div class="text-blue-500 mt-1">▸</div><span>Event app listing</span></li>
+            </ul>
+          </div>
+
+          <div class="cyber-card p-6 flex flex-col border-2 border-purple-500/40">
+            <div class="flex items-center gap-3 mb-6">
+              <i data-lucide="zap" class="w-8 h-8 text-purple-500"></i>
+              <div>
+                <div class="text-xs mono text-purple-500 tracking-wider">COMMUNITY</div>
+                <div class="text-sm text-white/60 mono">Multiple Slots</div>
+              </div>
+            </div>
+            <ul class="space-y-3 text-sm flex-1">
+              <li class="flex gap-2"><div class="text-purple-500 mt-1">▸</div><span>Sponsor wall logo</span></li>
+              <li class="flex gap-2"><div class="text-purple-500 mt-1">▸</div><span>Shared stall / kiosk window</span></li>
+              <li class="flex gap-2"><div class="text-purple-500 mt-1">▸</div><span>Swag distribution rights</span></li>
+              <li class="flex gap-2"><div class="text-purple-500 mt-1">▸</div><span>Event app mention</span></li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 5: Activations -->
+    <div class="slide">
+      <div class="content-layer">
+        <div class="mono text-xs text-purple-400 tracking-[0.3em] mb-12">ENGAGEMENT FORMATS</div>
+        <h2 class="clamp-title-md mb-8">Interactive Sponsor Activations</h2>
+        
+        <div class="grid grid-cols-2 gap-5">
+          <div class="cyber-card p-6">
+            <i data-lucide="code" class="w-10 h-10 text-purple-400 mb-4"></i>
+            <h3 class="text-xl font-bold mb-2">Secure Coding Sprint</h3>
+            <p class="text-white/70 text-sm mb-3">Teams patch vulnerable code and explain mitigation strategies under time pressure.</p>
+            <div class="flex gap-3 text-xs mono text-white/50">
+              <span>45 min</span> · <span>Team: 1-3</span>
+            </div>
+          </div>
+
+          <div class="cyber-card p-6">
+            <i data-lucide="bug" class="w-10 h-10 text-purple-400 mb-4"></i>
+            <h3 class="text-xl font-bold mb-2">API Security Bug Hunt</h3>
+            <p class="text-white/70 text-sm mb-3">Exploit sponsor-provided vulnerable API sandbox and submit detailed reports.</p>
+            <div class="flex gap-3 text-xs mono text-white/50">
+              <span>60 min</span> · <span>Individual</span>
+            </div>
+          </div>
+
+          <div class="cyber-card p-6">
+            <i data-lucide="cloud" class="w-10 h-10 text-purple-400 mb-4"></i>
+            <h3 class="text-xl font-bold mb-2">Cloud Security Quest</h3>
+            <p class="text-white/70 text-sm mb-3">IAM misconfig puzzles, logging triage, and key rotation drills in cloud environments.</p>
+            <div class="flex gap-3 text-xs mono text-white/50">
+              <span>30-45 min</span> · <span>Individual/Pairs</span>
+            </div>
+          </div>
+
+          <div class="cyber-card p-6">
+            <i data-lucide="users" class="w-10 h-10 text-purple-400 mb-4"></i>
+            <h3 class="text-xl font-bold mb-2">Career Accelerator Booth</h3>
+            <p class="text-white/70 text-sm mb-3">Resume reviews, portfolio checks, and fast-track interview token distribution.</p>
+            <div class="flex gap-3 text-xs mono text-white/50">
+              <span>Continuous</span> · <span>High ROI</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-6 cyber-card p-5 border-l-4 border-l-red-500">
+          <div class="flex items-center gap-3">
+            <i data-lucide="x-circle" class="w-6 h-6 text-red-500"></i>
+            <div class="text-sm">
+              <span class="font-bold">No Pure Sales Pitches.</span> All sponsor activities must include interactive technical components.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 6: ROI -->
+    <div class="slide">
+      <div class="content-layer">
+        <div class="mono text-xs text-purple-400 tracking-[0.3em] mb-12">VALUE PROPOSITION</div>
+        <h2 class="clamp-title-md mb-10">What You Get</h2>
+
+        <div class="grid grid-cols-2 gap-6">
+          <div class="space-y-5">
+            <div class="cyber-card p-6 border-l-4 border-l-purple-500">
+              <h3 class="font-bold text-lg mb-2 flex items-center gap-2">
+                <i data-lucide="target" class="w-5 h-5 text-purple-400"></i>
+                Direct Talent Access
+              </h3>
+              <p class="text-white/70 text-sm">600+ pre-vetted security engineers actively seeking opportunities. Conduct on-site interviews and collect portfolios.</p>
+            </div>
+
+            <div class="cyber-card p-6 border-l-4 border-l-blue-500">
+              <h3 class="font-bold text-lg mb-2 flex items-center gap-2">
+                <i data-lucide="trending-up" class="w-5 h-5 text-blue-400"></i>
+                Brand Visibility
+              </h3>
+              <p class="text-white/70 text-sm">Logo placement across campus screens, event app, stage, and all participant-facing materials for 3 days.</p>
+            </div>
+
+            <div class="cyber-card p-6 border-l-4 border-l-green-500">
+              <h3 class="font-bold text-lg mb-2 flex items-center gap-2">
+                <i data-lucide="bar-chart" class="w-5 h-5 text-green-400"></i>
+                Measurable Impact
+              </h3>
+              <p class="text-white/70 text-sm">Post-event report with footfall estimates, challenge participation count, lead scans, and media impressions.</p>
+            </div>
+          </div>
+
+          <div class="cyber-card p-6">
+            <h3 class="font-bold text-xl mb-6 flex items-center gap-2">
+              <i data-lucide="calendar-clock" class="w-6 h-6 text-purple-400"></i>
+              Deliverables Timeline
+            </h3>
+            <div class="space-y-4 text-sm">
+              <div class="flex justify-between items-center pb-3 border-b border-white/10">
+                <span class="text-white/70">Branding assets due</span>
+                <span class="mono text-purple-400 font-bold">T-14 days</span>
+              </div>
+              <div class="flex justify-between items-center pb-3 border-b border-white/10">
+                <span class="text-white/70">Technical setup freeze</span>
+                <span class="mono text-purple-400 font-bold">T-10 days</span>
+              </div>
+              <div class="flex justify-between items-center pb-3 border-b border-white/10">
+                <span class="text-white/70">Challenge dry run</span>
+                <span class="mono text-purple-400 font-bold">T-7 days</span>
+              </div>
+              <div class="flex justify-between items-center pb-3 border-b border-white/10">
+                <span class="text-white/70">Preliminary report</span>
+                <span class="mono text-green-400 font-bold">+72 hours</span>
+              </div>
+              <div class="flex justify-between items-center">
+                <span class="text-white/70">Final sponsor report</span>
+                <span class="mono text-green-400 font-bold">+7 days</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 7: Contact -->
+    <div class="slide">
+      <div class="content-layer justify-center">
+        <div class="max-w-3xl mx-auto text-center">
+          <div class="mono text-xs text-purple-400 tracking-[0.3em] mb-8">LET'S PARTNER</div>
+          <h2 class="clamp-title-md mb-6">Secure Your Spot</h2>
+          <p class="text-xl text-white/70 mb-12 max-w-xl mx-auto">
+            Limited sponsorship slots available. Connect with us to customize a package that aligns with your goals.
+          </p>
+
+          <div class="cyber-card p-10 text-left">
+            <div class="grid grid-cols-2 gap-6 mb-8">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-lg bg-purple-600/20 flex items-center justify-center flex-shrink-0">
+                  <i data-lucide="mail" class="w-6 h-6 text-purple-400"></i>
+                </div>
+                <div>
+                  <div class="text-xs text-white/50 mb-1 mono">EMAIL</div>
+                  <div class="font-medium">nrikhil@gmail.com</div>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-lg bg-purple-600/20 flex items-center justify-center flex-shrink-0">
+                  <i data-lucide="phone" class="w-6 h-6 text-purple-400"></i>
+                </div>
+                <div>
+                  <div class="text-xs text-white/50 mb-1 mono">PHONE</div>
+                  <div class="font-medium">+91 7386175224</div>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-lg bg-purple-600/20 flex items-center justify-center flex-shrink-0">
+                  <i data-lucide="linkedin" class="w-6 h-6 text-purple-400"></i>
+                </div>
+                <div>
+                  <div class="text-xs text-white/50 mb-1 mono">LINKEDIN</div>
+                  <div class="font-medium text-sm">linkedin.com/in/rikhil-nellimarla</div>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-lg bg-purple-600/20 flex items-center justify-center flex-shrink-0">
+                  <i data-lucide="calendar" class="w-6 h-6 text-purple-400"></i>
+                </div>
+                <div>
+                  <div class="text-xs text-white/50 mb-1 mono">EVENT DATES</div>
+                  <div class="font-medium">Apr 25-27, 2026</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-6 border-t border-white/10 text-center">
+              <div class="text-sm text-white/50 mono">ORGANIZED BY OSC + NULL CHAPTER · BACKED BY IIT-M</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    const slides = document.querySelectorAll('.slide');
+    const dotContainer = document.getElementById('dots-container');
+    const counter = document.getElementById('slide-counter');
+    const controls = document.getElementById('controls');
+    let current = 0;
+
+    let hideTimeout;
+    function resetHideTimeout() {
+      controls.classList.remove('hidden');
+      clearTimeout(hideTimeout);
+      hideTimeout = setTimeout(() => {
+        controls.classList.add('hidden');
+      }, 3000);
+    }
+
+    document.addEventListener('mousemove', resetHideTimeout);
+    document.addEventListener('keydown', resetHideTimeout);
+    resetHideTimeout();
+
+    slides.forEach((_, i) => {
+      const dot = document.createElement('div');
+      dot.className = `dot ${i === 0 ? 'active' : ''}`;
+      dot.onclick = () => goToSlide(i);
+      dotContainer.appendChild(dot);
+    });
+    const dots = document.querySelectorAll('.dot');
+
+    function updateNav() {
+      counter.innerText = `${String(current + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
+      dots.forEach((d, i) => {
+        d.classList.toggle('active', i === current);
+      });
+    }
+
+    function goToSlide(n) {
+      if (n < 0 || n >= slides.length) return;
+      slides.forEach((slide, i) => {
+        slide.classList.toggle('active', i === n);
+      });
+      current = n;
+      updateNav();
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') {
+        e.preventDefault();
+        goToSlide(current + 1);
+      }
+      if (e.key === 'ArrowLeft') {
+        goToSlide(current - 1);
+      }
+    });
+
+    goToSlide(0);
+  </script>
+</body>
+</html>

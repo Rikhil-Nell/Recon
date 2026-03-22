@@ -1,0 +1,1785 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recon 2026 — Sponsorship Deck</title>
+    <meta name="description"
+        content="Sponsor India's premier student-led DEFCON-style cybersecurity conference. April 19-21, 2026 at VIT-AP University.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
+
+        :root {
+            --purple: #8B5CF6;
+            --purple-light: #A78BFA;
+            --purple-dark: #6D28D9;
+            --purple-glow: rgba(139, 92, 246, 0.4);
+            --purple-subtle: rgba(43, 29, 75, 0.08);
+            --black: #09090B;
+            --gray-950: #0C0C0F;
+            --gray-900: #18181B;
+            --gray-800: #27272A;
+            --gray-700: #3F3F46;
+            --gray-400: #A1A1AA;
+            --gray-300: #D4D4D8;
+            --white: #FAFAFA;
+            --green: #22C55E;
+            --amber: #F59E0B;
+        }
+
+        html {
+            scroll-behavior: smooth
+        }
+
+        body {
+            font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--black);
+            color: var(--white);
+            overflow-x: hidden
+        }
+
+        .deck {
+            width: 100vw;
+            height: 100vh;
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            scroll-behavior: smooth
+        }
+
+        .slide {
+            width: 100%;
+            height: 100vh;
+            scroll-snap-align: start;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: clamp(1.5rem, 4vw, 3.5rem) clamp(2rem, 6vw, 5rem);
+            position: relative;
+            background: var(--black);
+            overflow: hidden
+        }
+
+        .slide-inner {
+            max-width: 1300px;
+            width: 100%;
+            position: relative;
+            z-index: 2
+        }
+
+        /* Subtle Noise Overlay & Raw Accents to reduce the "AI-generated" clinical feel */
+        .noise {
+            position: fixed;
+            inset: 0;
+            z-index: 999;
+            opacity: 0.03;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Ambient glow */
+        .glow {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            pointer-events: none;
+            opacity: .12
+        }
+
+        .glow-1 {
+            width: 600px;
+            height: 600px;
+            background: var(--purple);
+            top: -20%;
+            right: -10%
+        }
+
+        .glow-2 {
+            width: 400px;
+            height: 400px;
+            background: var(--purple-dark);
+            bottom: -15%;
+            left: -5%
+        }
+
+        /* Typography */
+        .eyebrow {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(.7rem, 1.2vw, .85rem);
+            font-weight: 500;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+            color: var(--purple);
+            margin-bottom: clamp(.6rem, 1.5vw, 1rem);
+            display: inline-flex;
+            align-items: center;
+            gap: .5rem;
+            padding: .4rem .9rem;
+            background: var(--purple-subtle);
+            border: 1px solid rgba(139, 92, 246, .2);
+            border-radius: 4px
+        }
+
+        .eyebrow::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--purple);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--purple-glow)
+        }
+
+        h1 {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: clamp(3rem, 9vw, 7.5rem);
+            line-height: .92;
+            letter-spacing: -.03em;
+            color: var(--white);
+            margin-bottom: clamp(1rem, 2.5vw, 1.5rem);
+            text-transform: uppercase
+        }
+
+        h2 {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: clamp(2rem, 5vw, 3.8rem);
+            line-height: 1.05;
+            letter-spacing: -.02em;
+            color: var(--white);
+            margin-bottom: clamp(1rem, 2.5vw, 1.5rem);
+            text-transform: uppercase
+        }
+
+        h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(1.1rem, 2vw, 1.5rem);
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: .5rem
+        }
+
+        .subtitle {
+            font-size: clamp(1.1rem, 2.2vw, 1.6rem);
+            font-weight: 500;
+            line-height: 1.45;
+            color: var(--purple-light);
+            max-width: 850px;
+            margin-bottom: clamp(1.5rem, 3vw, 2.5rem)
+        }
+
+        .body {
+            font-size: clamp(.9rem, 1.5vw, 1.05rem);
+            line-height: 1.65;
+            color: var(--gray-400)
+        }
+
+        .accent {
+            color: var(--purple)
+        }
+
+        .text-white {
+            color: var(--white)
+        }
+
+        /* Stat cards */
+        .stat-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: clamp(1rem, 2vw, 1.5rem);
+            margin-top: clamp(1.5rem, 3vw, 2.5rem)
+        }
+
+        .stat {
+            background: linear-gradient(135deg, var(--gray-900), var(--gray-950));
+            border: 1px solid var(--gray-800);
+            border-radius: 12px;
+            padding: clamp(1.2rem, 2.5vw, 1.8rem);
+            transition: all .35s ease;
+            position: relative;
+            overflow: hidden
+        }
+
+        .stat::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, transparent, rgba(139, 92, 246, .06));
+            opacity: 0;
+            transition: opacity .35s
+        }
+
+        .stat:hover {
+            border-color: var(--purple);
+            transform: translateY(-4px);
+            box-shadow: 0 16px 40px rgba(139, 92, 246, .15)
+        }
+
+        .stat:hover::after {
+            opacity: 1
+        }
+
+        .stat-num {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            color: var(--purple);
+            line-height: 1;
+            margin-bottom: .4rem;
+            text-shadow: 0 0 30px var(--purple-glow)
+        }
+
+        .stat-label {
+            font-size: clamp(.8rem, 1.3vw, .95rem);
+            color: var(--gray-400);
+            line-height: 1.4
+        }
+
+        /* Content cards */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: clamp(1rem, 2vw, 1.5rem);
+            margin-top: clamp(1.5rem, 3vw, 2rem)
+        }
+
+        .card {
+            background: var(--gray-900);
+            border: 1px solid var(--gray-800);
+            border-radius: 12px;
+            padding: clamp(1.2rem, 2.5vw, 1.6rem);
+            transition: all .35s cubic-bezier(0.19, 1, 0.22, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.5); /* Harder shadow for a raw feel */
+        }
+
+        .card::after {
+            /* Raw offset border effect on hover */
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 1px solid var(--purple);
+            border-radius: 12px;
+            opacity: 0;
+            transform: translate(-4px, -4px);
+            transition: all .3s;
+            pointer-events: none;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%;
+            background: var(--purple);
+            opacity: 0.5; /* Always slightly visible */
+            transition: all .3s
+        }
+
+        .card:hover {
+            border-color: rgba(139, 92, 246, .4);
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px rgba(139, 92, 246, 0.2);
+        }
+
+        .card:hover::after {
+            opacity: 1;
+            transform: translate(0, 0);
+        }
+
+        .card:hover::before {
+            width: 100%;
+            opacity: 0.03;
+        }
+
+        .card-icon {
+            font-size: 1.5rem;
+            margin-bottom: .6rem
+        }
+
+        .card-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(1rem, 1.8vw, 1.2rem);
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: .4rem
+        }
+
+        .card-text {
+            font-size: clamp(.8rem, 1.3vw, .9rem);
+            line-height: 1.55;
+            color: var(--gray-400)
+        }
+
+        /* 5-Card Centered Layouts (3 top, 2 bottom centered) */
+        .grid-5-centered {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: clamp(1rem, 2vw, 1.5rem);
+            margin-top: clamp(1.5rem, 3vw, 2rem)
+        }
+        
+        .grid-5-centered .card, .grid-5-centered .feat {
+            flex: 0 1 calc(33.333% - 1rem);
+            min-width: 280px;
+        }
+
+        /* Timeline */
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            margin-top: clamp(1rem, 2vw, 1.5rem)
+        }
+
+        .tl-day {
+            display: grid;
+            grid-template-columns: 140px 1fr;
+            gap: clamp(1rem, 2vw, 1.5rem);
+            padding: clamp(.8rem, 1.5vw, 1.2rem) 0;
+            border-bottom: 1px solid var(--gray-800)
+        }
+
+        .tl-day:last-child {
+            border-bottom: none
+        }
+
+        .tl-label {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: clamp(1rem, 2vw, 1.4rem);
+            color: var(--purple);
+            padding-top: .2rem
+        }
+
+        .tl-items {
+            display: flex;
+            flex-direction: column;
+            gap: .35rem
+        }
+
+        .tl-item {
+            font-size: clamp(.8rem, 1.3vw, .92rem);
+            color: var(--gray-400);
+            line-height: 1.5;
+            display: flex;
+            gap: .6rem
+        }
+
+        .tl-time {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(.7rem, 1.1vw, .8rem);
+            color: var(--purple-light);
+            min-width: 90px;
+            flex-shrink: 0;
+            padding-top: .15rem
+        }
+
+        /* Tier cards */
+        .tier-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: clamp(1.2rem, 2.5vw, 2rem);
+            margin-top: clamp(1.5rem, 3vw, 2rem)
+        }
+
+        .tier {
+            background: var(--gray-900);
+            border: 2px solid var(--gray-800);
+            border-radius: 16px;
+            padding: clamp(1.5rem, 3vw, 2rem);
+            transition: all .4s ease;
+            position: relative
+        }
+
+        .tier.featured {
+            border-color: var(--purple);
+            background: linear-gradient(160deg, var(--gray-900), rgba(139, 92, 246, .08))
+        }
+
+        .tier.featured::after {
+            content: 'EXCLUSIVE';
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--purple);
+            color: var(--white);
+            padding: .35rem 1rem;
+            font-size: .65rem;
+            font-weight: 700;
+            letter-spacing: .12em;
+            border-bottom-left-radius: 8px;
+            border-top-right-radius: 14px
+        }
+
+        .tier:hover {
+            transform: translateY(-6px);
+            border-color: var(--purple);
+            box-shadow: 0 24px 50px rgba(139, 92, 246, .2)
+        }
+
+        .tier-name {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            color: var(--white);
+            text-transform: uppercase;
+            margin-bottom: .4rem
+        }
+
+        .tier-price {
+            font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+            color: var(--purple);
+            font-weight: 700;
+            margin-bottom: 1.2rem
+        }
+
+        .tier-list {
+            list-style: none;
+            padding: 0
+        }
+
+        .tier-list li {
+            padding: .6rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, .06);
+            font-size: clamp(.8rem, 1.3vw, .92rem);
+            color: var(--gray-300);
+            display: flex;
+            align-items: flex-start;
+            gap: .7rem
+        }
+
+        .tier-list li:last-child {
+            border-bottom: none
+        }
+
+        .tier-list li::before {
+            content: '→';
+            color: var(--purple);
+            font-weight: 700;
+            flex-shrink: 0;
+            font-size: 1rem
+        }
+
+        /* Feature blocks */
+        .feat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: clamp(1rem, 2vw, 1.2rem);
+            margin-top: clamp(1.2rem, 2.5vw, 1.8rem)
+        }
+
+        .feat {
+            background: linear-gradient(135deg, rgba(139, 92, 246, .04), rgba(139, 92, 246, .1));
+            border-left: 3px solid var(--purple);
+            padding: clamp(1rem, 2vw, 1.4rem);
+            border-radius: 8px;
+            transition: all .3s ease
+        }
+
+        .feat:hover {
+            background: linear-gradient(135deg, rgba(139, 92, 246, .1), rgba(139, 92, 246, .18));
+            transform: translateX(6px)
+        }
+
+        .feat-title {
+            font-size: clamp(.95rem, 1.6vw, 1.15rem);
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: .35rem
+        }
+
+        .feat-text {
+            font-size: clamp(.78rem, 1.2vw, .88rem);
+            line-height: 1.55;
+            color: rgba(255, 255, 255, .6)
+        }
+
+        /* ROI metrics */
+        .roi-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: clamp(1rem, 2vw, 1.5rem);
+            margin-top: clamp(1.2rem, 2.5vw, 1.8rem)
+        }
+
+        .roi {
+            text-align: center;
+            padding: clamp(1.5rem, 3vw, 2rem);
+            background: rgba(139, 92, 246, .04);
+            border: 2px solid rgba(139, 92, 246, .15);
+            border-radius: 12px;
+            transition: all .3s
+        }
+
+        .roi:hover {
+            background: rgba(139, 92, 246, .08);
+            border-color: var(--purple);
+            transform: scale(1.04)
+        }
+
+        .roi-val {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: clamp(2.2rem, 4.5vw, 3.5rem);
+            color: var(--purple);
+            line-height: 1;
+            margin-bottom: .5rem
+        }
+
+        .roi-label {
+            font-size: clamp(.85rem, 1.4vw, 1rem);
+            color: rgba(255, 255, 255, .75);
+            font-weight: 600
+        }
+
+        /* CTA */
+        .cta-box {
+            background: linear-gradient(135deg, var(--purple-dark), var(--purple));
+            border-radius: 20px;
+            padding: clamp(2.5rem, 5vw, 4rem);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            margin-top: clamp(1.5rem, 3vw, 2rem)
+        }
+
+        .cta-box::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 30% 50%, rgba(255, 255, 255, .08), transparent 60%);
+            pointer-events: none
+        }
+
+        .cta-inner {
+            position: relative;
+            z-index: 1
+        }
+
+        .cta-title {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: clamp(1.8rem, 4vw, 3.2rem);
+            color: var(--white);
+            text-transform: uppercase;
+            margin-bottom: .8rem
+        }
+
+        .cta-text {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            color: rgba(255, 255, 255, .85);
+            margin-bottom: 1.5rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto
+        }
+
+        .contact-row {
+            display: flex;
+            justify-content: center;
+            gap: clamp(1.5rem, 3vw, 2.5rem);
+            flex-wrap: wrap;
+            margin-top: 1.5rem
+        }
+
+        .contact-item {
+            font-size: clamp(.9rem, 1.6vw, 1.1rem);
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            gap: .6rem
+        }
+
+        .contact-item a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 600;
+            transition: opacity .3s
+        }
+
+        .contact-item a:hover {
+            opacity: .7
+        }
+
+        .contact-cols {
+            display: flex;
+            justify-content: center;
+            gap: clamp(2rem, 5vw, 6rem);
+            margin: 2rem auto 0;
+            max-width: fit-content;
+            text-align: left;
+        }
+
+        .contact-col-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1rem;
+            color: var(--purple-light);
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            margin-bottom: 1.2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, .15);
+            padding-bottom: .6rem;
+            text-align: center;
+        }
+
+        .contact-col-links {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        @media(max-width:500px){
+            .contact-cols {
+                flex-direction: column;
+                gap: 2rem;
+            }
+        }
+
+        /* Callout */
+        .callout {
+            margin-top: clamp(1.2rem, 2.5vw, 1.8rem);
+            padding: clamp(1rem, 2vw, 1.4rem);
+            background: rgba(139, 92, 246, .08);
+            border: 1.5px solid var(--purple);
+            border-radius: 10px
+        }
+
+        .callout p {
+            font-size: clamp(.85rem, 1.4vw, 1rem);
+            color: var(--white);
+            margin: 0;
+            line-height: 1.5
+        }
+
+        .callout strong {
+            color: var(--purple)
+        }
+
+        /* Logo bar */
+        .logo-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: clamp(2rem, 5vw, 4rem);
+            margin-top: clamp(1.5rem, 3vw, 2rem);
+            flex-wrap: wrap;
+            opacity: .7
+        }
+
+        .logo-bar img {
+            height: clamp(30px, 4vw, 50px);
+            object-fit: contain
+        }
+
+        /* Navigation */
+        .nav-bar {
+            position: fixed;
+            bottom: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: .4rem;
+            z-index: 100;
+            background: rgba(0, 0, 0, .6);
+            padding: .6rem 1.2rem;
+            border-radius: 50px;
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, .08)
+        }
+
+        .nav-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, .2);
+            cursor: pointer;
+            transition: all .3s
+        }
+
+        .nav-dot.active {
+            background: var(--purple);
+            transform: scale(1.4);
+            box-shadow: 0 0 12px var(--purple-glow)
+        }
+
+        .nav-dot:hover {
+            background: var(--purple-light)
+        }
+
+        /* Slide counter */
+        .slide-counter {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 2rem;
+            z-index: 100;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .75rem;
+            color: rgba(255, 255, 255, .3);
+            letter-spacing: .05em
+        }
+
+        /* Two-col layout */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: clamp(2rem, 4vw, 3rem);
+            margin-top: clamp(1.2rem, 2.5vw, 1.8rem)
+        }
+
+        /* Infra tags */
+        .tag-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .5rem;
+            margin-top: .8rem
+        }
+
+        .tag {
+            display: inline-block;
+            padding: .3rem .7rem;
+            background: rgba(139, 92, 246, .1);
+            border: 1px solid rgba(139, 92, 246, .25);
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(.65rem, 1vw, .75rem);
+            color: var(--purple-light);
+            letter-spacing: .03em
+        }
+
+        /* Responsive */
+        @media(max-width:900px) {
+            .two-col {
+                grid-template-columns: 1fr
+            }
+
+            .tl-day {
+                grid-template-columns: 1fr
+            }
+
+            .tl-label {
+                margin-bottom: .3rem
+            }
+
+            .header-logo {
+                top: 1rem;
+                right: 1rem;
+                width: 40px;
+                height: 40px
+            }
+        }
+
+        @media(max-width:600px) {
+            .slide {
+                padding: 1.2rem 1.5rem
+            }
+
+            .nav-bar {
+                bottom: 1rem;
+                padding: .5rem .8rem
+            }
+
+            .slide-counter {
+                display: none
+            }
+
+            .stat-row,
+            .card-grid,
+            .tier-grid,
+            .feat-grid,
+            .roi-row {
+                grid-template-columns: 1fr
+            }
+
+            .contact-dropdown {
+                width: calc(100vw - 2rem);
+                right: 1rem;
+                top: 4rem
+            }
+        }
+
+        /* Header Logo & Dropdown */
+        .header-logo {
+            position: fixed;
+            top: 1.5rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, .5);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(139, 92, 246, .3);
+            z-index: 200;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all .3s ease;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, .3)
+        }
+
+        .header-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover
+        }
+
+        .header-logo:hover {
+            transform: scale(1.05);
+            border-color: var(--purple);
+            box-shadow: 0 0 20px var(--purple-glow)
+        }
+
+        .contact-dropdown {
+            position: fixed;
+            top: 5rem;
+            right: 2rem;
+            background: var(--gray-900);
+            border: 1px solid var(--gray-800);
+            border-radius: 12px;
+            padding: 1.5rem;
+            z-index: 190;
+            width: 320px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, .5);
+            transform-origin: top right;
+            transform: scale(.95) translateY(-10px);
+            opacity: 0;
+            pointer-events: none;
+            transition: all .3s cubic-bezier(0.16, 1, 0.3, 1)
+        }
+
+        .contact-dropdown.open {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+            border-color: var(--purple-subtle)
+        }
+
+        .cd-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--purple-light);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: .6rem;
+            border-bottom: 1px solid var(--gray-800);
+            padding-bottom: .4rem;
+            margin-top: 1.2rem;
+        }
+        .cd-title:first-child {
+            margin-top: 0;
+        }
+
+        .cd-item {
+            display: flex;
+            align-items: center;
+            gap: .6rem;
+            padding: .6rem 0;
+            color: var(--gray-300);
+            font-size: .9rem;
+            text-decoration: none;
+            transition: color .2s
+        }
+
+        .cd-item:hover {
+            color: var(--purple-light)
+        }
+
+        .cd-icon {
+            color: var(--purple);
+            flex-shrink: 0
+        }
+    </style>
+</head>
+
+<body>
+    <div class="noise"></div>
+
+    <!-- Fixed Header Logo & Contact Dropdown -->
+    <div class="header-logo" id="headerLogo" title="Contact Us">
+        <img src="logo/Recon%20Event%20Logo.jpeg" alt="Recon">
+    </div>
+
+    <div class="contact-dropdown" id="contactDropdown">
+        <div class="cd-title">Event Contact</div>
+        <a href="mailto:recon2k26@gmail.com" class="cd-item">
+            <svg class="cd-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+            <span>recon2k26@gmail.com</span>
+        </a>
+        <a href="https://x.com/Recon2k26" target="_blank" class="cd-item">
+            <svg class="cd-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4l11.733 16h4.267l-11.733 -16z"></path><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"></path>
+            </svg>
+            <span>@Recon2k26</span>
+        </a>
+        <a href="https://www.instagram.com/recon_2k26" target="_blank" class="cd-item">
+            <svg class="cd-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
+            <span>recon_2k26</span>
+        </a>
+        <a href="https://www.linkedin.com/in/recon-events/" target="_blank" class="cd-item">
+            <svg class="cd-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle>
+            </svg>
+            <span>recon-events</span>
+        </a>
+
+        <div class="cd-title">Event Director</div>
+        <a href="mailto:nrikhil@gmail.com" class="cd-item">
+            <svg class="cd-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+            </svg>
+            <span>nrikhil@gmail.com</span>
+        </a>
+        <a href="tel:+917386175224" class="cd-item">
+            <svg class="cd-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path
+                    d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                </path>
+            </svg>
+            <span>+91 738 617 5224</span>
+        </a>
+        <a href="https://linkedin.com/in/rikhilnellimarla" target="_blank" class="cd-item">
+            <svg class="cd-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                <rect x="2" y="9" width="4" height="12"></rect>
+                <circle cx="4" cy="4" r="2"></circle>
+            </svg>
+            <span>rikhil nellimarla</span>
+        </a>
+        <div
+            style="margin-top:1rem;padding-top:.8rem;border-top:1px solid rgba(255,255,255,.05);font-size:.8rem;color:var(--gray-400)">
+            Organized by Open Source Community & Null Chapter
+        </div>
+    </div>
+
+    <div class="deck" id="deck">
+
+        <!-- ==================== SLIDE 1: COVER ==================== -->
+        <div class="slide" id="s1">
+            <div class="glow glow-1"></div>
+            <div class="glow glow-2"></div>
+            <div class="slide-inner">
+                <div class="eyebrow">Inaugural Annual Edition • April 19–21, 2026 · VIT-AP University, Amaravati</div>
+                <h1>RECON<br><span class="accent">2026</span></h1>
+                <p class="subtitle">India's premier student-led DEFCON-style cybersecurity conference. Three days of
+                    offensive security, competitive hacking, and direct access to 600+ driven security engineers.</p>
+                <div class="stat-row">
+                    <div class="stat">
+                        <div class="stat-num">600+</div>
+                        <div class="stat-label">Security Enthusiasts</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-num">72H</div>
+                        <div class="stat-label">Nonstop Operations</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-num">10+</div>
+                        <div class="stat-label">Security Villages</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-num">₹4.97L</div>
+                        <div class="stat-label">Event Budget</div>
+                    </div>
+                </div>
+                <div class="logo-bar">
+                    <img src="logo/VITAP%20Logo.png" alt="VIT-AP University">
+                    <img src="logo/IIT%20Madras%20Logo.png" alt="IIT Madras">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Ministry_of_Electronics_and_Information_Technology.svg"
+                        alt="MeitY" style="filter: brightness(0) invert(1)">
+                    <img src="logo/ISEA%20Logo.png" alt="ISEA">
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 2: THE MISSION ==================== -->
+        <div class="slide" id="s2">
+            <div class="glow glow-1" style="top:-30%;right:20%"></div>
+            <div class="slide-inner">
+                <div class="eyebrow">Why This Exists</div>
+                <h2>NOT ANOTHER<br>TECH FEST</h2>
+                <div style="max-width: 900px;">
+                    <p class="subtitle" style="margin-bottom: 1rem;">Recon is a national-level, security-focused, DEFCON-style campus event built for
+                        high technical credibility, real engagement, and zero compromises on safety.</p>
+                    <p class="body" style="font-size: 1.1rem; margin-bottom: 2rem;"><strong>Mission:</strong> Run a 3-day cybersecurity immersion under strict university constraints —
+                        sandboxed offensive security, real infrastructure, actual skill assessment — not a glorified
+                        seminar with PowerPoints.</p>
+                </div>
+                
+                <div class="two-col" style="margin-top: 1rem; border-top: 1px dashed var(--gray-800); padding-top: 2rem;">
+                    <div>
+                        <h3>Primary Outcomes</h3>
+                        <div style="display:flex;flex-direction:column;gap:.5rem;margin-top:.8rem">
+                            <div class="body" style="display:flex; align-items:flex-start; gap:0.5rem"><span style="color:var(--green)">✓</span> <span>2 keynote/talk blocks delivered on schedule</span></div>
+                            <div class="body" style="display:flex; align-items:flex-start; gap:0.5rem"><span style="color:var(--green)">✓</span> <span>1 overnight CTF delivered end-to-end</span></div>
+                            <div class="body" style="display:flex; align-items:flex-start; gap:0.5rem"><span style="color:var(--green)">✓</span> <span>1 overnight KOTH delivered end-to-end</span></div>
+                            <div class="body" style="display:flex; align-items:flex-start; gap:0.5rem"><span style="color:var(--green)">✓</span> <span>10+ side events on published schedule</span></div>
+                            <div class="body" style="display:flex; align-items:flex-start; gap:0.5rem"><span style="color:var(--green)">✓</span> <span>Zero legal/policy breaches / safety incidents</span></div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3>Secondary Goals</h3>
+                        <div style="display:flex;flex-direction:column;gap:.6rem;margin-top:.8rem">
+                            <div class="body" style="display:flex; align-items:flex-start; gap:0.5rem"><span style="color:var(--purple-light); font-family:'JetBrains Mono'">→</span> <span>15+ sponsors/partners active</span></div>
+                            <div class="body" style="display:flex; align-items:flex-start; gap:0.5rem"><span style="color:var(--purple-light); font-family:'JetBrains Mono'">→</span> <span>450+ active attendance, 250+ outstation</span></div>
+                            <div class="body" style="display:flex; align-items:flex-start; gap:0.5rem"><span style="color:var(--purple-light); font-family:'JetBrains Mono'">→</span> <span>Live social + campus screen media footprint</span></div>
+                        </div>
+                        <div class="callout" style="margin-top:1.5rem; background: transparent; border: 1px solid var(--gray-800); border-left: 3px solid var(--purple);">
+                            <p style="color:var(--gray-300); font-size:0.9rem">Backed by <strong>IIT Madras</strong>. Organized by <strong>Open Source Community + Null Chapter</strong> at VIT-AP. Advisory: <strong>Dr. Sibi Chakkaravarty</strong>.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 3: BY THE NUMBERS ==================== -->
+        <div class="slide" id="s3">
+            <div class="glow glow-2" style="bottom:-25%;left:30%"></div>
+            <div class="slide-inner">
+                <div class="eyebrow">Scale & Impact</div>
+                <h2>BY THE<br>NUMBERS</h2>
+                <p class="subtitle">A fully operational security conference with the infrastructure and logistics to
+                    back it up.</p>
+                <div class="stat-row">
+                    <div class="stat">
+                        <div class="stat-num">600</div>
+                        <div class="stat-label">Registered Participants</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-num">250+</div>
+                        <div class="stat-label">Outstation Attendees</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-num">40</div>
+                        <div class="stat-label">Trained Workforce</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-num">3</div>
+                        <div class="stat-label">Days, 72 Hours</div>
+                    </div>
+                </div>
+                <div class="stat-row">
+                    <div class="stat">
+                        <div class="stat-num">10+</div>
+                        <div class="stat-label">Security Villages & Workshops</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-num">20-30</div>
+                        <div class="stat-label">CTF Challenges</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-num">12</div>
+                        <div class="stat-label">KOTH Target Machines</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-num">15+</div>
+                        <div class="stat-label">Sponsor/Partner Slots</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 4: 3-DAY SCHEDULE ==================== -->
+        <div class="slide" id="s4">
+            <div class="glow glow-1" style="top:10%;right:-15%"></div>
+            <div class="slide-inner">
+                <div class="eyebrow">Event Schedule</div>
+                <h2>THREE DAYS.<br>ZERO DOWNTIME.</h2>
+                <div class="timeline">
+                    <div class="tl-day">
+                        <div class="tl-label">DAY 1</div>
+                        <div class="tl-items">
+                            <div class="tl-item"><span class="tl-time">13:30</span>Gates open & check-in</div>
+                            <div class="tl-item"><span class="tl-time">14:00</span>Inauguration ceremony</div>
+                            <div class="tl-item"><span class="tl-time">15:00</span>Keynote Talk 1</div>
+                            <div class="tl-item"><span class="tl-time">16:15</span>Keynote Talk 2</div>
+                            <div class="tl-item"><span class="tl-time">17:15</span>CTF briefing + platform check</div>
+                            <div class="tl-item"><span class="tl-time">18:00</span><strong class="text-white">Overnight
+                                    CTF begins →</strong> runs until 06:00</div>
+                        </div>
+                    </div>
+                    <div class="tl-day">
+                        <div class="tl-label">DAY 2</div>
+                        <div class="tl-items">
+                            <div class="tl-item"><span class="tl-time">06:00</span>CTF close + provisional scoring</div>
+                            <div class="tl-item"><span class="tl-time">08:00</span>Mandatory rest block</div>
+                            <div class="tl-item"><span class="tl-time">14:00</span>Workshops + security village blocks
+                            </div>
+                            <div class="tl-item"><span class="tl-time">16:00</span><strong class="text-white">Sponsor
+                                    Demo Street</strong> + challenge blocks</div>
+                            <div class="tl-item"><span class="tl-time">18:30</span>Dinner + KOTH briefing</div>
+                            <div class="tl-item"><span class="tl-time">22:00</span><strong class="text-white">Overnight
+                                    KOTH begins →</strong> runs until 06:00</div>
+                        </div>
+                    </div>
+                    <div class="tl-day">
+                        <div class="tl-label">DAY 3</div>
+                        <div class="tl-items">
+                            <div class="tl-item"><span class="tl-time">06:00</span>KOTH close + adjudication</div>
+                            <div class="tl-item"><span class="tl-time">14:00</span>Finals highlights + lightning talks
+                            </div>
+                            <div class="tl-item"><span class="tl-time">16:00</span><strong class="text-white">Awards &
+                                    closing ceremony</strong></div>
+                            <div class="tl-item"><span class="tl-time">17:00</span>Teardown & asset recovery</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="callout">
+                    <p><strong>Sponsor Demo Street</strong> runs Day 2 afternoon (16:00–18:30) — your prime window for
+                        booth traffic, challenge engagement, and direct talent conversations.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 5: CTF ==================== -->
+        <div class="slide" id="s5">
+            <div class="glow glow-2" style="bottom:10%;right:20%"></div>
+            <div class="slide-inner">
+                <div class="eyebrow">Flagship Competition #1</div>
+                <h2>CAPTURE<br>THE FLAG</h2>
+                <p class="subtitle">12-hour overnight jeopardy-style CTF. The single largest engagement window of the
+                    event.</p>
+                <div class="two-col">
+                    <div>
+                        <div class="card-grid" style="grid-template-columns:1fr">
+                            <div class="card">
+                                <div class="card-title">Format</div>
+                                <div class="card-text">Day 1 18:00 → Day 2 06:00. Jeopardy style with 20–30 challenges
+                                    across tiered difficulty levels. Dynamic hints unlock as the night progresses. Teams
+                                    of 1–4. <strong>The Top 3 teams are awarded grand prizes.</strong></div>
+                            </div>
+                            <div class="card">
+                                <div class="card-title">Categories</div>
+                                <div class="card-text">Web exploitation · Binary pwn · Cryptography · Digital forensics
+                                    · Miscellaneous · OSINT. Sponsors can deploy custom challenges aligned with their
+                                    tech stack.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="card-grid" style="grid-template-columns:1fr">
+                            <div class="card">
+                                <div class="card-title">Anti-Cheat</div>
+                                <div class="card-text">Account/device/IP correlation checks. VPN-logged connections tied
+                                    to participant IDs. Writeup audits for top 10 teams before prize confirmation.</div>
+                            </div>
+                            <div class="card">
+                                <div class="card-title">Infrastructure</div>
+                                <div class="card-text">Self-hosted CTFd on AWS EC2 (t3.xlarge). CloudFront CDN for
+                                    challenge files. OpenVPN overlay for isolated challenge access. Hourly snapshot
+                                    backups.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="callout">
+                    <p><strong>Sponsor Opportunity:</strong> Deploy a branded challenge category within the CTF. Your
+                        team writes the challenges, we handle infra. Participants associate your brand with the hardest
+                        problems they solved all night.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 6: KOTH ==================== -->
+        <div class="slide" id="s6">
+            <div class="glow glow-1" style="top:20%;left:-10%"></div>
+            <div class="slide-inner">
+                <div class="eyebrow">Flagship Competition #2</div>
+                <h2>KING OF<br>THE HILL</h2>
+                <p class="subtitle">8-hour overnight attack/defend war on live vulnerable infrastructure. The ultimate
+                    test of offensive and defensive skill.</p>
+                <div class="two-col">
+                    <div>
+                        <div class="card-grid" style="grid-template-columns:1fr">
+                            <div class="card">
+                                <div class="card-title">Format</div>
+                                <div class="card-text">Day 2 22:00 → Day 3 06:00. 8–12 target boxes running real
+                                    vulnerable services. Teams gain points for every interval they hold a machine.
+                                    Red/Blue hybrid optional for finals.</div>
+                            </div>
+                            <div class="card">
+                                <div class="card-title">Target Architecture</div>
+                                <div class="card-text">10× AWS EC2 instances (t3.medium) in isolated VPN subnet.
+                                    Automated snapshot/restore every 30–60 min to prevent dead boxes. Security groups
+                                    enforce VPN-only access.</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="card-grid" style="grid-template-columns:1fr">
+                            <div class="card">
+                                <div class="card-title">Scoring</div>
+                                <div class="card-text">Point accrual per hold interval. First blood bonuses. Longest
+                                    hold awards. Mandatory reset windows keep competition fair and prevent box lockouts.
+                                    Target rotation maintains momentum.
+                                </div>
+                            </div>
+                            <div class="card">
+                                <div class="card-title">Prize Logic</div>
+                                <div class="card-text">Top 3 overall + first blood + longest hold. Side-event passport
+                                    pool rewards the top 20 point earners across all activities including KOTH.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 7: VILLAGES PART 1 ==================== -->
+        <div class="slide" id="s7">
+            <div class="glow glow-2" style="bottom:-20%;left:40%"></div>
+            <div class="slide-inner">
+                <div class="eyebrow">Security Villages — Part 1</div>
+                <h2>HANDS-ON<br>VILLAGES</h2>
+                <p class="subtitle">Rotating, immersive activity zones that keep 600 participants engaged between
+                    flagship competitions.</p>
+                <div class="grid-5-centered">
+                    <div class="card">
+                        <div class="card-icon">🔐</div>
+                        <div class="card-title">RFID Lock Hunt</div>
+                        <div class="card-text">Campus-wide clue trail leading to RFID lockbox challenges. 3 programmable
+                            locks, 8 RFID keycards, key logic rotates every 2 hours. Max 3 unlock attempts per session.
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">🔧</div>
+                        <div class="card-title">Hardware Badge + IoT Village</div>
+                        <div class="card-text">Build interactive badges with MCU boards, LEDs, sensors. 40 solder
+                            stations with PPE-mandatory safety marshals. Tracks: beginner blink → sensor integration →
+                            firmware hardening.</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">🎮</div>
+                        <div class="card-title">Gaming Arena</div>
+                        <div class="card-text">Short-format FIFA/Valorant/CS2 tournaments. 12–20 gaming rigs, 20-min
+                            slot model with app-managed queues. Passport points for winners — drives sponsor zone foot
+                            traffic.</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">🌐</div>
+                        <div class="card-title">Web Exploit Dojo</div>
+                        <div class="card-text">OWASP Top 10 sandbox with guided 45-min modules. Beginner & advanced
+                            lanes. Containerized targets reset every session — credentials rotated per block.</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">🔍</div>
+                        <div class="card-title">OSINT Corner</div>
+                        <div class="card-text">Time-boxed investigations on synthetic personas & public datasets. Social
+                            graph mapping, location inference, metadata extraction. New scenario every hour.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 8: VILLAGES PART 2 ==================== -->
+        <div class="slide" id="s8">
+            <div class="glow glow-1" style="top:-15%;left:50%"></div>
+            <div class="slide-inner">
+                <div class="eyebrow">Security Villages — Part 2</div>
+                <h2>MORE<br>VILLAGES</h2>
+                <p class="subtitle">From AI red-teaming to career clinics — every skill level and interest has a home at
+                    Recon.</p>
+                <div class="grid-5-centered">
+                    <div class="card">
+                        <div class="card-icon">🧬</div>
+                        <div class="card-title">Forensics Sprint</div>
+                        <div class="card-text">30-min rapid DFIR cases: memory dumps, pcap analysis, log triage,
+                            steganography. Rolling case drops every hour. Individual or pairs.</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">🤖</div>
+                        <div class="card-title">AI Red-Team Mini-Lab</div>
+                        <div class="card-text">Prompt injection, jailbreak defenses, model misuse case studies.
+                            Attack/defend tabletop + hands-on sandbox. Teams submit exploit chain + mitigation notes.
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">🐛</div>
+                        <div class="card-title">Bug Bounty App Quest</div>
+                        <div class="card-text">Hidden easter egg campaign in the event app. Legally scoped targets on
+                            isolated challenge hosts. Discoverable by participants, tracked on secret leaderboard.</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">💼</div>
+                        <div class="card-title">Security Career Clinic</div>
+                        <div class="card-text">CV triage, GitHub profile reviews, roadmap advising, internship prep.
+                            High engagement for non-hardcore participants — a soft landing for sponsor recruitment
+                            conversations.</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">🏪</div>
+                        <div class="card-title">Sponsor Demo Street</div>
+                        <div class="card-text">Fixed demo blocks with mandatory interactive components. No pure sales
+                            pitches >10 min. Resume reviews, secure coding sprints, API bug hunts, RE puzzles with swag.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- ==================== SLIDE 9: AUDIENCE ==================== -->
+        <div class="slide" id="s9">
+            <div class="glow glow-1" style="top:-30%;right:-10%"></div>
+            <div class="slide-inner">
+                <div class="eyebrow">Audience Profile</div>
+                <h2>YOUR NEXT<br>SECURITY TEAM</h2>
+                <p class="subtitle">Connect with India's most driven cybersecurity talent in an environment built for
+                    authentic engagement.</p>
+                <div class="stat-row">
+                    <div class="stat">
+                        <div class="stat-num">65%</div>
+                        <div class="stat-label">CS & Engineering Students</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-num">40%</div>
+                        <div class="stat-label">Final Year (Placement Ready)</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-num">250+</div>
+                        <div class="stat-label">Active CTF Competitors</div>
+                    </div>
+                </div>
+                <div class="card-grid">
+                    <div class="card">
+                        <div class="card-title">CTF Champions</div>
+                        <div class="card-text">Top performers from national jeopardy and attack/defend capture-the-flag
+                            competitions, looking for real-world challenges.</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">Placement-Ready Seniors</div>
+                        <div class="card-text">Final-year students actively seeking security engineering, penetration
+                            testing, and SOC analyst roles.</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">Security Researchers</div>
+                        <div class="card-text">Students publishing CVEs, discovering vulnerabilities, and contributing
+                            to open-source security tooling.</div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">Community Leaders</div>
+                        <div class="card-text">Active members and leads of Null chapters, OWASP student chapters, and
+                            university security clubs.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 10: TIERS ==================== -->
+        <div class="slide" id="s10">
+            <div class="glow glow-2" style="bottom:-20%;left:-10%"></div>
+            <div class="slide-inner">
+                <div class="eyebrow">Partnership Opportunities</div>
+                <h2>SPONSORSHIP<br>TIERS</h2>
+                <p class="subtitle">Three tiers, one goal: measurable talent acquisition and brand visibility.</p>
+                <div class="tier-grid">
+                    <div class="tier featured">
+                        <div class="tier-name">Title</div>
+                        <div class="tier-price">₹2,00,000</div>
+                        <p class="body" style="margin-bottom:1rem;font-size:.85rem">(1 slot available)</p>
+                        <ul class="tier-list">
+                            <li>Exclusive naming rights ("Powered by [You]")</li>
+                            <li>30-minute keynote + demo slot on main stage</li>
+                            <li>Premium booth in central networking zone</li>
+                            <li>Full logo prominence on all event creatives</li>
+                            <li>Dedicated challenge category in CTF</li>
+                            <li>Direct access to participant resume database</li>
+                            <li>5 all-access passes for recruiting team</li>
+                        </ul>
+                    </div>
+                    <div class="tier">
+                        <div class="tier-name">Gold</div>
+                        <div class="tier-price">₹75,000</div>
+                        <p class="body" style="margin-bottom:1rem;font-size:.85rem">(Up to 4 slots available)</p>
+                        <ul class="tier-list">
+                            <li>15-minute presentation block</li>
+                            <li>Standard booth with branded backdrop</li>
+                            <li>Secondary stage/logo placement across venue</li>
+                            <li>Sponsored challenge in CTF or workshop</li>
+                            <li>Access to opt-in participant resume book</li>
+                            <li>3 event passes for recruiting team</li>
+                        </ul>
+                    </div>
+                    <div class="tier">
+                        <div class="tier-name">Community</div>
+                        <div class="tier-price">₹25,000</div>
+                        <p class="body" style="margin-bottom:1rem;font-size:.85rem">(Unlimited slots)</p>
+                        <ul class="tier-list">
+                            <li>Logo placement on website & sponsor wall</li>
+                            <li>Shared booth or kiosk window in sponsor zone</li>
+                            <li>Swag/reward partner recognition</li>
+                            <li>Social media recognition pre/post event</li>
+                            <li>1 event pass for company representative</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 11: ACTIVATIONS ==================== -->
+        <div class="slide" id="s11">
+            <div class="glow glow-1" style="top:20%;right:-10%"></div>
+            <div class="slide-inner">
+                <div class="eyebrow">Engagement Formats</div>
+                <h2>ACTIVATIONS<br>THAT CONVERT</h2>
+                <p class="subtitle">No pure sales pitches. Recon sponsor activations must be hands-on technical
+                    experiences or direct career opportunities.</p>
+                <div class="grid-5-centered">
+                    <div class="feat">
+                        <div class="feat-title">Secure Coding Sprint</div>
+                        <div class="feat-text">45-min timed challenge. Participants fix intentionally vulnerable code in
+                            your provided tech stack. Winners get prizes, you identify top dev-sec talent.</div>
+                    </div>
+                    <div class="feat">
+                        <div class="feat-title">API Bug Hunt (Sandbox)</div>
+                        <div class="feat-text">Deploy an intentionally vulnerable API instance on our sandboxed network.
+                            Participants race to find bugs using your tools. Live leaderboard drives competition.</div>
+                    </div>
+                    <div class="feat">
+                        <div class="feat-title">Cloud Security Quest</div>
+                        <div class="feat-text">30-45 min misconfigured cloud environment challenge. Teams exploit (then
+                            secure) IAM, S3, or logging setups. Perfect for cloud talent.</div>
+                    </div>
+                    <div class="feat">
+                        <div class="feat-title">Reverse Eng Micro-Challenge</div>
+                        <div class="feat-text">30-min static/dynamic binary analysis puzzle. Sponsor provides the
+                            binary, participants retrieve the flag and explain the reasoning.</div>
+                    </div>
+                    <div class="feat">
+                        <div class="feat-title">Career Booth & Speed Interviews</div>
+                        <div class="feat-text">Continuous activation throughout Day 2. Perform on-site resume triage,
+                            portfolio checks, and give out "fast-track" mock interview tokens.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 12: ROI ==================== -->
+        <div class="slide" id="s12">
+            <div class="glow glow-2" style="bottom:-30%;left:20%"></div>
+            <div class="slide-inner">
+                <div class="eyebrow">Measurable Outcomes</div>
+                <h2>QUANTIFIED<br>ROI</h2>
+                <p class="subtitle">Trackable, predictable metrics to prove your sponsorship delivered real hiring and
+                    branding outcomes.</p>
+                <div class="roi-row">
+                    <div class="roi">
+                        <div class="roi-val">CVs</div>
+                        <div class="roi-label">Qualified Candidate Pipeline (Opt-in)</div>
+                    </div>
+                    <div class="roi">
+                        <div class="roi-val">Data</div>
+                        <div class="roi-label">Challenge Performance Analytics</div>
+                    </div>
+                    <div class="roi">
+                        <div class="roi-val">Media</div>
+                        <div class="roi-label">Post-Event Content Assets</div>
+                    </div>
+                    <div class="roi">
+                        <div class="roi-val">Reach</div>
+                        <div class="roi-label">Tracked Footfall & Impressions</div>
+                    </div>
+                </div>
+                <div class="two-col">
+                    <div>
+                        <h3>Talent Discovery</h3>
+                        <p class="body">Receive resumes (with attendee consent) explicitly linked to challenge
+                            completion. Stop guessing skills during technical rounds — hire the student who solved your
+                            custom pwn challenge at 3 AM.</p>
+                    </div>
+                    <div>
+                        <h3>Documentation & Brand Engagement</h3>
+                        <p class="body">Preliminary sponsor report delivered within 72 hours. Final detailed report
+                            (footfall estimates by slot, challenge solves, stage mentions) delivered within 7 days.
+                            <strong>All sponsors receive high-resolution photographic documentation of their branding, booths, and winning teams for internal verification and marketing.</strong></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 13: INFRASTRUCTURE ==================== -->
+        <div class="slide" id="s13">
+            <div class="glow glow-1" style="top:10%;left:-20%"></div>
+            <div class="slide-inner">
+                <div class="eyebrow">Behind the Scenes</div>
+                <h2>ENTERPRISE-GRADE<br>INFRASTRUCTURE</h2>
+                <p class="subtitle">We built a resilient, cloud-first architecture so operations never fail when the
+                    campus network inevitably chokes.</p>
+                <div class="two-col">
+                    <div class="card" style="border-color:var(--purple)">
+                        <div class="card-title accent">OpenVPN Overlay Network</div>
+                        <div class="card-text">Campus IT restrictions bypassed safely. All participants connect to AWS
+                            OpenVPN via custom .ovpn profiles (600+ unique configs tied to IDs). 10.8.x.x subnet access
+                            only.</div>
+                        <div class="tag-row">
+                            <span class="tag">AWS EC2</span><span class="tag">VPN</span><span
+                                class="tag">Anti-Cheat</span>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">Cloud-Hosted Flagships</div>
+                        <div class="card-text">CTF platform running on scalable self-hosted instances. KOTH comprises 10
+                            isolated targets running in a locked-down VPC with automated snapshot restores.</div>
+                        <div class="tag-row">
+                            <span class="tag">CTFd</span><span class="tag">AWS S3</span><span class="tag">CloudFront
+                                CDN</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card" style="margin-top:1.5rem">
+                    <div class="card-title text-white">Strict Compliance & Safety</div>
+                    <div class="card-text">All targets are strictly sandboxed. Zero-trust regarding university
+                        infrastructure. Full logging for challenge environments. Clear vulnerability disclosure policies
+                        and immediate disqualification protocol for out-of-scope attacks. Incident response playbook
+                        active 24/7.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 14: TIMELINE ==================== -->
+        <div class="slide" id="s14">
+            <div class="glow glow-2" style="bottom:-20%;right:-10%"></div>
+            <div class="slide-inner">
+                <div class="eyebrow">Key Dates</div>
+                <h2>PARTNERSHIP<br>TIMELINE</h2>
+                <p class="subtitle">Structured milestones to ensure flawless execution and mutual preparedness.</p>
+                <div class="timeline">
+                    <div class="tl-day">
+                        <div class="tl-label" style="color:var(--white)">T-30</div>
+                        <div class="tl-items">
+                            <div class="tl-item"><strong class="accent">Mar 20: Sponsor commitment period
+                                    opens.</strong> Select tier, outline activation format.</div>
+                        </div>
+                    </div>
+                    <div class="tl-day">
+                        <div class="tl-label" style="color:var(--purple-light)">T-21</div>
+                        <div class="tl-items">
+                            <div class="tl-item"><strong>Mar 29: Commercial intent locked.</strong> SOW signatures and
+                                package confirmation.</div>
+                        </div>
+                    </div>
+                    <div class="tl-day">
+                        <div class="tl-label" style="color:var(--purple-light)">T-14</div>
+                        <div class="tl-items">
+                            <div class="tl-item"><strong>Apr 5: Assets freeze.</strong> Branding assets, final copy, and
+                                initial logistics brief submitted.</div>
+                        </div>
+                    </div>
+                    <div class="tl-day">
+                        <div class="tl-label" style="color:var(--purple-light)">T-10</div>
+                        <div class="tl-items">
+                            <div class="tl-item"><strong>Apr 9: Technical freeze.</strong> Power/network stall
+                                requirements locked. Challenge scope reviewed.</div>
+                        </div>
+                    </div>
+                    <div class="tl-day">
+                        <div class="tl-label" style="color:var(--purple-light)">T-7</div>
+                        <div class="tl-items">
+                            <div class="tl-item"><strong>Apr 12: Dry run.</strong> Challenge dry run and compliance
+                                check within sandbox environment.</div>
+                        </div>
+                    </div>
+                    <div class="tl-day">
+                        <div class="tl-label" style="color:var(--purple)">DAY 0</div>
+                        <div class="tl-items">
+                            <div class="tl-item"><strong>Apr 19–21: Recon event live.</strong> Real-time engagement
+                                tracking.</div>
+                        </div>
+                    </div>
+                    <div class="tl-day">
+                        <div class="tl-label" style="color:var(--purple)">T+7</div>
+                        <div class="tl-items">
+                            <div class="tl-item"><strong>Apr 28: Deliverables.</strong> Final sponsor analytics report
+                                and candidate database handover.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== SLIDE 15: CTA ==================== -->
+        <div class="slide" id="s15">
+            <div class="glow glow-1"
+                style="top:50%;left:50%;transform:translate(-50%,-50%);width:800px;height:800px;opacity:.08"></div>
+            <div class="slide-inner" style="text-align:center">
+                <div class="cta-box">
+                    <div class="cta-inner">
+                        <div class="eyebrow"
+                            style="background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2);color:var(--white)">
+                            Let's Build This Together</div>
+                        <div class="cta-title">SECURE YOUR<br>HIRING FUNNEL NOW</div>
+                        <p class="cta-text">Sponsor slots are capped to maintain event quality and ensure high ROI for
+                            all partners. Reach out to discuss how Recon 2026 fits your technical recruitment strategy.
+                        </p>
+                        <div class="contact-cols">
+                            <!-- Event Contact Column -->
+                            <div>
+                                <div class="contact-col-title">Event Contact</div>
+                                <div class="contact-col-links">
+                                    <div class="contact-item">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline>
+                                        </svg>
+                                        <a href="mailto:recon2k26@gmail.com">recon2k26@gmail.com</a>
+                                    </div>
+                                    <div class="contact-item">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M4 4l11.733 16h4.267l-11.733 -16z"></path><path d="M4 20l6.768 -6.768m2.46 -2.46l6.772 -6.772"></path>
+                                        </svg>
+                                        <a href="https://x.com/Recon2k26" target="_blank">@Recon2k26</a>
+                                    </div>
+                                    <div class="contact-item">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                                        </svg>
+                                        <a href="https://www.instagram.com/recon_2k26" target="_blank">@recon_2k26</a>
+                                    </div>
+                                    <div class="contact-item">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle>
+                                        </svg>
+                                        <a href="https://www.linkedin.com/in/recon-events/" target="_blank">recon-events</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Event Director Column -->
+                            <div>
+                                <div class="contact-col-title">Event Director</div>
+                                <div class="contact-col-links">
+                                    <div class="contact-item">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path
+                                                d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z">
+                                            </path>
+                                            <polyline points="22,6 12,13 2,6"></polyline>
+                                        </svg>
+                                        <a href="mailto:nrikhil@gmail.com">nrikhil@gmail.com</a>
+                                    </div>
+                                    <div class="contact-item">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path
+                                                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                                            </path>
+                                        </svg>
+                                        <a href="tel:+917386175224">+91 7386175224</a>
+                                    </div>
+                                    <div class="contact-item">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <path
+                                                d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z">
+                                            </path>
+                                            <rect x="2" y="9" width="4" height="12"></rect>
+                                            <circle cx="4" cy="4" r="2"></circle>
+                                        </svg>
+                                        <a href="https://linkedin.com/in/rikhilnellimarla" target="_blank">rikhil nellimarla</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>                          </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top:4rem;padding-top:2rem;border-top:1px solid var(--gray-800)">
+                    <p
+                        style="font-size:.9rem;color:var(--gray-400);margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.05em">
+                        Organized By</p>
+                    <p
+                        style="font-family:'Archivo Black',sans-serif;font-size:1.5rem;color:var(--white);margin-bottom:.5rem">
+                        Open Source Community + NULL CHAPTER</p>
+                    <p style="font-size:1rem;color:var(--purple-light)">VIT-AP University • Advisory: Dr. Sibi
+                        Chakkaravarty</p>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- end .deck -->
+
+    <!-- Navigation Elements -->
+    <div class="nav-bar" id="navBar">
+        <!-- JS will populate dots -->
+    </div>
+    <div class="slide-counter" id="slideCounter">01 / 15</div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const deck = document.getElementById("deck");
+            const slides = document.querySelectorAll(".slide");
+            const navBar = document.getElementById("navBar");
+            const slideCounter = document.getElementById("slideCounter");
+            const headerLogo = document.getElementById("headerLogo");
+            const contactDropdown = document.getElementById("contactDropdown");
+            let activeIndex = 0;
+
+            // Toggle contact dropdown
+            headerLogo.addEventListener("click", function () {
+                contactDropdown.classList.toggle("open");
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener("click", function (e) {
+                if (!headerLogo.contains(e.target) && !contactDropdown.contains(e.target)) {
+                    contactDropdown.classList.remove("open");
+                }
+            });
+
+            // Create nav dots
+            slides.forEach((slide, i) => {
+                const dot = document.createElement("div");
+                dot.className = "nav-dot" + (i === 0 ? " active" : "");
+                dot.addEventListener("click", () => {
+                    slide.scrollIntoView({ behavior: "smooth" });
+                });
+                navBar.appendChild(dot);
+            });
+
+            const dots = document.querySelectorAll(".nav-dot");
+
+            // Update active dot and counter based on scroll
+            deck.addEventListener("scroll", () => {
+                let index = Math.round(deck.scrollTop / window.innerHeight);
+                if (index !== activeIndex && index >= 0 && index < slides.length) {
+                    dots[activeIndex].classList.remove("active");
+                    activeIndex = index;
+                    dots[activeIndex].classList.add("active");
+                    slideCounter.textContent = `${String(activeIndex + 1).padStart(2, '0')} / ${slides.length}`;
+                }
+            });
+
+            // Keyboard navigation
+            document.addEventListener("keydown", (e) => {
+                if (e.key === "ArrowDown" || e.key === "ArrowRight" || e.key === "PageDown") {
+                    if (activeIndex < slides.length - 1) {
+                        slides[activeIndex + 1].scrollIntoView({ behavior: "smooth" });
+                    }
+                } else if (e.key === "ArrowUp" || e.key === "ArrowLeft" || e.key === "PageUp") {
+                    if (activeIndex > 0) {
+                        slides[activeIndex - 1].scrollIntoView({ behavior: "smooth" });
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recon 2026 — Sponsor Decks</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Archivo+Black&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --purple: #8B5CF6;
+            --purple-light: #A78BFA;
+            --purple-dark: #6D28D9;
+            --black: #0A0A0A;
+            --gray-900: #0F172A;
+            --gray-800: #1E293B;
+            --gray-100: #F1F5F9;
+            --white: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--black);
+            color: var(--white);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        .bg-gradient {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at 20% 50%, var(--purple-dark) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, var(--purple) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 20%, var(--purple-light) 0%, transparent 40%);
+            opacity: 0.15;
+            animation: pulseGlow 8s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.15; transform: scale(1); }
+            50% { opacity: 0.25; transform: scale(1.05); }
+        }
+
+        .container {
+            max-width: 1400px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: clamp(3rem, 6vw, 5rem);
+        }
+
+        .logo-text {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: clamp(3rem, 8vw, 6rem);
+            line-height: 1;
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, var(--white) 0%, var(--purple-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .tagline {
+            font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+            color: var(--purple-light);
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: clamp(0.875rem, 1.5vw, 1rem);
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: 400;
+        }
+
+        .intro-text {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto clamp(3rem, 6vw, 4rem);
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .deck-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: clamp(1.5rem, 3vw, 2rem);
+            margin-bottom: clamp(3rem, 6vw, 4rem);
+        }
+
+        .deck-card {
+            background: linear-gradient(135deg, var(--gray-900) 0%, var(--gray-800) 100%);
+            border: 2px solid rgba(139, 92, 246, 0.2);
+            border-radius: 16px;
+            padding: clamp(2rem, 4vw, 2.5rem);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+            color: var(--white);
+            display: block;
+        }
+
+        .deck-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, transparent 0%, rgba(139, 92, 246, 0.2) 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .deck-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--purple);
+            box-shadow: 0 20px 40px rgba(139, 92, 246, 0.3);
+        }
+
+        .deck-card:hover::before {
+            opacity: 1;
+        }
+
+        .deck-number {
+            font-family: 'Archivo Black', sans-serif;
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            color: var(--purple);
+            margin-bottom: 0.75rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .deck-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .deck-description {
+            font-size: clamp(0.875rem, 1.5vw, 1rem);
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 1.25rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .deck-meta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 1;
+        }
+
+        .meta-badge {
+            display: inline-block;
+            padding: 0.375rem 0.75rem;
+            background: rgba(139, 92, 246, 0.15);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--purple-light);
+        }
+
+        .cta-arrow {
+            position: absolute;
+            top: 50%;
+            right: 2rem;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            color: var(--purple);
+            opacity: 0;
+            transition: all 0.4s ease;
+            z-index: 1;
+        }
+
+        .deck-card:hover .cta-arrow {
+            opacity: 1;
+            right: 1.5rem;
+        }
+
+        footer {
+            text-align: center;
+            padding-top: clamp(2rem, 4vw, 3rem);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-text {
+            font-size: clamp(0.875rem, 1.5vw, 1rem);
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-contact {
+            font-size: clamp(0.875rem, 1.5vw, 1rem);
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .footer-contact a {
+            color: var(--purple-light);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-contact a:hover {
+            color: var(--white);
+        }
+
+        @media (max-width: 768px) {
+            .deck-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-arrow {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-gradient"></div>
+    
+    <div class="container">
+        <header>
+            <h1 class="logo-text">RECON 2026</h1>
+            <p class="tagline">Sponsor Pitch Decks</p>
+            <p class="subtitle">April 25–27, 2026 • VIT-AP University</p>
+        </header>
+
+        <p class="intro-text">
+            Choose the presentation style that best matches your sponsor's brand identity. Each deck contains identical information about Recon 2026's sponsorship opportunities, audience profile, and ROI metrics — just with different visual approaches.
+        </p>
+
+        <div class="deck-grid">
+            <a href="/sponsor-deck-variant-1.html" class="deck-card">
+                <div class="deck-number">VARIANT 1</div>
+                <h2 class="deck-title">Cinematic</h2>
+                <p class="deck-description">
+                    Liquid glass UI with premium video backgrounds, smooth transitions, and polished Mux video streaming. Inspired by modern SaaS pitch decks.
+                </p>
+                <div class="deck-meta">
+                    <span class="meta-badge">Video Backgrounds</span>
+                    <span class="meta-badge">8 Slides</span>
+                    <span class="meta-badge">Modern</span>
+                </div>
+                <div class="cta-arrow">→</div>
+            </a>
+
+            <a href="/sponsor-deck-variant-2.html" class="deck-card">
+                <div class="deck-number">VARIANT 2</div>
+                <h2 class="deck-title">Cyberpunk</h2>
+                <p class="deck-description">
+                    Dark grid aesthetics with monospace typography, cyber-card components, and technical styling. Perfect for security-focused sponsors.
+                </p>
+                <div class="deck-meta">
+                    <span class="meta-badge">Technical Grid</span>
+                    <span class="meta-badge">7 Slides</span>
+                    <span class="meta-badge">Dark Mode</span>
+                </div>
+                <div class="cta-arrow">→</div>
+            </a>
+
+            <a href="/sponsor-deck-variant-3.html" class="deck-card">
+                <div class="deck-number">VARIANT 3</div>
+                <h2 class="deck-title">Minimalist</h2>
+                <p class="deck-description">
+                    Clean white backgrounds with elegant Space Grotesk typography and subtle purple accents. Professional and approachable for enterprise sponsors.
+                </p>
+                <div class="deck-meta">
+                    <span class="meta-badge">Clean Design</span>
+                    <span class="meta-badge">8 Slides</span>
+                    <span class="meta-badge">Light Mode</span>
+                </div>
+                <div class="cta-arrow">→</div>
+            </a>
+
+            <a href="/sponsor-deck-variant-4.html" class="deck-card">
+                <div class="deck-number">VARIANT 4</div>
+                <h2 class="deck-title">Bold Impact</h2>
+                <p class="deck-description">
+                    High-contrast dark theme with massive Archivo Black headlines, neon purple glows, and aggressive typography. Built for disruptive brands.
+                </p>
+                <div class="deck-meta">
+                    <span class="meta-badge">High Impact</span>
+                    <span class="meta-badge">7 Slides</span>
+                    <span class="meta-badge">Bold Type</span>
+                </div>
+                <div class="cta-arrow">→</div>
+            </a>
+        </div>
+
+        <footer>
+            <p class="footer-text">Organized by Open Source Community (OSC) & Null Chapter • VIT-AP University</p>
+            <p class="footer-contact">
+                Questions? Contact <a href="mailto:rikhilnellimarla@gmail.com">rikhilnellimarla@gmail.com</a>
+            </p>
+        </footer>
+    </div>
+</body>
+</html>
