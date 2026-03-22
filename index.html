@@ -54,7 +54,13 @@
             height: 100vh;
             scroll-snap-type: y mandatory;
             overflow-y: scroll;
-            scroll-behavior: smooth
+            scroll-behavior: smooth;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none;  /* IE and Edge */
+        }
+        
+        .deck::-webkit-scrollbar {
+            display: none; /* Chrome, Safari and Opera */
         }
 
         .slide {
