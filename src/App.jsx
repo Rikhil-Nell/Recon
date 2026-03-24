@@ -17,6 +17,28 @@ function App() {
         return () => document.removeEventListener('click', handleClick);
     }, []);
 
+    useEffect(() => {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const id = entry.target.id;
+                    if (id && id.startsWith('s')) {
+                        const index = parseInt(id.replace('s', ''), 10) - 1;
+                        if (!isNaN(index)) setActiveIndex(index);
+                    }
+                }
+            });
+        }, {
+            root: null,
+            rootMargin: '-50% 0px -50% 0px'
+        });
+
+        const slides = document.querySelectorAll('.slide');
+        slides.forEach(slide => observer.observe(slide));
+
+        return () => observer.disconnect();
+    }, []);
+
     return (
         <>
             <div className="noise" />
@@ -100,15 +122,12 @@ function App() {
                 </div>
             </div>
 
-            <div className="deck" id="deck" onScroll={(e) => {
-                const index = Math.round(e.target.scrollTop / window.innerHeight);
-                if (index !== activeIndex) setActiveIndex(index);
-            }}>
+            <div className="deck" id="deck">
                 <div className="slide" id="s1">
                     <div className="glow glow-1"></div>
                     <div className="glow glow-2"></div>
                     <div className="slide-inner">
-                        <div className="eyebrow">Inaugural Annual Edition • April 19–21, 2026 (Tentative) · VIT-AP University, Amaravati</div>
+                        <div className="eyebrow">Inaugural Annual Edition • April 27-29 · VIT-AP University, Amaravati</div>
                         <h1>RECON<br /><span className="accent">2026</span></h1>
                         <p className="subtitle">India's premier student-led DEFCON-style cybersecurity conference. Three days of
                             offensive security, competitive hacking, and direct access to 600+ driven security engineers.</p>
@@ -887,7 +906,7 @@ function App() {
                                 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '2rem', marginBottom: '1rem' }}>
                                 <img src="logo/OSC%20Logo.png" alt="OSC" style={{ height: '50px', objectFit: 'contain' }} />
                                 <img src="logo/Null%20Logo.png" alt="Null"
-                                    style={{ height: '50px', objectFit: 'contain', filter: 'invert(1) brightness(2)' }} />
+                                    style={{ height: '50px', objectFit: 'contain' }} />
                             </div>
                             <p style={{ fontSize: '1rem', color: 'var(--purple-light)' }}>VIT-AP University • Advisory: Dr. Sibi
                                 Chakkaravarty</p>
