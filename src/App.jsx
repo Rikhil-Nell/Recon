@@ -127,7 +127,7 @@ function App() {
                     <div className="glow glow-1"></div>
                     <div className="glow glow-2"></div>
                     <div className="slide-inner">
-                        <div className="eyebrow">Inaugural Annual Edition • April 27-29 · VIT-AP University, Amaravati</div>
+                        <div className="eyebrow">Inaugural Annual Edition • April 19-21 · VIT-AP University, Amaravati</div>
                         <h1>RECON<br /><span className="accent">2026</span></h1>
                         <p className="subtitle">India's premier student-led DEFCON-style cybersecurity conference. Three days of
                             offensive security, competitive hacking, and direct access to 600+ driven security engineers.</p>
@@ -149,13 +149,43 @@ function App() {
                                 <div className="stat-label">Event Budget</div>
                             </div>
                         </div>
-                        <div className="logo-bar">
-                            <img src="logo/VITAP%20Logo.png" alt="VIT-AP University" />
-                            <img src="logo/IIT%20Madras%20Logo.png" alt="IIT Madras" />
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Ministry_of_Electronics_and_Information_Technology.svg"
-                                alt="MeitY" style={{ filter: 'brightness(0) invert(1)' }} />
-                            <img src="logo/ISEA%20Logo.png" alt="ISEA" />
-                            <img src="logo/DF%20HD%20Logo.jpeg" alt="Digital Fortress" />
+                        <div className="marquee-wrapper">
+                            <div className="marquee-track">
+                                <div className="marquee-content">
+                                    <div className="sponsor-pill">
+                                        <img src="logo/VITAP%20Logo.png" alt="VIT-AP University" />
+                                    </div>
+                                    <div className="sponsor-pill">
+                                        <img src="logo/IIT%20Madras%20Logo.png" alt="IIT Madras" style={{ transform: 'scale(1.4)' }} />
+                                    </div>
+                                    <div className="sponsor-pill">
+                                        <img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Ministry_of_Electronics_and_Information_Technology.svg" alt="MeitY" />
+                                    </div>
+                                    <div className="sponsor-pill">
+                                        <img src="logo/ISEA%20Logo.png" alt="ISEA" style={{ transform: 'scale(1.3)' }} />
+                                    </div>
+                                    <div className="sponsor-pill">
+                                        <img src="logo/DF%20HD%20Logo.png" alt="Digital Fortress" style={{ transform: 'scale(1.5)' }} />
+                                    </div>
+                                </div>
+                                <div className="marquee-content" aria-hidden="true">
+                                    <div className="sponsor-pill">
+                                        <img src="logo/VITAP%20Logo.png" alt="VIT-AP University" />
+                                    </div>
+                                    <div className="sponsor-pill">
+                                        <img src="logo/IIT%20Madras%20Logo.png" alt="IIT Madras" style={{ transform: 'scale(1.4)' }} />
+                                    </div>
+                                    <div className="sponsor-pill">
+                                        <img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/Ministry_of_Electronics_and_Information_Technology.svg" alt="MeitY" />
+                                    </div>
+                                    <div className="sponsor-pill">
+                                        <img src="logo/ISEA%20Logo.png" alt="ISEA" style={{ transform: 'scale(1.3)' }} />
+                                    </div>
+                                    <div className="sponsor-pill">
+                                        <img src="logo/DF%20HD%20Logo.png" alt="Digital Fortress" style={{ transform: 'scale(1.5)' }} />
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
