@@ -212,7 +212,7 @@ function App() {
                                 <h3>Primary Outcomes</h3>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '.5rem', marginTop: '.8rem' }}>
                                     <div className="body" style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem' }}><span
-                                        style={{ color: 'var(--green)' }}>✓</span> <span>2 keynote/talk blocks delivered on
+                                        style={{ color: 'var(--green)' }}>✓</span> <span>4 keynote/talk blocks delivered on
                                             schedule</span></div>
                                     <div className="body" style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem' }}><span
                                         style={{ color: 'var(--green)' }}>✓</span> <span>1 overnight CTF delivered
@@ -310,11 +310,12 @@ function App() {
                             <div className="tl-day">
                                 <div className="tl-label">DAY 1</div>
                                 <div className="tl-items">
-                                    <div className="tl-item"><span className="tl-time">13:30</span>Gates open & check-in</div>
-                                    <div className="tl-item"><span className="tl-time">14:00</span>Inauguration ceremony</div>
-                                    <div className="tl-item"><span className="tl-time">15:00</span>Keynote Talk 1</div>
-                                    <div className="tl-item"><span className="tl-time">16:15</span>Keynote Talk 2</div>
-                                    <div className="tl-item"><span className="tl-time">17:15</span>CTF briefing + platform check</div>
+                                    <div className="tl-item"><span className="tl-time">09:30</span>Gates Open</div>
+                                    <div className="tl-item"><span className="tl-time">10:00</span>Inauguration</div>
+                                    <div className="tl-item"><span className="tl-time">11:00</span>Talk 1</div>
+                                    <div className="tl-item"><span className="tl-time">13:30</span>Talk 2</div>
+                                    <div className="tl-item"><span className="tl-time">15:00</span>All Stalls Open</div>
+                                    <div className="tl-item"><span className="tl-time">17:00</span>CTF Briefing & Break</div>
                                     <div className="tl-item"><span className="tl-time">18:00</span><strong className="text-white">Overnight
                                         CTF begins →</strong> runs until 06:00</div>
                                 </div>
@@ -322,13 +323,11 @@ function App() {
                             <div className="tl-day">
                                 <div className="tl-label">DAY 2</div>
                                 <div className="tl-items">
-                                    <div className="tl-item"><span className="tl-time">06:00</span>CTF close + provisional scoring</div>
-                                    <div className="tl-item"><span className="tl-time">08:00</span>Mandatory rest block</div>
-                                    <div className="tl-item"><span className="tl-time">14:00</span>Workshops + security village blocks
-                                    </div>
-                                    <div className="tl-item"><span className="tl-time">16:00</span><strong className="text-white">Sponsor
-                                        Demo Street</strong> + challenge blocks</div>
-                                    <div className="tl-item"><span className="tl-time">18:30</span>Dinner + KOTH briefing</div>
+                                    <div className="tl-item"><span className="tl-time">06:00</span>Recovery & Low-Intensity Block</div>
+                                    <div className="tl-item"><span className="tl-time">13:30</span>Talk 3</div>
+                                    <div className="tl-item"><span className="tl-time">14:30</span>Talk 4</div>
+                                    <div className="tl-item"><span className="tl-time">15:30</span>All Stalls Open</div>
+                                    <div className="tl-item"><span className="tl-time">21:30</span>Dinner + KOTH Briefing</div>
                                     <div className="tl-item"><span className="tl-time">22:00</span><strong className="text-white">Overnight
                                         KOTH begins →</strong> runs until 06:00</div>
                                 </div>
@@ -336,17 +335,16 @@ function App() {
                             <div className="tl-day">
                                 <div className="tl-label">DAY 3</div>
                                 <div className="tl-items">
-                                    <div className="tl-item"><span className="tl-time">06:00</span>KOTH close + adjudication</div>
-                                    <div className="tl-item"><span className="tl-time">14:00</span>Finals highlights + lightning talks
-                                    </div>
+                                    <div className="tl-item"><span className="tl-time">06:00</span>Recovery & Adjudication</div>
+                                    <div className="tl-item"><span className="tl-time">14:00</span>Finals Highlights & Lightning Talks</div>
                                     <div className="tl-item"><span className="tl-time">16:00</span><strong className="text-white">Awards &
-                                        closing ceremony</strong></div>
+                                        Closing Ceremony</strong></div>
                                     <div className="tl-item"><span className="tl-time">17:00</span>Teardown & asset recovery</div>
                                 </div>
                             </div>
                         </div>
                         <div className="callout">
-                            <p><strong>Sponsor Demo Street</strong> runs Day 2 afternoon (16:00–18:30) — your prime window for
+                            <p><strong>Sponsor Demo Street</strong> runs on Day 1 (16:00) and Day 2 (16:00) — your prime window for
                                 booth traffic, challenge engagement, and direct talent conversations.</p>
                         </div>
                     </div>
