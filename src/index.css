@@ -25,6 +25,12 @@
 html {
     scroll-behavior: smooth;
     overflow-x: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar {
+    display: none;
 }
 
 body {
@@ -34,34 +40,92 @@ body {
     overflow-x: hidden;
 }
 
+/* Scroll progress bar at top */
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--purple), var(--purple-light));
+    z-index: 300;
+    width: 0%;
+    transition: none;
+    box-shadow: 0 0 10px var(--purple-glow);
+}
+
+/* Page container — normal scrolling flow */
 .deck {
     width: 100%;
-    height: 100svh;
-    scroll-snap-type: y mandatory;
-    overflow-y: scroll;
-    scroll-behavior: smooth;
-    scrollbar-width: none;
-    /* Firefox */
-    -ms-overflow-style: none;
-    /* IE and Edge */
 }
 
-.deck::-webkit-scrollbar {
-    display: none;
-    /* Chrome, Safari and Opera */
-}
-
-.slide {
+/* Each section */
+.section {
     width: 100%;
-    height: 100svh;
-    scroll-snap-align: start;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: clamp(1.5rem, 4vw, 3.5rem) clamp(2rem, 6vw, 5rem);
+    padding: clamp(4rem, 8vh, 7rem) clamp(2rem, 6vw, 5rem);
     position: relative;
     background: var(--black);
-    overflow: hidden;
+}
+
+/* Hero section gets extra height to feel immersive */
+.section--hero {
+    min-height: 100vh;
+    min-height: 100svh;
+}
+
+.section-inner {
+    max-width: 1300px;
+    width: 100%;
+    position: relative;
+    z-index: 2
+}
+
+/* Subtle separator between sections */
+.section + .section {
+    /* continuous flow — no visible divider */
+}
+
+/* ── Scroll-reveal animation system ── */
+.reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Staggered delays for child elements */
+.reveal-d1 { transition-delay: 0.08s; }
+.reveal-d2 { transition-delay: 0.16s; }
+.reveal-d3 { transition-delay: 0.24s; }
+.reveal-d4 { transition-delay: 0.32s; }
+.reveal-d5 { transition-delay: 0.40s; }
+
+/* Legacy class compat — .slide maps to .section, .slide-inner maps to .section-inner */
+.slide { 
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(4rem, 8vh, 7rem) clamp(2rem, 6vw, 5rem);
+    position: relative;
+    background: var(--black);
+}
+
+.slide + .slide {
+    /* continuous flow — no visible divider */
+}
+
+.slide:first-child {
+    min-height: 100vh;
+    min-height: 100svh;
+    border-top: none;
 }
 
 .slide-inner {
@@ -385,7 +449,7 @@ h3 {
 /* Tier cards */
 .tier-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: clamp(1.2rem, 2.5vw, 2rem);
     margin-top: clamp(1.5rem, 3vw, 2rem)
 }
@@ -680,9 +744,7 @@ h3 {
             animation: scroll-pill 35s linear infinite;
         }
 
-        .marquee-track:hover {
-            animation-play-state: paused;
-        }
+
 
         .marquee-content {
             display: flex;
@@ -699,26 +761,13 @@ h3 {
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
-        }
-
-        .sponsor-pill:hover {
-            transform: translateY(-2px);
-            background: #ffffff;
-            box-shadow: 0 0 20px var(--purple-glow);
         }
 
         .sponsor-pill img {
             height: clamp(25px, 3.5vw, 40px);
             object-fit: contain;
-            mix-blend-mode: multiply; /* Removes white bg from JPEG naturally */
-            filter: grayscale(1) opacity(0.85);
-            transition: all 0.3s ease;
-        }
-
-        .sponsor-pill:hover img {
-            filter: grayscale(0) opacity(1);
+            mix-blend-mode: multiply;
         }
 
         @keyframes scroll-pill {
@@ -726,52 +775,7 @@ h3 {
             100% { transform: translateX(-50%); }
         }
 
-/* Navigation */
-.nav-bar {
-    position: fixed;
-    bottom: 1.5rem;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: .4rem;
-    z-index: 100;
-    background: rgba(0, 0, 0, .6);
-    padding: .6rem 1.2rem;
-    border-radius: 50px;
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, .08)
-}
-
-.nav-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, .2);
-    cursor: pointer;
-    transition: all .3s
-}
-
-.nav-dot.active {
-    background: var(--purple);
-    transform: scale(1.4);
-    box-shadow: 0 0 12px var(--purple-glow)
-}
-
-.nav-dot:hover {
-    background: var(--purple-light)
-}
-
-/* Slide counter */
-.slide-counter {
-    position: fixed;
-    bottom: 1.5rem;
-    right: 2rem;
-    z-index: 100;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: .75rem;
-    color: rgba(255, 255, 255, .3);
-    letter-spacing: .05em
-}
+/* Nav dots and slide counter removed — replaced by scroll-progress bar */
 
 /* Two-col layout */
 .two-col {
@@ -803,18 +807,14 @@ h3 {
 
 /* Responsive */
 @media(max-width:900px) {
-    .deck {
-        scroll-snap-type: none;
-        height: auto;
-        overflow-y: auto;
-        overflow-x: hidden;
+    .slide,
+    .section {
+        padding: 3rem 1.5rem;
     }
 
-    .slide {
-        height: auto;
-        min-height: 100svh;
-        overflow: hidden;
-        padding-top: 6rem;
+    .slide:first-child,
+    .section--hero {
+        padding-top: 5rem;
         padding-bottom: 4rem;
     }
 
@@ -830,26 +830,16 @@ h3 {
         margin-bottom: .3rem;
     }
 
-    .header-logo {
-        top: 1rem;
-        right: 1rem;
-        width: 40px;
-        height: 40px;
+    .header-logo,
+    .contact-dropdown {
+        display: none !important;
     }
 }
 
 @media(max-width:600px) {
-    .slide {
-        padding: 1.2rem 1.5rem
-    }
-
-    .nav-bar {
-        bottom: 1rem;
-        padding: .5rem .8rem
-    }
-
-    .slide-counter {
-        display: none
+    .slide,
+    .section {
+        padding: 2.5rem 1.2rem;
     }
 
     .stat-row,
@@ -858,6 +848,11 @@ h3 {
     .feat-grid,
     .roi-row {
         grid-template-columns: 1fr
+    }
+
+    .grid-5-centered .card,
+    .grid-5-centered .feat {
+        flex: 0 1 100%;
     }
 
     .contact-dropdown {
@@ -870,10 +865,10 @@ h3 {
 /* Header Logo & Dropdown */
 .header-logo {
     position: fixed;
-    top: 1.5rem;
-    right: 2rem;
-    width: 50px;
-    height: 50px;
+    top: 1.2rem;
+    right: 1.5rem;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
     background: rgba(0, 0, 0, .5);
     backdrop-filter: blur(8px);

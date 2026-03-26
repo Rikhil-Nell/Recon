@@ -1,11 +1,10 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import './index.css';
 
 function App() {
     const [dropdownOpen, setDropdownOpen] = useState(false);
-    const [activeIndex, setActiveIndex] = useState(0);
-    const totalSlides = 15;
+    const [scrollProgress, setScrollProgress] = useState(0);
 
     useEffect(() => {
         const handleClick = (e) => {
@@ -17,30 +16,44 @@ function App() {
         return () => document.removeEventListener('click', handleClick);
     }, []);
 
+    // Scroll progress bar
+    useEffect(() => {
+        const handleScroll = () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+            setScrollProgress(progress);
+        };
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    // Scroll-reveal: fade up elements as they enter viewport
     useEffect(() => {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    const id = entry.target.id;
-                    if (id && id.startsWith('s')) {
-                        const index = parseInt(id.replace('s', ''), 10) - 1;
-                        if (!isNaN(index)) setActiveIndex(index);
-                    }
+                    entry.target.classList.add('revealed');
                 }
             });
         }, {
             root: null,
-            rootMargin: '-50% 0px -50% 0px'
+            rootMargin: '0px 0px -60px 0px',
+            threshold: 0.1
         });
 
-        const slides = document.querySelectorAll('.slide');
-        slides.forEach(slide => observer.observe(slide));
+        const revealTargets = document.querySelectorAll('.slide-inner');
+        revealTargets.forEach(el => {
+            el.classList.add('reveal');
+            observer.observe(el);
+        });
 
         return () => observer.disconnect();
     }, []);
 
     return (
         <>
+            <div className="scroll-progress" style={{ width: `${scrollProgress}%` }} />
             <div className="noise" />
 
             <div
@@ -312,8 +325,8 @@ function App() {
                                 <div className="tl-items">
                                     <div className="tl-item"><span className="tl-time">09:30</span>Gates Open</div>
                                     <div className="tl-item"><span className="tl-time">10:00</span>Inauguration</div>
-                                    <div className="tl-item"><span className="tl-time">11:00</span>Talk 1</div>
-                                    <div className="tl-item"><span className="tl-time">13:30</span>Talk 2</div>
+                                    <div className="tl-item"><span className="tl-time">11:00</span>Talk 1 — National Workshop on System Security</div>
+                                    <div className="tl-item"><span className="tl-time">13:30</span>Talk 2 — National Workshop on System Security</div>
                                     <div className="tl-item"><span className="tl-time">15:00</span>All Stalls Open</div>
                                     <div className="tl-item"><span className="tl-time">17:00</span>CTF Briefing & Break</div>
                                     <div className="tl-item"><span className="tl-time">18:00</span><strong className="text-white">Overnight
@@ -324,8 +337,8 @@ function App() {
                                 <div className="tl-label">DAY 2</div>
                                 <div className="tl-items">
                                     <div className="tl-item"><span className="tl-time">06:00</span>Recovery & Low-Intensity Block</div>
-                                    <div className="tl-item"><span className="tl-time">13:30</span>Talk 3</div>
-                                    <div className="tl-item"><span className="tl-time">14:30</span>Talk 4</div>
+                                    <div className="tl-item"><span className="tl-time">13:30</span>Talk 3 — Information Security</div>
+                                    <div className="tl-item"><span className="tl-time">14:30</span>Talk 4 — Application Security</div>
                                     <div className="tl-item"><span className="tl-time">15:30</span>All Stalls Open</div>
                                     <div className="tl-item"><span className="tl-time">21:30</span>Dinner + KOTH Briefing</div>
                                     <div className="tl-item"><span className="tl-time">22:00</span><strong className="text-white">Overnight
@@ -941,22 +954,6 @@ function App() {
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div className="nav-bar" id="navBar">
-                {Array.from({ length: totalSlides }).map((_, i) => (
-                    <div
-                        key={i}
-                        className={`nav-dot ${i === activeIndex ? 'active' : ''}`}
-                        onClick={() => {
-                            const el = document.getElementById(`s${i + 1}`);
-                            if (el) el.scrollIntoView({ behavior: 'smooth' });
-                        }}
-                    />
-                ))}
-            </div>
-            <div className="slide-counter" id="slideCounter">
-                {String(activeIndex + 1).padStart(2, '0')} / {totalSlides}
             </div>
         </>
     );
