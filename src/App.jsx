@@ -325,8 +325,24 @@ function App() {
                                 <div className="tl-items">
                                     <div className="tl-item"><span className="tl-time">09:30</span>Gates Open</div>
                                     <div className="tl-item"><span className="tl-time">10:00</span>Inauguration</div>
-                                    <div className="tl-item"><span className="tl-time">11:00</span>Talk 1 — National Workshop on System Security</div>
-                                    <div className="tl-item"><span className="tl-time">13:30</span>Talk 2 — National Workshop on System Security</div>
+                                    <div className="tl-item">
+                                        <span className="tl-time">11:00</span>
+                                        <div>
+                                            <strong className="text-white">Talk 1</strong>
+                                            <div style={{ fontSize: '0.85em', color: 'var(--gray-400)', lineHeight: '1.4', marginTop: '0.2rem' }}>
+                                                National Workshop on System Security: From Vulnerabilities To Trustworthy Systems
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="tl-item">
+                                        <span className="tl-time">13:30</span>
+                                        <div>
+                                            <strong className="text-white">Talk 2</strong>
+                                            <div style={{ fontSize: '0.85em', color: 'var(--gray-400)', lineHeight: '1.4', marginTop: '0.2rem' }}>
+                                                National Workshop on System Security: From Vulnerabilities To Trustworthy Systems
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div className="tl-item"><span className="tl-time">15:00</span>All Stalls Open</div>
                                     <div className="tl-item"><span className="tl-time">17:00</span>CTF Briefing & Break</div>
                                     <div className="tl-item"><span className="tl-time">18:00</span><strong className="text-white">Overnight
@@ -337,8 +353,24 @@ function App() {
                                 <div className="tl-label">DAY 2</div>
                                 <div className="tl-items">
                                     <div className="tl-item"><span className="tl-time">06:00</span>Recovery & Low-Intensity Block</div>
-                                    <div className="tl-item"><span className="tl-time">13:30</span>Talk 3 — Information Security</div>
-                                    <div className="tl-item"><span className="tl-time">14:30</span>Talk 4 — Application Security</div>
+                                    <div className="tl-item">
+                                        <span className="tl-time">13:30</span>
+                                        <div>
+                                            <strong className="text-white">Talk 3</strong>
+                                            <div style={{ fontSize: '0.85em', color: 'var(--gray-400)', lineHeight: '1.4', marginTop: '0.2rem' }}>
+                                                National Workshop on System Security: From Vulnerabilities To Trustworthy Systems
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="tl-item">
+                                        <span className="tl-time">14:30</span>
+                                        <div>
+                                            <strong className="text-white">Talk 4</strong>
+                                            <div style={{ fontSize: '0.85em', color: 'var(--gray-400)', lineHeight: '1.4', marginTop: '0.2rem' }}>
+                                                National Workshop on System Security: From Vulnerabilities To Trustworthy Systems
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div className="tl-item"><span className="tl-time">15:30</span>All Stalls Open</div>
                                     <div className="tl-item"><span className="tl-time">21:30</span>Dinner + KOTH Briefing</div>
                                     <div className="tl-item"><span className="tl-time">22:00</span><strong className="text-white">Overnight
@@ -427,7 +459,8 @@ function App() {
                                         <div className="card-title">Format</div>
                                         <div className="card-text">Day 2 22:00 → Day 3 06:00. 8–12 target boxes running real
                                             vulnerable services. Teams gain points for every interval they hold a machine.
-                                            Red/Blue hybrid optional for finals.</div>
+                                            Red/Blue hybrid optional for finals. Teams
+                                            of 1–4. <strong>The Top 3 teams are awarded grand prizes.</strong></div>
                                     </div>
                                     <div className="card">
                                         <div className="card-title">Target Architecture</div>
@@ -723,7 +756,7 @@ function App() {
                                 <h3>Documentation & Brand Engagement</h3>
                                 <p className="body">Preliminary sponsor report delivered within 72 hours. Final detailed report
                                     (footfall estimates by slot, challenge solves, stage mentions) delivered within 7 days.
-                                    <strong>All sponsors receive high-resolution photographic documentation of their branding,
+                                    <strong> All sponsors receive high-resolution photographic documentation of their branding,
                                         booths, and winning teams for internal verification and marketing.</strong>
                                 </p>
                             </div>
