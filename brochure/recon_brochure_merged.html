@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recon 2026 — National Workshop on System Security</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --purple: #8B5CF6;
+      --purple-light: #A78BFA;
+      --purple-dark: #6D28D9;
+      --purple-glow: rgba(139, 92, 246, 0.4);
+      --purple-subtle: rgba(139, 92, 246, 0.08);
+      --black: #09090B;
+      --gray-950: #0C0C0F;
+      --gray-900: #18181B;
+      --gray-800: #27272A;
+      --gray-700: #3F3F46;
+      --gray-400: #A1A1AA;
+      --gray-200: #E4E4E7;
+      --white: #FAFAFA;
+      --red: #EF4444;
+      --amber: #F59E0B;
+      --green: #10B981;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Print at A4, designed for both screen and print */
+    @page {
+      size: A4;
+      margin: 0;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      overflow-x: hidden;
+    }
+
+    body {
+      background: var(--black);
+      color: var(--gray-400);
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 10pt;
+      line-height: 1.6;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    /* NOISE OVERLAY */
+    .noise {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    }
+
+    /* PAGE WRAPPER */
+    .page {
+      width: 100%;
+      max-width: 210mm;
+      min-height: 297mm;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+      background: var(--black);
+      page-break-after: always;
+    }
+
+    /* AMBIENT GLOWS */
+    .glow-tl {
+      position: absolute;
+      top: -80px;
+      left: -80px;
+      width: 350px;
+      height: 350px;
+      background: var(--purple-dark);
+      border-radius: 50%;
+      filter: blur(140px);
+      opacity: 0.14;
+      pointer-events: none;
+    }
+
+    .glow-br {
+      position: absolute;
+      bottom: -60px;
+      right: -60px;
+      width: 280px;
+      height: 280px;
+      background: var(--purple);
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.1;
+      pointer-events: none;
+    }
+
+    .glow-mid {
+      position: absolute;
+      top: 45%;
+      left: 55%;
+      width: 200px;
+      height: 200px;
+      background: var(--purple-dark);
+      border-radius: 50%;
+      filter: blur(100px);
+      opacity: 0.08;
+      pointer-events: none;
+    }
+
+    /* ——— PAGE 1 COVER ——— */
+    .cover {
+      display: flex;
+      flex-direction: column;
+      height: 297mm;
+      padding: 0;
+    }
+
+    /* Top bar */
+    .cover-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10mm 14mm 8mm;
+      border-bottom: 1px solid var(--gray-800);
+    }
+
+    .inst-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .inst-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--purple-subtle);
+      border: 1px solid rgba(139, 92, 246, 0.25);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9pt;
+      color: var(--purple-light);
+      font-weight: 500;
+    }
+
+    .inst-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 8pt;
+      color: var(--gray-400);
+      line-height: 1.3;
+    }
+
+    .inst-name strong {
+      display: block;
+      color: var(--white);
+      font-size: 9pt;
+      font-weight: 600;
+    }
+
+    .funding-pill {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--purple-subtle);
+      border: 1px solid rgba(139, 92, 246, 0.2);
+      border-radius: 20px;
+      padding: 5px 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 7.5pt;
+      color: var(--purple-light);
+    }
+
+    .funding-pill::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: var(--purple);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--purple-glow);
+      flex-shrink: 0;
+    }
+
+    /* Hero section */
+    .cover-hero {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 10mm 14mm 6mm;
+      position: relative;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--purple-subtle);
+      border: 1px solid rgba(139, 92, 246, 0.2);
+      border-radius: 20px;
+      padding: 4px 12px;
+      margin-bottom: 14px;
+      width: fit-content;
+    }
+
+    .eyebrow::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: var(--purple);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--purple-glow);
+      flex-shrink: 0;
+    }
+
+    .eyebrow span {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 7pt;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--purple);
+    }
+
+    .cover-title {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 28pt;
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+      color: var(--white);
+      text-transform: uppercase;
+      margin-bottom: 6mm;
+    }
+
+    .cover-title em {
+      color: var(--purple-light);
+      font-style: normal;
+    }
+
+    .cover-subtitle {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 10pt;
+      color: var(--gray-400);
+      line-height: 1.65;
+      max-width: 130mm;
+      margin-bottom: 10mm;
+    }
+
+    /* Stat strip */
+    .stat-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 3mm;
+      margin-bottom: 10mm;
+    }
+
+    .stat-card {
+      background: var(--gray-900);
+      border: 1px solid var(--gray-800);
+      border-radius: 8px;
+      padding: 8px 10px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.5);
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: var(--purple);
+      opacity: 0.6;
+    }
+
+    .stat-num {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 16pt;
+      color: var(--white);
+      letter-spacing: -0.02em;
+      line-height: 1;
+      display: block;
+    }
+
+    .stat-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 6.5pt;
+      color: var(--gray-400);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      display: block;
+      margin-top: 3px;
+    }
+
+    /* Date/venue block */
+    .meta-block {
+      display: flex;
+      gap: 4mm;
+      margin-bottom: 8mm;
+    }
+
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .meta-key {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 6.5pt;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--purple);
+    }
+
+    .meta-val {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 9pt;
+      font-weight: 600;
+      color: var(--white);
+    }
+
+    .meta-divider {
+      width: 1px;
+      background: var(--gray-800);
+      align-self: stretch;
+      margin: 0 2mm;
+    }
+
+    /* Track pills row */
+    .track-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 8mm;
+    }
+
+    .track-pill {
+      background: var(--gray-900);
+      border: 1px solid var(--gray-800);
+      border-radius: 16px;
+      padding: 4px 10px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 6.5pt;
+      color: var(--gray-400);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .track-pill.hot {
+      border-color: rgba(139, 92, 246, 0.35);
+      color: var(--purple-light);
+      background: var(--purple-subtle);
+    }
+
+    /* Horizontal rule with label */
+    .rule-line {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 6mm 0 5mm;
+    }
+
+    .rule-line::before,
+    .rule-line::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--gray-800);
+    }
+
+    .rule-line span {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 6.5pt;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--gray-700);
+      white-space: nowrap;
+    }
+
+    /* Cover bottom bar */
+    .cover-footer {
+      border-top: 1px solid var(--gray-800);
+      padding: 5mm 14mm;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .cover-footer-left {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 7pt;
+      color: var(--gray-700);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .cover-footer-right {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 7.5pt;
+      color: var(--gray-400);
+    }
+
+    .cover-footer-right strong {
+      color: var(--purple-light);
+    }
+
+    /* ——— PAGE 2 CONTENT ——— */
+    .content-page {
+      height: 297mm;
+      display: flex;
+      flex-direction: column;
+      padding: 10mm 14mm;
+      position: relative;
+    }
+
+    .section-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 6.5pt;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--purple);
+      margin-bottom: 5px;
+    }
+
+    .section-title {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 16pt;
+      color: var(--white);
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      line-height: 1;
+      margin-bottom: 6mm;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5mm;
+      margin-bottom: 7mm;
+    }
+
+    .three-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 4mm;
+      margin-bottom: 7mm;
+    }
+
+    .info-card {
+      background: var(--gray-900);
+      border: 1px solid var(--gray-800);
+      border-radius: 8px;
+      padding: 10px 12px;
+      box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .info-card::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: var(--purple);
+      opacity: 0.5;
+    }
+
+    .info-card h4 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 8.5pt;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 5px;
+    }
+
+    .info-card p,
+    .info-card li {
+      font-size: 7.5pt;
+      color: var(--gray-400);
+      line-height: 1.55;
+    }
+
+    .info-card ul {
+      padding-left: 12px;
+    }
+
+    .info-card li {
+      margin-bottom: 2px;
+    }
+
+    .highlight-card {
+      background: var(--purple-subtle);
+      border: 1px solid rgba(139, 92, 246, 0.25);
+      border-radius: 8px;
+      padding: 10px 12px;
+      box-shadow: 4px 4px 0px rgba(139, 92, 246, 0.1);
+    }
+
+    .highlight-card h4 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 8.5pt;
+      font-weight: 700;
+      color: var(--purple-light);
+      margin-bottom: 5px;
+    }
+
+    .highlight-card p,
+    .highlight-card li {
+      font-size: 7.5pt;
+      color: var(--gray-400);
+      line-height: 1.55;
+    }
+
+    .highlight-card ul {
+      padding-left: 12px;
+    }
+
+    .highlight-card li {
+      margin-bottom: 2px;
+    }
+
+    .body-text {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 8.5pt;
+      color: var(--gray-400);
+      line-height: 1.65;
+      margin-bottom: 5mm;
+    }
+
+    .body-text strong {
+      color: var(--white);
+    }
+
+    /* Timeline */
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3mm;
+      margin-bottom: 6mm;
+    }
+
+    .tl-item {
+      background: var(--gray-900);
+      border: 1px solid var(--gray-800);
+      border-radius: 6px;
+      padding: 8px 10px;
+      position: relative;
+    }
+
+    .tl-day {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 9pt;
+      color: var(--purple-light);
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .tl-date {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 6.5pt;
+      color: var(--gray-700);
+      display: block;
+      margin-bottom: 6px;
+      letter-spacing: 0.08em;
+    }
+
+    .tl-events {
+      list-style: none;
+      padding: 0;
+    }
+
+    .tl-events li {
+      font-size: 7pt;
+      color: var(--gray-400);
+      padding: 2px 0;
+      border-bottom: 1px solid var(--gray-800);
+      display: flex;
+      align-items: flex-start;
+      gap: 5px;
+    }
+
+    .tl-events li:last-child {
+      border-bottom: none;
+    }
+
+    .tl-events li::before {
+      content: '▸';
+      color: var(--purple);
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* Budget table */
+    .budget-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 5mm;
+      font-size: 7.5pt;
+    }
+
+    .budget-table th {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 6.5pt;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--purple);
+      text-align: left;
+      padding: 6px 8px;
+      background: var(--purple-subtle);
+      border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+    }
+
+    .budget-table td {
+      padding: 5px 8px;
+      color: var(--gray-400);
+      border-bottom: 1px solid var(--gray-800);
+    }
+
+    .budget-table td:last-child {
+      color: var(--white);
+      font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .budget-table tr:last-child td {
+      color: var(--purple-light);
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 8.5pt;
+      border-bottom: none;
+      background: var(--purple-subtle);
+    }
+
+    .budget-table tr:last-child td:last-child {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 10pt;
+      letter-spacing: -0.01em;
+      color: var(--white);
+    }
+
+    /* Org grid */
+    .org-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3mm;
+      margin-bottom: 5mm;
+    }
+
+    .org-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 6px 8px;
+      background: var(--gray-900);
+      border-radius: 6px;
+      border: 1px solid var(--gray-800);
+    }
+
+    .org-role {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 5.5pt;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--purple);
+      white-space: nowrap;
+      width: 55px;
+      flex-shrink: 0;
+      padding-top: 2px;
+    }
+
+    .org-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 7.5pt;
+      color: var(--white);
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    .org-id {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 6pt;
+      color: var(--gray-700);
+      display: block;
+    }
+
+    /* Outcome badges */
+    .outcome-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-bottom: 5mm;
+    }
+
+    .outcome-badge {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--gray-900);
+      border: 1px solid var(--gray-800);
+      border-radius: 6px;
+      padding: 5px 9px;
+      font-size: 7.5pt;
+      color: var(--gray-400);
+    }
+
+    .outcome-badge .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .dot-green {
+      background: var(--green);
+    }
+
+    .dot-purple {
+      background: var(--purple);
+    }
+
+    .dot-amber {
+      background: var(--amber);
+    }
+
+    /* Footer */
+    .page-footer {
+      margin-top: auto;
+      border-top: 1px solid var(--gray-800);
+      padding-top: 5mm;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .footer-left {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 6.5pt;
+      color: var(--gray-700);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      line-height: 1.6;
+    }
+
+    .footer-right {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 7.5pt;
+      color: var(--gray-400);
+      text-align: right;
+      line-height: 1.5;
+    }
+
+    .footer-right strong {
+      color: var(--purple-light);
+    }
+
+    /* Divider between sections */
+    .section-gap {
+      margin-bottom: 7mm;
+    }
+
+    .inline-mono {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 7.5pt;
+      color: var(--purple-light);
+      background: var(--purple-subtle);
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+
+    /* Print only: remove screen extras */
+    @media print {
+      @page {
+        margin: 0;
+        size: A4;
+      }
+
+      ::-webkit-scrollbar {
+        display: none;
+      }
+
+      .noise {
+        display: none;
+      }
+
+      html,
+      body {
+        width: 210mm !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: #09090B !important;
+        overflow-x: hidden !important;
+        box-sizing: border-box !important;
+      }
+
+      .page {
+        width: 210mm !important;
+        max-width: none !important;
+        min-height: 297mm !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        background: #09090B !important;
+        page-break-after: always;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="noise"></div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- PAGE 1: COVER -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div class="page">
+    <div class="glow-tl"></div>
+    <div class="glow-br"></div>
+
+    <div class="cover">
+
+      <!-- Top identity bar -->
+      <div class="cover-topbar">
+        <div class="inst-badge">
+          <div class="inst-icon">VIT</div>
+          <div class="inst-name">
+            <strong>VIT-AP University</strong>
+            Centre of Excellence in Cyber Security · School of CS&amp;E · <br> Open Source Community · Null Chapter
+          </div>
+        </div>
+        <div class="funding-pill">ISEA PROJECT · IIT MADRAS LEAD INSTITUTION</div>
+      </div>
+
+      <!-- Hero -->
+      <div class="cover-hero">
+        <img src="../logo/Recon Event Logo.jpeg"
+          style="position: absolute; right: 14mm; top: 12mm; width: 75px; height: 75px; border-radius: 8px; object-fit: cover; box-shadow: 0 4px 15px rgba(0,0,0,0.5); opacity: 0.95; z-index: 10;"
+          alt="Recon Logo" />
+
+        <div class="eyebrow" style="margin-bottom: 4mm;"><span>Recon HQ · Apr 19–21, 2026</span></div>
+
+        <div
+          style="font-family:'Space Grotesk',sans-serif; font-size:14pt; font-weight:700; color:var(--white); line-height:1.2; margin-bottom: 4mm; max-width:85%;">
+          National Workshop on System Security:<br>
+          <span style="color:var(--purple-light); font-weight:500;">From Vulnerabilities To Trustworthy Systems</span>
+        </div>
+        <h1 class="cover-title">
+          Recon<br>
+          <em>2026</em>
+        </h1>
+
+        <p class="cover-subtitle">
+          A national-level, DEFCON-style campus workshop on system security — from vulnerabilities to trustworthy
+          systems. Three days of keynotes, overnight competitions, 10+ hands-on security villages, and immersive
+          technical programming.
+        </p>
+
+        <!-- Stats -->
+        <div class="stat-strip">
+          <div class="stat-card">
+            <span class="stat-num">600</span>
+            <span class="stat-label">Participants</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-num">3</span>
+            <span class="stat-label">Days</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-num">10+</span>
+            <span class="stat-label">Workshops</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-num">80</span>
+            <span class="stat-label">Workforce</span>
+          </div>
+        </div>
+
+        <!-- Meta -->
+        <div class="meta-block">
+          <div class="meta-item">
+            <span class="meta-key">Dates</span>
+            <span class="meta-val">April 19–21, 2026</span>
+          </div>
+          <div class="meta-divider"></div>
+          <div class="meta-item">
+            <span class="meta-key">Venue</span>
+            <span class="meta-val">VIT-AP University</span>
+          </div>
+          <div class="meta-divider"></div>
+          <div class="meta-item">
+            <span class="meta-key">Thematic Area</span>
+            <span class="meta-val">Systems &amp; Software Security</span>
+          </div>
+          <div class="meta-divider"></div>
+          <div class="meta-item">
+            <span class="meta-key">Grant Support</span>
+            <span class="meta-val">ISEA Project (MeitY)</span>
+          </div>
+        </div>
+
+        <!-- Track tags -->
+        <div class="track-row">
+          <span class="track-pill hot">Overnight CTF</span>
+          <span class="track-pill hot">King of the Hill</span>
+          <span class="track-pill">Secure System Architectures</span>
+          <span class="track-pill">Supply-Chain Trust</span>
+          <span class="track-pill">Hardware Hacking</span>
+          <span class="track-pill">AI Red-Teaming</span>
+          <span class="track-pill">Web Exploit Dojo</span>
+          <span class="track-pill">OSINT</span>
+          <span class="track-pill">SOC &amp; Monitoring</span>
+        </div>
+
+        <div class="rule-line"><span>Institutional Support &amp; Partners</span></div>
+
+        <!-- Institutional Logos -->
+        <div
+          style="display:flex; gap: 8mm; align-items:center; flex-wrap:wrap; margin-bottom: 6mm; background: rgb(39, 39, 42); padding: 6mm 8mm; border-radius: 8px; border: 1px solid var(--gray-800);">
+          <div
+            style="background: white; padding: 6px 10px; border-radius: 6px; display: flex; align-items: center; justify-content: center; height: 42px; box-shadow: 0 2px 10px rgba(0,0,0,0.5);">
+            <img src="../logo/VITAP Logo.png" style="height: 30px; object-fit: contain;" alt="VIT-AP" />
+          </div>
+          <img src="../logo/IIT Madras Logo.png" style="height: 42px; object-fit: contain;" alt="IIT Madras" />
+          <img src="../logo/ISEA Logo.png" style="height: 42px; object-fit: contain;" alt="ISEA" />
+          <div style="width: 1px; height: 35px; background: var(--gray-700);"></div>
+          <img src="../logo/OSC Logo.png" style="height: 40px; object-fit: contain;" alt="OSC" />
+          <img src="../logo/Null Logo.png" style="height: 35px; object-fit: contain;" alt="Null Chapter" />
+        </div>
+
+        <div class="rule-line"><span>Organised by</span></div>
+
+        <!-- Org names -->
+        <div style="display:flex; gap: 8mm; align-items:center; flex-wrap:wrap;">
+          <div>
+            <div
+              style="font-family:'JetBrains Mono',monospace;font-size:6.5pt;color:var(--purple);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:3px;">
+              Event Director</div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-size:9pt;color:var(--white);font-weight:600;">Rikhil
+              Nellimarla</div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-size:7.5pt;color:var(--gray-400);">23BEC7030 ·
+              7386175224</div>
+          </div>
+          <div style="width:1px;background:var(--gray-800);align-self:stretch;height:36px;"></div>
+          <div>
+            <div
+              style="font-family:'JetBrains Mono',monospace;font-size:6.5pt;color:var(--purple);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:3px;">
+              Investigator (IIT-M)</div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-size:9pt;color:var(--white);font-weight:600;">Prof.
+              Chester Rebeiro</div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-size:7.5pt;color:var(--gray-400);">Assoc. Prof,
+              Dept. CS&amp;E</div>
+          </div>
+          <div style="width:1px;background:var(--gray-800);align-self:stretch;height:36px;"></div>
+          <div>
+            <div
+              style="font-family:'JetBrains Mono',monospace;font-size:6.5pt;color:var(--purple);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:3px;">
+              Conveners (VIT-AP)</div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-size:9pt;color:var(--white);font-weight:600;">Dr.
+              Hari Seetha · Dr. Sudhakar Ilango</div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-size:7.5pt;color:var(--gray-400);">School of
+              CS&amp;E, VIT-AP</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="cover-footer">
+        <div class="cover-footer-left"><a href="https://partner.reconhq.tech" target="_blank">ReconHQ</a>· Information
+          Security
+          Education
+          &amp; Awareness (ISEA)
+        </div>
+        <div class="cover-footer-right">Lead: <strong>IIT Madras</strong> · Spoke: <strong>VIT-AP University</strong>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- PAGE 2: ABOUT + PROGRAMME STRUCTURE -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div class="page">
+    <div class="glow-tl"></div>
+    <div class="glow-mid"></div>
+
+    <div class="content-page">
+
+      <div class="section-eyebrow">Section 01 — About the Event</div>
+      <div class="section-title">Mission &amp; Programme</div>
+
+      <p class="body-text">
+        <strong>Recon 2026</strong> is a three-day national workshop on system security, designed to bridge the gap
+        between theoretical academic knowledge and real-world offensive and defensive security practice. Modelled on the
+        DEFCON conference format, the event brings together students, practitioners, and researchers from across India
+        for an intensive, hands-on programme at VIT-AP University's campus.
+      </p>
+
+      <div class="two-col">
+        <div class="highlight-card">
+          <h4>⚑ Primary Objectives</h4>
+          <ul>
+            <li>Deliver 4 expert keynote sessions from national security practitioners</li>
+            <li>Run a 12-hour overnight Capture-the-Flag competition (CTF)</li>
+            <li>Run an 8-hour overnight King-of-the-Hill (KOTH) competition</li>
+            <li>Operate 10+ concurrent technical security villages and workshops</li>
+            <li>Zero policy violations; all offensive activity sandboxed and in-scope</li>
+          </ul>
+        </div>
+        <div class="info-card">
+          <h4>◎ Scale &amp; Reach</h4>
+          <ul>
+            <li>600 registered participants from across India</li>
+            <li>450+ active attendance at peak; 250+ outstation attendees</li>
+            <li>80-member workforce across 8 functional teams</li>
+            <li>15+ sponsors and community partners</li>
+            <li>National media and campus broadcast coverage</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 3-day timeline -->
+      <div class="section-eyebrow">Section 02 — Programme Structure</div>
+
+      <div class="timeline">
+        <div class="tl-item">
+          <span class="tl-day">Day One</span>
+          <span class="tl-date">April 19, 2026</span>
+          <ul class="tl-events">
+            <li>Inauguration &amp; dignitary address</li>
+            <li>National Workshop on System Security: From Vulnerabilities To Trustworthy Systems [Day 1] (11:00–16:00)
+            </li>
+            <li>All side villages open (16:00)</li>
+            <li>Sponsor demo block</li>
+            <li>CTF briefing (17:00)</li>
+            <li>CTF starts 18:00 → overnight until 06:00</li>
+          </ul>
+        </div>
+        <div class="tl-item">
+          <span class="tl-day">Day Two</span>
+          <span class="tl-date">April 20, 2026</span>
+          <ul class="tl-events">
+            <li>CTF close &amp; provisional leaderboard</li>
+            <li>Recovery &amp; career clinic (morning)</li>
+            <li>National Workshop on System Security: From Vulnerabilities To Trustworthy Systems [Day 2] (11:00–16:00)
+            </li>
+            <li>All villages open (15:30)</li>
+            <li>Sponsor Demo Street (DAY-2 only)</li>
+            <li>KOTH starts 22:00 → overnight until 06:00</li>
+          </ul>
+        </div>
+        <div class="tl-item">
+          <span class="tl-day">Day Three</span>
+          <span class="tl-date">April 21, 2026</span>
+          <ul class="tl-events">
+            <li>KOTH close &amp; adjudication</li>
+            <li>Top-team verification (morning)</li>
+            <li>CTF &amp; KOTH debrief lightning talks</li>
+            <li>Sponsor innovation showcases</li>
+            <li>Awards ceremony (16:00)</li>
+            <li>Group photo &amp; media close</li>
+            <li>Teardown &amp; command room close</li>
+          </ul>
+        </div>
+      </div>
+      <!--  -->
+
+      <!-- Villages grid -->
+      <div class="section-eyebrow">Section 03B — Technical Villages</div>
+
+      <div class="three-col">
+        <div class="info-card">
+          <h4>🔐 CTF (Overnight)</h4>
+          <p>Jeopardy-style, 20–30 challenges across web, pwn, crypto, forensics, OSINT, misc. Teams of 1–4. Dynamic
+            scoring and anti-cheat enforcement.</p>
+        </div>
+        <div class="info-card">
+          <h4>⚔ King of the Hill</h4>
+          <p>8–12 target machines. Points accrue per hold-interval. Red/Blue hybrid finale. Mandatory reset windows to
+            prevent dead boxes.</p>
+        </div>
+        <div class="info-card">
+          <h4>🛠 Hardware &amp; IoT Village</h4>
+          <p>Build interactive security badges. Solder, firmware hardening, OTA risk lab. 40 benches, component kits
+            included.</p>
+        </div>
+        <div class="info-card">
+          <h4>🌐 Web Exploit Dojo</h4>
+          <p>OWASP Top-10 guided modules in sandboxed vulnerable apps. Beginner and advanced lanes. In-scope targets
+            only.</p>
+        </div>
+        <div class="info-card">
+          <h4>🔎 OSINT Corner</h4>
+          <p>Timed investigations using synthetic personas and public datasets. Social graph mapping, metadata
+            extraction, location inference.</p>
+        </div>
+        <div class="info-card">
+          <h4>🧬 Forensics Sprint</h4>
+          <p>30-min rolling DFIR cases: pcap analysis, memory dumps, log triage, steganography. Individual or pair
+            format.</p>
+        </div>
+        <div class="info-card">
+          <h4>🤖 AI Red-Team Lab</h4>
+          <p>Prompt injection, jailbreak defense, model misuse case studies. Attack/defend tabletop with hands-on
+            sandbox testing.</p>
+        </div>
+        <div class="info-card">
+          <h4>🔑 NFC Lock Hunt</h4>
+          <p>Campus-wide puzzle hunt with NFC identity cards and a physical lockbox finale. ESP32-based hardware with
+            backend progression control.</p>
+        </div>
+        <div class="info-card">
+          <h4>🎮 Gaming Arena</h4>
+          <p>Short-format brackets on 12–20 rigs. Provides crowd distribution and sponsor engagement. Passport points
+            for participation.</p>
+        </div>
+      </div>
+
+      <div class="page-footer">
+        <div class="footer-left">Recon 2026 · VIT-AP University<br>National Workshop on System Security</div>
+        <div class="footer-right">Event Director: <strong>Rikhil Nellimarla</strong> · 7386175224<br>Faculty Advisor:
+          <strong>Dr. Sibi Chakkaravarthy Sethuraman</strong>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- PAGE 3: INFRA + BUDGET + TEAM -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div class="page">
+    <div class="glow-tl"></div>
+    <div class="glow-br"></div>
+
+    <div class="content-page">
+
+      <div class="section-eyebrow">Section 04 — Technical Infrastructure</div>
+      <div class="section-title">Architecture &amp; Security</div>
+
+      <p class="body-text">
+        All competition infrastructure runs <strong>cloud-first on AWS</strong>, completely independent of campus
+        network reliability. A dedicated <strong>OpenVPN overlay network</strong> isolates challenge targets from the
+        public internet, giving participants authenticated access while providing organisers full audit logs for
+        anti-cheat enforcement. Campus Wi-Fi is used only as a best-effort transport layer to reach cloud services.
+      </p>
+
+      <div class="two-col section-gap">
+        <div class="info-card">
+          <h4>☁ Cloud Infrastructure (AWS)</h4>
+          <ul>
+            <li>CTFd platform: EC2 t3.xlarge (4 vCPU / 16 GB)</li>
+            <li>KOTH targets: 10× EC2 t3.medium with snapshot-restore automation</li>
+            <li>OpenVPN server: EC2 t3.large — 10.8.0.0/16 subnet</li>
+            <li>App backend: EC2/ECS with FastAPI + CloudFront CDN</li>
+            <li>Database: Neon Postgres (serverless, Pro tier)</li>
+            <li>S3 + CloudWatch monitoring + hourly automated snapshots</li>
+          </ul>
+        </div>
+        <div class="info-card">
+          <h4>🛡 Security &amp; Compliance</h4>
+          <ul>
+            <li>Firewall default-deny; all inbound blocked except VPN subnet</li>
+            <li>600 unique .ovpn configs tied to participant registration IDs</li>
+            <li>Anti-cheat: rate-limit per config, connection audit log, auto-revocation</li>
+            <li>Isolated challenge infra — no real university systems in scope</li>
+            <li>Written scope published; out-of-scope activity = immediate disqualification</li>
+            <li>Full incident log with 5-min SEV-1 response SLA</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Outcomes -->
+      <div class="section-eyebrow">Section 05 — Expected Outcomes</div>
+      <div
+        style="font-family:'Archivo Black',sans-serif;font-size:12pt;color:var(--white);text-transform:uppercase;letter-spacing:-0.02em;line-height:1;margin-bottom:5mm;">
+        Research Impact</div>
+
+      <p class="body-text">
+        The workshop is designed to produce lasting outcomes that strengthen India's <strong>Systems &amp; Software
+          Security</strong> capacity, aligned with the national cybersecurity mission under MeitY's ISEA Project.
+      </p>
+
+      <div class="two-col" style="margin-bottom:5mm;">
+        <div class="info-card">
+          <h4>🔬 Research &amp; Industry Alignment</h4>
+          <ul>
+            <li>Identification of key challenges in secure system architectures, OS security, and decentralized
+              networks.</li>
+            <li>Well-defined problem statements generated from structured brainstorming between students and industry.
+            </li>
+            <li>Hands-on validation of theoretical concepts through competitive, sandboxed environments.</li>
+          </ul>
+        </div>
+        <div class="info-card">
+          <h4>🤝 Community Capacity Building</h4>
+          <ul>
+            <li>Enhanced collaboration between academic institutions and active industry practitioners.</li>
+            <li>Strengthened practical capacity among faculty, students, and scholars through exposure to zero-day
+              emulation.</li>
+            <li>Development of a highly skilled, offensive-defense focused workforce trained on modern infrastructure.
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Core team & Faculty -->
+      <div class="section-eyebrow">Section 06 — Leadership &amp; Advisory</div>
+      <div
+        style="font-family:'Archivo Black',sans-serif;font-size:12pt;color:var(--white);text-transform:uppercase;letter-spacing:-0.02em;line-height:1;margin-bottom:5mm;">
+        Organising Committee &amp; Faculty</div>
+
+      <div class="org-grid">
+        <div class="org-row">
+          <div class="org-role">Director</div>
+          <div>
+            <div class="org-name">Rikhil Nellimarla</div><span class="org-id">23BEC7030 · 7386175224</span>
+          </div>
+        </div>
+        <div class="org-row">
+          <div class="org-role">Investigator</div>
+          <div>
+            <div class="org-name">Prof. Chester Rebeiro</div><span class="org-id">Dept. CS&amp;E, IIT Madras</span>
+          </div>
+        </div>
+        <div class="org-row">
+          <div class="org-role">Conveners</div>
+          <div>
+            <div class="org-name">Dr. Hari Seetha · Dr. Sudhakar I.</div><span class="org-id">School of CS&amp;E,
+              VIT-AP</span>
+          </div>
+        </div>
+        <div class="org-row">
+          <div class="org-role">CTO</div>
+          <div>
+            <div class="org-name">Abhiram Venkat Sai Adabala</div><span class="org-id">23BCE8643 · 7338299721</span>
+          </div>
+        </div>
+        <div class="org-row">
+          <div class="org-role">Coordinators</div>
+          <div>
+            <div class="org-name">Dr. Sibi C. · Dr. Ganesh Reddy K.</div><span class="org-id">School of CS&amp;E,
+              VIT-AP</span>
+          </div>
+        </div>
+        <div class="org-row">
+          <div class="org-role">Ops Chiefs</div>
+          <div>
+            <div class="org-name">Mohammed Faariz · Cheppali Chanu</div><span class="org-id">24BCE7839 /
+              23BCE20115</span>
+          </div>
+        </div>
+        <div class="org-row">
+          <div class="org-role">CTF/KOTH</div>
+          <div>
+            <div class="org-name">Vikhyat Nambiar · Swarnim Bandekar</div><span class="org-id">23BCB7137 /
+              24BCB7157</span>
+          </div>
+        </div>
+        <div class="org-row">
+          <div class="org-role">Program</div>
+          <div>
+            <div class="org-name">Aditya Shettigar · Akshat Singh</div><span class="org-id">23MIC7018 / 24BCE7295</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Outcomes -->
+      <div class="outcome-row">
+        <div class="outcome-badge"><span class="dot dot-green"></span>ISEA Project · Grant Supported via IIT-M</div>
+        <div class="outcome-badge"><span class="dot dot-purple"></span>Faculty Coordinators: Dr. Hari Seetha &amp; team
+        </div>
+        <div class="outcome-badge"><span class="dot dot-green"></span>Sandboxed — no real infra at risk</div>
+        <div class="outcome-badge"><span class="dot dot-amber"></span>15+ sponsors · national media footprint</div>
+        <div class="outcome-badge"><span class="dot dot-purple"></span>80-member trained workforce</div>
+      </div>
+
+      <div class="page-footer">
+        <div class="footer-left">Recon 2026 · VIT-AP University<br>ISEA Project · Lead Institution: IIT Madras</div>
+        <div class="footer-right">
+          Funding Body: <strong>C-DAC, Hyderabad / MeitY</strong><br>
+          Dean IC&amp;SR: <strong>Prof. Manu Santhanam, IIT Madras</strong>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+
+</html>
