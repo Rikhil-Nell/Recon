@@ -399,24 +399,31 @@
     /* Cover bottom bar */
     .cover-footer {
       border-top: 1px solid var(--gray-800);
-      padding: 5mm 14mm;
+      padding: 4mm 14mm 4.5mm;
       display: flex;
-      align-items: center;
+      align-items: flex-end;
       justify-content: space-between;
+      gap: 8mm;
     }
 
     .cover-footer-left {
       font-family: 'JetBrains Mono', monospace;
-      font-size: 7pt;
-      color: var(--gray-700);
+      font-size: 6.4pt;
+      color: var(--gray-200);
       text-transform: uppercase;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.08em;
+      line-height: 1.35;
+      flex: 1;
+      min-width: 0;
+      overflow-wrap: anywhere;
     }
 
     .cover-footer-right {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 7.5pt;
+      font-size: 7.2pt;
       color: var(--gray-400);
+      text-align: right;
+      flex-shrink: 0;
     }
 
     .cover-footer-right strong {
@@ -701,8 +708,75 @@
     .org-id {
       font-family: 'JetBrains Mono', monospace;
       font-size: 6pt;
-      color: var(--gray-700);
+      color: var(--gray-300);
       display: block;
+    }
+
+    .faculty-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3mm;
+      margin-bottom: 5mm;
+    }
+
+    .faculty-card {
+      background:
+        radial-gradient(circle at top right, rgba(139, 92, 246, 0.14), transparent 42%),
+        linear-gradient(180deg, rgba(24, 24, 27, 0.98), rgba(12, 12, 15, 0.98));
+      border: 1px solid var(--gray-800);
+      border-radius: 8px;
+      padding: 8px 10px 7px;
+      box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .faculty-card::before {
+      content: '';
+      position: absolute;
+      inset: 0 auto auto 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, var(--purple), rgba(167, 139, 250, 0.2));
+    }
+
+    .faculty-card h4 {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 6.5pt;
+      font-weight: 600;
+      color: var(--purple-light);
+      margin-bottom: 5px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .faculty-card ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      align-items: flex-start;
+    }
+
+    .faculty-card li {
+      font-size: 6.5pt;
+      color: var(--gray-200);
+      line-height: 1.15;
+      margin-bottom: 0;
+      padding: 3px 6px;
+      background: rgba(139, 92, 246, 0.06);
+      border: 1px solid rgba(139, 92, 246, 0.14);
+      border-radius: 6px;
+      display: inline-flex;
+      max-width: 100%;
+    }
+
+    .faculty-note {
+      font-size: 6.8pt;
+      color: var(--gray-700);
+      margin-top: 5px;
+      line-height: 1.4;
     }
 
     /* Outcome badges */
@@ -757,7 +831,7 @@
     .footer-left {
       font-family: 'JetBrains Mono', monospace;
       font-size: 6.5pt;
-      color: var(--gray-700);
+      color: var(--gray-200);
       text-transform: uppercase;
       letter-spacing: 0.1em;
       line-height: 1.6;
@@ -846,16 +920,16 @@
           <div class="inst-icon">VIT</div>
           <div class="inst-name">
             <strong>VIT-AP University</strong>
-            Centre of Excellence in Cyber Security · School of CS&amp;E · <br> Open Source Community · Null Chapter
+            Centre of Excellence in Cyber Security · School of CSE · <br> Open Source Community · Null Chapter
           </div>
         </div>
-        <div class="funding-pill">ISEA PROJECT · IIT MADRAS LEAD INSTITUTION</div>
+        <div class="funding-pill">ISEA PROJECT · IIT MADRAS</div>
       </div>
 
       <!-- Hero -->
       <div class="cover-hero">
-        <img src="../logo/Recon Event Logo.jpeg"
-          style="position: absolute; right: 14mm; top: 12mm; width: 75px; height: 75px; border-radius: 8px; object-fit: cover; box-shadow: 0 4px 15px rgba(0,0,0,0.5); opacity: 0.95; z-index: 10;"
+        <img src="../logo/Recon Event Logo.png"
+          style="position: absolute; right: 6mm; top: 6mm; width: 250px; height: 250px; border-radius: 12px; object-fit: cover; box-shadow: 0 8px 24px rgba(0,0,0,0.5); opacity: 0.95; z-index: 10;"
           alt="Recon Logo" />
 
         <div class="eyebrow" style="margin-bottom: 4mm;"><span>Recon HQ · Apr 19–21, 2026</span></div>
@@ -965,21 +1039,23 @@
           <div>
             <div
               style="font-family:'JetBrains Mono',monospace;font-size:6.5pt;color:var(--purple);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:3px;">
-              Investigator (IIT-M)</div>
+              Investigator (IIT Madras)</div>
             <div style="font-family:'Space Grotesk',sans-serif;font-size:9pt;color:var(--white);font-weight:600;">Prof.
               Chester Rebeiro</div>
-            <div style="font-family:'Space Grotesk',sans-serif;font-size:7.5pt;color:var(--gray-400);">Assoc. Prof,
-              Dept. CS&amp;E</div>
+            <div style="font-family:'Space Grotesk',sans-serif;font-size:7.5pt;color:var(--gray-400);">Professor,
+              Department of CSE</div>
           </div>
           <div style="width:1px;background:var(--gray-800);align-self:stretch;height:36px;"></div>
           <div>
             <div
               style="font-family:'JetBrains Mono',monospace;font-size:6.5pt;color:var(--purple);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:3px;">
               Conveners (VIT-AP)</div>
-            <div style="font-family:'Space Grotesk',sans-serif;font-size:9pt;color:var(--white);font-weight:600;">Dr.
-              Hari Seetha · Dr. Sudhakar Ilango</div>
+            <div
+              style="font-family:'Space Grotesk',sans-serif;font-size:8pt;color:var(--white);font-weight:600;line-height:1.25;">
+              Dr. Sibi Chakkaravarthy Sethuraman · Dr. Sudhakar Ilango<br>Hari Seetha ma'am
+            </div>
             <div style="font-family:'Space Grotesk',sans-serif;font-size:7.5pt;color:var(--gray-400);">School of
-              CS&amp;E, VIT-AP</div>
+              CSE, VIT-AP</div>
           </div>
         </div>
       </div>
@@ -991,7 +1067,7 @@
           Education
           &amp; Awareness (ISEA)
         </div>
-        <div class="cover-footer-right">Lead: <strong>IIT Madras</strong> · Spoke: <strong>VIT-AP University</strong>
+        <div class="cover-footer-right">Partner: <strong>IIT Madras</strong> · Host: <strong>VIT-AP University</strong>
         </div>
       </div>
 
@@ -1158,37 +1234,35 @@
 
     <div class="content-page">
 
-      <div class="section-eyebrow">Section 04 — Technical Infrastructure</div>
-      <div class="section-title">Architecture &amp; Security</div>
+      <div class="section-eyebrow">Section 04 — Academic Leadership</div>
+      <div class="section-title">Faculty &amp; Workforce</div>
 
       <p class="body-text">
-        All competition infrastructure runs <strong>cloud-first on AWS</strong>, completely independent of campus
-        network reliability. A dedicated <strong>OpenVPN overlay network</strong> isolates challenge targets from the
-        public internet, giving participants authenticated access while providing organisers full audit logs for
-        anti-cheat enforcement. Campus Wi-Fi is used only as a best-effort transport layer to reach cloud services.
+        Recon 2026 is supported by faculty from <strong>IIT Madras</strong> and <strong>VIT-AP University</strong>,
+        with the academic committee, conveners, coordinators, and student workforce aligned under the CSE ecosystem for
+        programme delivery, technical operations, and participant support.
       </p>
 
-      <div class="two-col section-gap">
-        <div class="info-card">
-          <h4>☁ Cloud Infrastructure (AWS)</h4>
+      <div class="faculty-grid section-gap">
+        <div class="faculty-card">
+          <h4>Investigators &amp; Conveners</h4>
           <ul>
-            <li>CTFd platform: EC2 t3.xlarge (4 vCPU / 16 GB)</li>
-            <li>KOTH targets: 10× EC2 t3.medium with snapshot-restore automation</li>
-            <li>OpenVPN server: EC2 t3.large — 10.8.0.0/16 subnet</li>
-            <li>App backend: EC2/ECS with FastAPI + CloudFront CDN</li>
-            <li>Database: Neon Postgres (serverless, Pro tier)</li>
-            <li>S3 + CloudWatch monitoring + hourly automated snapshots</li>
+            <li>Prof. Chester Rebeiro, Department of CSE, IIT Madras</li>
+            <li>Dr. Sibi Chakkaravarthy Sethuraman</li>
+            <li>Dr. Sudhakar Ilango</li>
+            <li>Hari Seetha ma'am</li>
           </ul>
         </div>
-        <div class="info-card">
-          <h4>🛡 Security &amp; Compliance</h4>
+        <div class="faculty-card">
+          <h4>Coordinators</h4>
           <ul>
-            <li>Firewall default-deny; all inbound blocked except VPN subnet</li>
-            <li>600 unique .ovpn configs tied to participant registration IDs</li>
-            <li>Anti-cheat: rate-limit per config, connection audit log, auto-revocation</li>
-            <li>Isolated challenge infra — no real university systems in scope</li>
-            <li>Written scope published; out-of-scope activity = immediate disqualification</li>
-            <li>Full incident log with 5-min SEV-1 response SLA</li>
+            <li>Dr. Ganesh Reddy Karri</li>
+            <li>Dr. Nandha Kumar R</li>
+            <li>Dr. Varun Kumar K A</li>
+            <li>Dr. Kothandaraman D</li>
+            <li>Dr. Kumar Debasis</li>
+            <li>Dr. Thangam S</li>
+            <li>Dr. Ajith Jubilson</li>
           </ul>
         </div>
       </div>
@@ -1231,7 +1305,7 @@
       <div class="section-eyebrow">Section 06 — Leadership &amp; Advisory</div>
       <div
         style="font-family:'Archivo Black',sans-serif;font-size:12pt;color:var(--white);text-transform:uppercase;letter-spacing:-0.02em;line-height:1;margin-bottom:5mm;">
-        Organising Committee &amp; Faculty</div>
+        Organising Committee</div>
 
       <div class="org-grid">
         <div class="org-row">
@@ -1241,57 +1315,66 @@
           </div>
         </div>
         <div class="org-row">
-          <div class="org-role">Investigator</div>
-          <div>
-            <div class="org-name">Prof. Chester Rebeiro</div><span class="org-id">Dept. CS&amp;E, IIT Madras</span>
-          </div>
-        </div>
-        <div class="org-row">
-          <div class="org-role">Conveners</div>
-          <div>
-            <div class="org-name">Dr. Hari Seetha · Dr. Sudhakar I.</div><span class="org-id">School of CS&amp;E,
-              VIT-AP</span>
-          </div>
-        </div>
-        <div class="org-row">
           <div class="org-role">CTO</div>
           <div>
             <div class="org-name">Abhiram Venkat Sai Adabala</div><span class="org-id">23BCE8643 · 7338299721</span>
           </div>
         </div>
         <div class="org-row">
-          <div class="org-role">Coordinators</div>
+          <div class="org-role">Ops Chiefs</div>
           <div>
-            <div class="org-name">Dr. Sibi C. · Dr. Ganesh Reddy K.</div><span class="org-id">School of CS&amp;E,
-              VIT-AP</span>
+            <div class="org-name">Mohammed Faariz · Cheppali Chanu</div><span class="org-id">24BCE7839 · 7010616263 /
+              23BCE20115 · 7989313174</span>
           </div>
         </div>
         <div class="org-row">
-          <div class="org-role">Ops Chiefs</div>
+          <div class="org-role">Tech Infra</div>
           <div>
-            <div class="org-name">Mohammed Faariz · Cheppali Chanu</div><span class="org-id">24BCE7839 /
-              23BCE20115</span>
+            <div class="org-name">Izhaan Raza · Surya Theja Dhommalapati</div><span class="org-id">24BCA7544 ·
+              990515819 / 24BCS7011 · 7075052734</span>
           </div>
         </div>
         <div class="org-row">
           <div class="org-role">CTF/KOTH</div>
           <div>
-            <div class="org-name">Vikhyat Nambiar · Swarnim Bandekar</div><span class="org-id">23BCB7137 /
-              24BCB7157</span>
+            <div class="org-name">Vikhyat Shajee Nambiar · Swarnim Bandekar</div><span class="org-id">23BCB7137 ·
+              7795351504 / 24BCB7157 · 9945721305</span>
           </div>
         </div>
         <div class="org-row">
           <div class="org-role">Program</div>
           <div>
-            <div class="org-name">Aditya Shettigar · Akshat Singh</div><span class="org-id">23MIC7018 / 24BCE7295</span>
+            <div class="org-name">Aditya J Shettigar · Akshat Abhishek Singh</div><span class="org-id">23MIC7018 ·
+              8861248515 / 24BCE7295 · 9310753160</span>
+          </div>
+        </div>
+        <div class="org-row">
+          <div class="org-role">Sponsorship</div>
+          <div>
+            <div class="org-name">Ayushi</div><span class="org-id">24BCA7064 · 8938967796</span>
+          </div>
+        </div>
+        <div class="org-row">
+          <div class="org-role">Design</div>
+          <div>
+            <div class="org-name">Jahnvi Kotangale</div><span class="org-id">23BCE8201 · 9082812563</span>
+          </div>
+        </div>
+        <div class="org-row">
+          <div class="org-role">Volunteers</div>
+          <div>
+            <div class="org-name">Reet Mishra · A. Dharineesh</div><span class="org-id">23BCE8992 · 8639627939 /
+              23BCE7490 · 6374853503</span>
           </div>
         </div>
       </div>
 
       <!-- Outcomes -->
       <div class="outcome-row">
-        <div class="outcome-badge"><span class="dot dot-green"></span>ISEA Project · Grant Supported via IIT-M</div>
-        <div class="outcome-badge"><span class="dot dot-purple"></span>Faculty Coordinators: Dr. Hari Seetha &amp; team
+        <div class="outcome-badge"><span class="dot dot-green"></span>ISEA Project · Supported with IIT Madras</div>
+        <div class="outcome-badge"><span class="dot dot-purple"></span>Faculty Conveners: Dr. Sibi Chakkaravarthy
+          Sethuraman,
+          Dr. Sudhakar Ilango, Hari Seetha ma'am
         </div>
         <div class="outcome-badge"><span class="dot dot-green"></span>Sandboxed — no real infra at risk</div>
         <div class="outcome-badge"><span class="dot dot-amber"></span>15+ sponsors · national media footprint</div>
@@ -1299,7 +1382,7 @@
       </div>
 
       <div class="page-footer">
-        <div class="footer-left">Recon 2026 · VIT-AP University<br>ISEA Project · Lead Institution: IIT Madras</div>
+        <div class="footer-left">Recon 2026 · VIT-AP University<br>ISEA Project · IIT Madras</div>
         <div class="footer-right">
           Funding Body: <strong>C-DAC, Hyderabad / MeitY</strong><br>
           Dean IC&amp;SR: <strong>Prof. Manu Santhanam, IIT Madras</strong>
