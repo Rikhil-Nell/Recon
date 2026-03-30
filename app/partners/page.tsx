@@ -9,8 +9,9 @@ function App() {
     const [scrollProgress, setScrollProgress] = useState(0);
 
     useEffect(() => {
-        const handleClick = (e) => {
-            if (!e.target.closest('.header-logo') && !e.target.closest('.contact-dropdown')) {
+        const handleClick = (e: MouseEvent) => {
+            const target = e.target as Element;
+            if (target && !target.closest('.header-logo') && !target.closest('.contact-dropdown')) {
                 setDropdownOpen(false);
             }
         };
