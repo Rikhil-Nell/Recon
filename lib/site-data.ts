@@ -55,7 +55,7 @@ export const navItems: NavItem[] = [
   { label: "Events", href: "#events" },
   { label: "Schedule", href: "#schedule" },
   { label: "Speakers", href: "#speakers" },
-  { label: "Partners", href: "https://partner.reconhq.tech" },
+  { label: "Partners", href: "/partners" },
   { label: "FAQ", href: "#faq" },
   { label: "Register", href: "/signup" },
 ];

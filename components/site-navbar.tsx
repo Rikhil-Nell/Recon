@@ -22,21 +22,15 @@ export function SiteNavbar() {
           Recon
         </Link>
         <div className="hidden items-center gap-1 md:flex">
-          {navItems.map((item) => {
-            const isExternal = item.href.startsWith("http");
-            const Tag = isExternal ? "a" : Link;
-            const extraProps = isExternal ? { target: "_blank" as const, rel: "noreferrer" } : {};
-            return (
-              <Tag
-                key={item.label}
-                href={item.href}
-                {...extraProps}
-                className="rounded-full px-4 py-2 text-[11px] font-medium uppercase tracking-[0.22em] text-[var(--gray-400)] transition hover:bg-white/[0.06] hover:text-white"
-              >
-                {item.label}
-              </Tag>
-            );
-          })}
+          {navItems.map((item) => (
+            <Link
+              key={item.label}
+              href={item.href}
+              className="rounded-full px-4 py-2 text-[11px] font-medium uppercase tracking-[0.22em] text-[var(--gray-400)] transition hover:bg-white/[0.06] hover:text-white"
+            >
+              {item.label}
+            </Link>
+          ))}
         </div>
         <Link
           href="/login"

@@ -372,10 +372,10 @@ function PartnersSection() {
             full sponsorship copy and structure lives on the dedicated partners
             route with unchanged content.
           </p>
-          <a href="https://partner.reconhq.tech" target="_blank" rel="noreferrer" className="cta-primary mt-8 inline-flex">
+          <Link href="/partners" className="cta-primary mt-8 inline-flex">
             Open Partners Page
             <ArrowRight className="h-4 w-4" />
-          </a>
+          </Link>
         </Reveal>
         <Reveal delay={0.12}>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -489,9 +489,9 @@ function Footer() {
           <Link href="/signup" className="footer-chip">
             Signup
           </Link>
-          <a href="https://partner.reconhq.tech" target="_blank" rel="noreferrer" className="footer-chip">
+          <Link href="/partners" className="footer-chip">
             Partners
-          </a>
+          </Link>
         </div>
       </div>
     </footer>
