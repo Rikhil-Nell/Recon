@@ -87,7 +87,7 @@ export default function Footer() {
           100% { background-position: 0% 50%; }
         }
         .laser-pan {
-          background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(0,255,65,0.8) 50%, rgba(255,255,255,0) 100%);
+          background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(139,92,246,0.8) 50%, rgba(255,255,255,0) 100%);
           background-size: 200% auto;
           color: transparent;
           -webkit-background-clip: text;

@@ -14,6 +14,8 @@ const config: Config = {
         fg: "var(--fg)",
         "terminal-green": "var(--accent)",
         "electric-blue": "var(--accent2)",
+        "accent": "var(--accent)",
+        "accent-alt": "var(--accent-alt)",
         outline: "var(--outline)",
         dim: "var(--dim)",
         border: "var(--border)",

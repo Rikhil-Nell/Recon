@@ -73,15 +73,15 @@ export default function MatrixRain() {
           const force = (120 - dist) / 120;
           renderX += dx * force * 0.8;
           renderY += dy * force * 0.8;
-          ctx.fillStyle = "#00cfff"; // Cyan glitch 
+          ctx.fillStyle = "#a78bfa"; // Light violet glitch 
           ctx.shadowBlur = 8;
-          ctx.shadowColor = "#00cfff";
+          ctx.shadowColor = "#a78bfa";
         } else {
           // Standard falling char
           const isHead = Math.random() > 0.95;
-          ctx.fillStyle = isHead ? "#ffffff" : "#00ff41";
+          ctx.fillStyle = isHead ? "#ffffff" : "#8b5cf6"; // Muted Violet drops
           ctx.shadowBlur = isHead ? 5 : 0;
-          ctx.shadowColor = isHead ? "#ffffff" : "#00ff41";
+          ctx.shadowColor = isHead ? "#ffffff" : "#8b5cf6";
         }
 
         ctx.fillText(text, renderX, renderY);

@@ -65,7 +65,7 @@ export default function GridDistortion() {
           float alpha = (1.0 - line) * 0.15;
           // Gradient fade edges
           float edgeFade = vUv.x * (1.0 - vUv.x) * vUv.y * (1.0 - vUv.y) * 16.0;
-          gl_FragColor = vec4(0.0, 1.0, 0.255, alpha * edgeFade); // 0.255 mapping to approx #00ff41
+          gl_FragColor = vec4(0.545, 0.36, 0.965, alpha * edgeFade); // #8b5cf6
         }
       `,
       transparent: true,

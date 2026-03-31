@@ -51,13 +51,13 @@ export default function CustomCursor() {
   const getVariantClasses = () => {
     switch (variant) {
       case "hover":
-        return "w-[60px] h-[60px] border-[rgba(0,255,65,0.9)]";
+        return "w-[60px] h-[60px] border-[rgba(255,255,255,0.9)]";
       case "click":
-        return "w-[28px] h-[28px] border-[rgba(0,255,65,1)]";
+        return "w-[28px] h-[28px] border-[rgba(255,255,255,1)]";
       case "text":
-        return "w-[80px] h-[3px] border-[rgba(0,255,65,0.5)] rounded-none";
+        return "w-[80px] h-[3px] border-[rgba(255,255,255,0.5)] rounded-none";
       default:
-        return "w-[36px] h-[36px] border-[rgba(0,255,65,0.5)]";
+        return "w-[36px] h-[36px] border-[rgba(255,255,255,0.5)]";
     }
   };
 
@@ -65,7 +65,7 @@ export default function CustomCursor() {
     <>
       <div
         ref={dotRef}
-        className="fixed w-[8px] h-[8px] rounded-full bg-terminal-green z-[9999] pointer-events-none"
+        className="fixed w-[8px] h-[8px] rounded-full bg-white z-[9999] pointer-events-none"
         style={{ transform: "translate(-50%, -50%)", transition: "width 0.15s, height 0.15s", mixBlendMode: "difference" }}
       ></div>
       <div

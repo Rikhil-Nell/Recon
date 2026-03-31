@@ -33,7 +33,7 @@ export default function ParticleField() {
     geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
 
     const material = new THREE.PointsMaterial({
-      color: 0x00ff41,
+      color: 0x8b5cf6,
       size: 0.02,
       transparent: true,
       opacity: 0.6,
@@ -45,7 +45,7 @@ export default function ParticleField() {
 
     // LINE CONNECTIONS
     const lineMaterial = new THREE.LineBasicMaterial({
-      color: 0x00ff41,
+      color: 0x8b5cf6,
       transparent: true,
       opacity: 0.15,
     });

@@ -40,17 +40,17 @@ export default function Manifesto() {
   return (
     <section ref={sectionRef} id="manifesto" className="min-h-screen relative flex flex-col justify-center px-8 lg:px-24 py-32">
       {/* Accent Line */}
-      <div className="absolute left-6 lg:left-[48px] top-0 w-[2px] h-full opacity-15" style={{ background: "linear-gradient(to bottom, transparent, #00ff41 30%, #00ff41 70%, transparent)" }} />
+      <div className="absolute left-6 lg:left-[48px] top-0 w-[2px] h-full opacity-15" style={{ background: "linear-gradient(to bottom, transparent, #8b5cf6 30%, #8b5cf6 70%, transparent)" }} />
 
       <div className="max-w-5xl w-full mx-auto relative z-10">
         <div className="flex flex-col gap-2 mb-16 lg:mb-24">
-          <div ref={line1Ref} className="font-brand text-[clamp(24px,5vw,72px)] text-white uppercase leading-[1.1]" style={{ opacity: 0.08, filter: "blur(4px)", transform: "translateY(20px)" }}>
+          <div ref={line1Ref} className="font-brand text-[clamp(24px,5vw,72px)] text-zinc-300 uppercase leading-[1.1]" style={{ opacity: 0.08, filter: "blur(4px)", transform: "translateY(20px)" }}>
             The system is flawed.
           </div>
-          <div ref={line2Ref} className="font-brand text-[clamp(24px,5vw,72px)] text-white uppercase leading-[1.1]" style={{ opacity: 0.08, filter: "blur(4px)", transform: "translateY(20px)" }}>
+          <div ref={line2Ref} className="font-brand text-[clamp(24px,5vw,72px)] text-zinc-300 uppercase leading-[1.1]" style={{ opacity: 0.08, filter: "blur(4px)", transform: "translateY(20px)" }}>
             The perimeter is <span className="text-terminal-green">dead</span>.
           </div>
-          <div ref={line3Ref} className="font-brand text-[clamp(24px,5vw,72px)] text-white uppercase leading-[1.1]" style={{ opacity: 0.08, filter: "blur(4px)", transform: "translateY(20px)" }}>
+          <div ref={line3Ref} className="font-brand text-[clamp(24px,5vw,72px)] text-zinc-300 uppercase leading-[1.1]" style={{ opacity: 0.08, filter: "blur(4px)", transform: "translateY(20px)" }}>
             Welcome to the inside.
           </div>
         </div>

@@ -61,7 +61,7 @@ export default function Hero() {
         {/* Titles */}
         <div className="flex flex-col select-none">
           <div className="overflow-hidden">
-            <div ref={title1Ref} className="font-brand text-[16vw] leading-[0.85] tracking-tighter text-white hero-glitch relative" data-text="RECON">
+            <div ref={title1Ref} className="font-brand text-[16vw] leading-[0.85] tracking-tighter text-white relative">
               RECON
             </div>
           </div>

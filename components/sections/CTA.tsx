@@ -79,8 +79,8 @@ export default function CTA() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-6">
-            <MagneticButton className="btn-fill border border-terminal-green bg-terminal-green text-black px-10 py-5 font-mono text-sm tracking-widest uppercase font-bold text-center">
-              INITIATE UPLINK →
+            <MagneticButton className="btn-fill px-10 py-5 font-mono text-sm tracking-widest uppercase font-bold text-center rounded-lg text-zinc-100">
+              REGISTER NOW →
             </MagneticButton>
             <MagneticButton href="#faq" className="border border-white/20 bg-transparent text-white px-10 py-5 font-mono text-sm tracking-widest uppercase hover:border-white transition-colors text-center">
               VIEW DOSSIER

@@ -70,7 +70,7 @@ export default function Navigation() {
           scrolled ? "bg-black/80 backdrop-blur-md border-b border-[rgba(0,255,65,0.15)] py-3" : "bg-transparent py-5"
         }`}
       >
-        <div className="flex items-center gap-2 group cursor-pointer hero-glitch relative" data-text="RECON">
+        <div className="flex items-center gap-2 group cursor-pointer relative">
           <span className="font-brand font-bold text-xl tracking-wider text-white">RECON</span>
           <span className="font-brand font-bold text-xl text-terminal-green">2026</span>
         </div>
@@ -99,7 +99,7 @@ export default function Navigation() {
             <span className="font-mono text-[9px] tracking-widest text-terminal-green uppercase">LIVE</span>
           </div>
           
-          <MagneticButton href="https://luma.com/v933kdr1" external={true} className="hidden md:inline-flex btn-fill bg-terminal-green text-black px-6 py-3 font-mono text-xs font-bold tracking-widest uppercase rounded-none">
+          <MagneticButton href="https://luma.com/v933kdr1" external={true} className="hidden md:inline-flex btn-fill px-6 py-3 font-mono text-xs font-bold tracking-widest uppercase rounded-md text-zinc-100">
             REGISTER →
           </MagneticButton>
           
