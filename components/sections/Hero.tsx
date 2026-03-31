@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { useScrollTrigger } from "@/hooks/useScrollTrigger";
 import { gsap } from "@/lib/gsap";
@@ -20,6 +20,21 @@ export default function Hero() {
   const hudRef = useRef<HTMLDivElement>(null);
   const tickerRef = useRef<HTMLDivElement>(null);
   const scrollIndRef = useRef<HTMLDivElement>(null);
+  const glowRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (glowRef.current && containerRef.current) {
+        const rect = containerRef.current.getBoundingClientRect();
+        // Calculate X/Y relative to the Hero section container
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        glowRef.current.style.transform = `translate3d(calc(${x}px - 50%), calc(${y}px - 50%), 0)`;
+      }
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
 
   useScrollTrigger(() => {
     const tl = gsap.timeline();
@@ -41,12 +56,31 @@ export default function Hero() {
       <GridDistortion />
 
       {/* Overlays */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.8)_100%)] z-[5] pointer-events-none"></div>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.85)_100%)] z-[5] pointer-events-none"></div>
       <div className="absolute inset-0 z-[6] pointer-events-none opacity-20 mix-blend-overlay bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPjxyZWN0IHdpZHRoPSI0IiBoZWlnaHQ9IjEiIGZpbGw9IiNmZmYiLz48L3N2Zz4=')]"></div>
-      <div className="scanline"></div>
+      <div className="scanline z-[7]"></div>
+
+      {/* Interactive Cursor Glow */}
+      <div 
+        ref={glowRef}
+        className="absolute top-0 left-0 w-[600px] h-[600px] bg-[radial-gradient(circle_at_center,rgba(139,92,246,0.4)_0%,rgba(234,255,0,0.15)_40%,transparent_70%)] rounded-full blur-[50px] pointer-events-none mix-blend-screen z-[4]"
+        style={{ willChange: "transform" }}
+      ></div>
+
+      {/* Precision Graphic SVG Radar */}
+      <div className="absolute inset-0 z-[3] pointer-events-none flex items-center justify-center opacity-[0.15] mix-blend-screen overflow-hidden">
+        <svg className="w-[120vw] h-[120vw] animate-[spin_90s_linear_infinite]" viewBox="0 0 1000 1000" fill="none">
+          <circle cx="500" cy="500" r="450" stroke="#8b5cf6" strokeWidth="1" strokeDasharray="4 20" />
+          <circle cx="500" cy="500" r="350" stroke="#8b5cf6" strokeWidth="1" />
+          <circle cx="500" cy="500" r="250" stroke="#eaff00" strokeWidth="2" strokeDasharray="1 6" className="animate-[spin_40s_linear_infinite_reverse] origin-center" />
+          <circle cx="500" cy="500" r="150" stroke="#8b5cf6" strokeWidth="1" />
+          <path d="M500 50 L500 950 M50 500 L950 500" stroke="#8b5cf6" strokeWidth="0.5" />
+          <path d="M181 181 L819 819 M181 819 L819 181" stroke="#eaff00" strokeWidth="0.5" strokeDasharray="2 10" />
+        </svg>
+      </div>
 
       {/* HUD Corners */}
-      <div ref={hudRef} className="absolute inset-0 z-10 pointer-events-none">
+      <div ref={hudRef} className="absolute inset-0 z-[8] pointer-events-none">
         <div className="hud-corners w-full h-full absolute inset-0"></div>
         <div className="hud-corners-bottom w-full h-full absolute inset-0"></div>
       </div>
@@ -59,14 +93,15 @@ export default function Hero() {
         </div>
 
         {/* Titles */}
-        <div className="flex flex-col select-none">
-          <div className="overflow-hidden">
-            <div ref={title1Ref} className="font-brand text-[16vw] leading-[0.85] tracking-tighter text-white relative">
+        <div className="flex flex-col select-none relative z-[10] group cursor-none">
+          <div className="overflow-visible mix-blend-screen">
+            <div ref={title1Ref} className="font-brand text-[clamp(80px,16vw,250px)] leading-[0.8] tracking-tighter text-white relative transition-all duration-500 ease-out group-hover:skew-x-[-15deg] group-hover:text-accent-alt group-hover:drop-shadow-[0_0_30px_rgba(234,255,0,0.8)]">
               RECON
             </div>
           </div>
-          <div className="overflow-hidden">
-            <div ref={title2Ref} className="font-brand text-[16vw] leading-[0.85] tracking-tighter text-white">
+          <div className="overflow-visible mix-blend-screen flex justify-end md:justify-start">
+            <div ref={title2Ref} className="font-brand text-[clamp(80px,16vw,250px)] leading-[0.8] tracking-tighter text-white transition-all duration-500 ease-out group-hover:skew-x-[15deg] group-hover:text-transparent group-hover:[-webkit-text-stroke:2px_#8b5cf6] md:ml-[10vw]">
+              <span className="opacity-0 group-hover:opacity-100 absolute -translate-x-full pr-4 text-[clamp(40px,8vw,120px)] text-accent-alt blur-[2px] mt-8">// </span>
               2026
             </div>
           </div>
