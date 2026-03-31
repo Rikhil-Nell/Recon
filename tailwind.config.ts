@@ -2,16 +2,43 @@ import type { Config } from "tailwindcss";
 
 const config: Config = {
   content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     extend: {
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      colors: {
+        background: "var(--bg)",
+        surface: "var(--surface)",
+        fg: "var(--fg)",
+        "terminal-green": "var(--accent)",
+        "electric-blue": "var(--accent2)",
+        outline: "var(--outline)",
+        dim: "var(--dim)",
+        border: "var(--border)",
+        "border-dim": "var(--border-dim)",
+      },
+      fontFamily: {
+        brand: ["var(--font-michroma)", "sans-serif"],
+        headline: ["var(--font-space-grotesk)", "sans-serif"],
+        mono: ["var(--font-jetbrains-mono)", "monospace"],
+        body: ["var(--font-geist-mono)", "monospace"],
+      },
+      animation: {
+        "lenis-scroll": "none",
+        ticker: "ticker 20s linear infinite",
+        "marquee-r": "marqueeR 28s linear infinite",
+      },
+      keyframes: {
+        ticker: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
+        marqueeR: {
+          "0%": { transform: "translateX(-50%)" },
+          "100%": { transform: "translateX(0)" },
+        },
       },
     },
   },
