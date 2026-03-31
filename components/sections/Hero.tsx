@@ -101,7 +101,7 @@ export default function Hero() {
           </div>
           <div className="overflow-visible mix-blend-screen flex justify-end md:justify-start">
             <div ref={title2Ref} className="font-brand text-[clamp(80px,16vw,250px)] leading-[0.8] tracking-tighter text-white transition-all duration-500 ease-out group-hover:skew-x-[15deg] group-hover:text-transparent group-hover:[-webkit-text-stroke:2px_#8b5cf6] md:ml-[10vw]">
-              <span className="opacity-0 group-hover:opacity-100 absolute -translate-x-full pr-4 text-[clamp(40px,8vw,120px)] text-accent-alt blur-[2px] mt-8">// </span>
+              <span className="opacity-0 group-hover:opacity-100 absolute -translate-x-full pr-4 text-[clamp(40px,8vw,120px)] text-accent-alt blur-[2px] mt-8">{"// "}</span>
               2026
             </div>
           </div>

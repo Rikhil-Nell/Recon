@@ -7,7 +7,8 @@ export default function ParticleField() {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!containerRef.current) return;
+    const container = containerRef.current;
+    if (!container) return;
 
     // SCENE SETUP
     const scene = new THREE.Scene();
@@ -17,7 +18,7 @@ export default function ParticleField() {
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    containerRef.current.appendChild(renderer.domElement);
+    container.appendChild(renderer.domElement);
 
     // PARTICLES
     const particleCount = 200;
@@ -64,11 +65,11 @@ export default function ParticleField() {
 
     // SCROLL FADE
     const handleScroll = () => {
-      if (!containerRef.current) return;
+      if (!container) return;
       const scrollY = window.scrollY;
       const maxScroll = window.innerHeight;
       const opacity = Math.max(0, 0.3 - (scrollY / maxScroll) * 0.3);
-      containerRef.current.style.opacity = opacity.toString();
+      container.style.opacity = opacity.toString();
     };
     window.addEventListener("scroll", handleScroll);
 
@@ -134,8 +135,8 @@ export default function ParticleField() {
       linesMesh.geometry.dispose();
       lineMaterial.dispose();
       renderer.dispose();
-      if (containerRef.current) {
-        containerRef.current.innerHTML = "";
+      if (container) {
+        container.innerHTML = "";
       }
     };
   }, []);
