@@ -7,7 +7,8 @@ export default function GridDistortion() {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (!containerRef.current) return;
+    const container = containerRef.current;
+    if (!container) return;
 
     // SCENE SETUP
     const scene = new THREE.Scene();
@@ -16,13 +17,13 @@ export default function GridDistortion() {
 
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
     const setSize = () => {
-      if (containerRef.current) {
-        renderer.setSize(containerRef.current.clientWidth, containerRef.current.clientHeight);
+      if (container) {
+        renderer.setSize(container.clientWidth, container.clientHeight);
       }
     };
     setSize();
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    containerRef.current.appendChild(renderer.domElement);
+    container.appendChild(renderer.domElement);
 
     // SHADER MATERIAL
     const geometry = new THREE.PlaneGeometry(2, 2, 16, 16);
@@ -77,8 +78,8 @@ export default function GridDistortion() {
     // MOUSE TRACKING for uMouse
     let targetMouse = new THREE.Vector2(0.5, 0.5);
     const handleMouseMove = (e: MouseEvent) => {
-      if (!containerRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
+      if (!container) return;
+      const rect = container.getBoundingClientRect();
       targetMouse.x = (e.clientX - rect.left) / rect.width;
       targetMouse.y = 1.0 - (e.clientY - rect.top) / rect.height; // invert Y for WebGL
     };
@@ -112,8 +113,8 @@ export default function GridDistortion() {
       geometry.dispose();
       material.dispose();
       renderer.dispose();
-      if (containerRef.current) {
-        containerRef.current.innerHTML = "";
+      if (container) {
+        container.innerHTML = "";
       }
     };
   }, []);
