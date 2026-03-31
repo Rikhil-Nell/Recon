@@ -99,7 +99,7 @@ export default function Navigation() {
             <span className="font-mono text-[9px] tracking-widest text-terminal-green uppercase">LIVE</span>
           </div>
           
-          <MagneticButton href="#register-cta" className="hidden md:inline-flex btn-fill bg-terminal-green text-black px-6 py-3 font-mono text-xs font-bold tracking-widest uppercase rounded-none">
+          <MagneticButton href="https://luma.com/v933kdr1" className="hidden md:inline-flex btn-fill bg-terminal-green text-black px-6 py-3 font-mono text-xs font-bold tracking-widest uppercase rounded-none" target="_blank" rel="noopener noreferrer">
             REGISTER →
           </MagneticButton>
           
