@@ -77,7 +77,7 @@ export default function Stats() {
               ref={(el) => {
                 if (el) cardsRef.current[i] = el;
               }}
-              className="stat-border-left bg-black p-6 sm:p-8 lg:p-12 flex flex-col min-h-[300px] relative group overflow-hidden"
+              className="stat-border-left bg-black p-6 sm:p-8 lg:p-12 flex flex-col min-h-[250px] sm:min-h-[300px] relative group overflow-hidden"
             >
             {/* Hover Sweep */}
             <div className="absolute left-0 bottom-0 w-[2px] h-0 bg-terminal-green transition-all duration-500 ease-out group-hover:h-full group-hover:top-0 group-hover:bottom-auto z-10"></div>

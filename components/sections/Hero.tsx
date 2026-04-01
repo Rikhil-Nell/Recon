@@ -49,7 +49,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section ref={containerRef} id="home" className="h-screen relative overflow-hidden flex flex-col justify-end bg-black">
+    <section ref={containerRef} id="home" className="h-[100svh] relative overflow-hidden flex flex-col justify-center md:justify-end bg-black">
       {/* z-0 and z-2 layers */}
       <ParticleField />
       <MatrixRain />
