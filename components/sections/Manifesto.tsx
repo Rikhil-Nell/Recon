@@ -38,7 +38,7 @@ export default function Manifesto() {
   });
 
   return (
-    <section ref={sectionRef} id="manifesto" className="min-h-screen relative flex flex-col justify-center px-8 lg:px-24 py-32">
+    <section ref={sectionRef} id="manifesto" className="min-h-screen relative flex flex-col justify-center px-4 md:px-8 lg:px-24 py-16 md:py-32">
       {/* Accent Line */}
       <div className="absolute left-6 lg:left-[48px] top-0 w-[2px] h-full opacity-15" style={{ background: "linear-gradient(to bottom, transparent, #8b5cf6 30%, #8b5cf6 70%, transparent)" }} />
 

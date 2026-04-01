@@ -39,7 +39,7 @@ export default function FAQ() {
   };
 
   return (
-    <section ref={sectionRef} id="faq" className="py-32 px-8 lg:px-24">
+    <section ref={sectionRef} id="faq" className="py-16 md:py-32 px-4 md:px-8 lg:px-24">
       <div className="max-w-[800px] mx-auto">
         <div className="text-center mb-24">
           <DiagnosticLabel text="// BRIEFING MATERIALS" />

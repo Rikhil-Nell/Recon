@@ -33,7 +33,7 @@ export default function Schedule() {
   });
 
   return (
-    <section ref={sectionRef} id="schedule" className="py-32 px-8 lg:px-24 border-t border-white/5 relative">
+    <section ref={sectionRef} id="schedule" className="py-16 md:py-32 px-4 md:px-8 lg:px-24 border-t border-white/5 relative">
       <div className="max-w-[1200px] mx-auto">
         <DiagnosticLabel text="// OPERATIONAL TIMELINE" />
         <h2 className="font-brand text-[clamp(40px,6vw,80px)] text-white uppercase leading-[0.9] tracking-tight mt-6 mb-24">

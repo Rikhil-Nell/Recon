@@ -38,7 +38,7 @@ export default function Footer() {
       <div className="absolute inset-0 bg-[linear-gradient(rgba(0,255,65,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(0,255,65,0.02)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,black,transparent)] pointer-events-none"></div>
 
       {/* Top Details */}
-      <div ref={topRef} className="w-full flex justify-between px-8 z-10 font-mono text-[10px] tracking-[0.2em] text-white/40 uppercase">
+      <div ref={topRef} className="w-full flex justify-between px-4 md:px-8 z-10 font-mono text-[10px] tracking-[0.2em] text-white/40 uppercase">
         <div className="flex flex-col gap-1">
           <span className="text-white/60">SYS.STATUS // TERMINAL_END</span>
           <span>EOF // 2026</span>
@@ -69,7 +69,7 @@ export default function Footer() {
       </div>
 
       {/* Bottom Details */}
-      <div className="z-10 w-full flex flex-col md:flex-row justify-between items-center px-8 text-center md:text-left font-mono text-[10px] text-white/30 tracking-[0.3em] gap-4">
+      <div className="z-10 w-full flex flex-col md:flex-row justify-between items-center px-4 md:px-8 text-center md:text-left font-mono text-[10px] text-white/30 tracking-[0.3em] gap-4">
         <span>© 2026 VIT-AP UNIVERSITY</span>
         <span className="text-terminal-green/50">ALL RIGHTS RESERVED</span>
         <span>DESIGNED FOR DOMINATION</span>

@@ -35,9 +35,9 @@ export default function Tracks() {
   });
 
   return (
-    <section ref={sectionRef} id="tracks" className="min-h-screen py-32 px-8 lg:px-24">
+    <section ref={sectionRef} id="tracks" className="min-h-screen py-16 md:py-32 px-4 md:px-8 lg:px-24">
       <div className="max-w-[1400px] mx-auto relative">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-24 lg:mb-32">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 lg:mb-32">
           <div>
             <DiagnosticLabel text="// OPERATIONAL VILLAGES" />
             <h2 className="font-brand text-[clamp(40px,6vw,80px)] text-white uppercase leading-[0.9] tracking-tight mt-6">
@@ -58,7 +58,7 @@ export default function Tracks() {
               ref={(el) => {
                 if (el) cardsRef.current[i] = el;
               }}
-              className="bg-black p-8 lg:p-10 min-h-[350px] flex flex-col group relative overflow-hidden transition-colors"
+              className="bg-black p-6 md:p-8 lg:p-10 min-h-[350px] flex flex-col group relative overflow-hidden transition-colors"
               onMouseEnter={() => setHoveredIndex(i)}
               onMouseLeave={() => setHoveredIndex(null)}
             >

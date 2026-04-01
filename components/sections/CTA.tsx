@@ -60,7 +60,7 @@ export default function CTA() {
       <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent"></div>
 
       {/* Main Content */}
-      <div className="relative z-10 w-full flex flex-col items-center justify-center min-h-[50vh] px-8 text-center pb-24">
+      <div className="relative z-10 w-full flex flex-col items-center justify-center min-h-[50vh] px-4 md:px-8 text-center pb-24">
         <div ref={ctaRef} className="flex flex-col items-center max-w-3xl">
           <div className="font-mono text-[12px] text-terminal-green tracking-[0.3em] uppercase mb-8 flex items-center gap-3">
             <span className="w-8 h-[1px] bg-terminal-green"></span>
@@ -95,7 +95,7 @@ export default function CTA() {
           <MarqueeTrack items={["NO QUARTER", "NO MERCY", "EXPECT RESISTANCE", "PERSISTENCE IS KEY"]} direction="right" speedClass="animate-marquee-r" dimmer />
         </div>
         
-        <div className="px-8 lg:px-16 py-8 flex flex-col md:flex-row justify-between items-center gap-4 mt-8 opacity-50 font-mono text-[10px] tracking-widest uppercase border-t border-white/5">
+        <div className="px-4 md:px-8 lg:px-16 py-8 flex flex-col md:flex-row justify-between items-center gap-4 mt-8 opacity-50 font-mono text-[10px] tracking-widest uppercase border-t border-white/5">
           <div>RECON 2026 // VIT-AP UNIVERSITY</div>
           <div className="flex gap-8">
             <a href="#" className="hover:text-terminal-green transition-colors">TWITTER (X)</a>

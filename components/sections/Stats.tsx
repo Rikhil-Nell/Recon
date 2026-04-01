@@ -72,13 +72,13 @@ export default function Stats() {
     <section ref={sectionRef} id="stats" className="w-full border-t border-b border-white/5 py-12 lg:py-0">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[1px] bg-white/5">
         {stats.map((stat, i) => (
-          <div
-            key={i}
-            ref={(el) => {
-              if (el) cardsRef.current[i] = el;
-            }}
-            className="stat-border-left bg-black p-8 lg:p-12 flex flex-col min-h-[300px] relative group overflow-hidden"
-          >
+            <div
+              key={i}
+              ref={(el) => {
+                if (el) cardsRef.current[i] = el;
+              }}
+              className="stat-border-left bg-black p-6 sm:p-8 lg:p-12 flex flex-col min-h-[300px] relative group overflow-hidden"
+            >
             {/* Hover Sweep */}
             <div className="absolute left-0 bottom-0 w-[2px] h-0 bg-terminal-green transition-all duration-500 ease-out group-hover:h-full group-hover:top-0 group-hover:bottom-auto z-10"></div>
             

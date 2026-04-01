@@ -69,7 +69,7 @@ export default function Hero() {
 
       {/* Precision Graphic SVG Radar */}
       <div className="absolute inset-0 z-[3] pointer-events-none flex items-center justify-center opacity-[0.15] mix-blend-screen overflow-hidden">
-        <svg className="w-[120vw] h-[120vw] animate-[spin_90s_linear_infinite]" viewBox="0 0 1000 1000" fill="none">
+        <svg className="w-[200vw] h-[200vw] sm:w-[150vw] sm:h-[150vw] md:w-[120vw] md:h-[120vw] animate-[spin_90s_linear_infinite]" viewBox="0 0 1000 1000" fill="none">
           <circle cx="500" cy="500" r="450" stroke="#8b5cf6" strokeWidth="1" strokeDasharray="4 20" />
           <circle cx="500" cy="500" r="350" stroke="#8b5cf6" strokeWidth="1" />
           <circle cx="500" cy="500" r="250" stroke="#eaff00" strokeWidth="2" strokeDasharray="1 6" className="animate-[spin_40s_linear_infinite_reverse] origin-center" />
@@ -86,7 +86,7 @@ export default function Hero() {
       </div>
 
       {/* Main Content */}
-      <div className="relative z-10 px-8 lg:px-16 pb-16 w-full flex flex-col">
+      <div className="relative z-10 px-4 sm:px-8 lg:px-16 pb-16 w-full flex flex-col">
         {/* Diagnostic Label */}
         <div className="mb-4">
           <DiagnosticLabel text="// NATIONAL WORKSHOP ON SYSTEM SECURITY" />
@@ -95,12 +95,12 @@ export default function Hero() {
         {/* Titles */}
         <div className="flex flex-col select-none relative z-[10] group cursor-none">
           <div className="overflow-visible mix-blend-screen">
-            <div ref={title1Ref} className="font-brand text-[clamp(80px,16vw,250px)] leading-[0.8] tracking-tighter text-white relative transition-all duration-500 ease-out group-hover:skew-x-[-15deg] group-hover:text-accent-alt group-hover:drop-shadow-[0_0_30px_rgba(234,255,0,0.8)]">
+            <div ref={title1Ref} className="font-brand text-[clamp(60px,16vw,250px)] leading-[0.8] tracking-tighter text-white relative transition-all duration-500 ease-out group-hover:skew-x-[-15deg] group-hover:text-accent-alt group-hover:drop-shadow-[0_0_30px_rgba(234,255,0,0.8)]">
               RECON
             </div>
           </div>
           <div className="overflow-visible mix-blend-screen flex justify-end md:justify-start">
-            <div ref={title2Ref} className="font-brand text-[clamp(80px,16vw,250px)] leading-[0.8] tracking-tighter text-white transition-all duration-500 ease-out group-hover:skew-x-[15deg] group-hover:text-transparent group-hover:[-webkit-text-stroke:2px_#8b5cf6] md:ml-[10vw]">
+            <div ref={title2Ref} className="font-brand text-[clamp(60px,16vw,250px)] leading-[0.8] tracking-tighter text-white transition-all duration-500 ease-out group-hover:skew-x-[15deg] group-hover:text-transparent group-hover:[-webkit-text-stroke:2px_#8b5cf6] md:ml-[10vw]">
               <span className="opacity-0 group-hover:opacity-100 absolute -translate-x-full pr-4 text-[clamp(40px,8vw,120px)] text-accent-alt blur-[2px] mt-8">{"// "}</span>
               2026
             </div>
