@@ -95,13 +95,13 @@ export default function Hero() {
         {/* Titles */}
         <div className="flex flex-col select-none relative z-[10] group cursor-none">
           <div className="overflow-visible mix-blend-screen">
-            <div ref={title1Ref} className="font-brand text-[clamp(60px,16vw,250px)] leading-[0.8] tracking-tighter text-white relative transition-all duration-500 ease-out group-hover:skew-x-[-15deg] group-hover:text-accent-alt group-hover:drop-shadow-[0_0_30px_rgba(234,255,0,0.8)]">
+            <div ref={title1Ref} className="font-brand text-[clamp(50px,14vw,250px)] leading-[0.8] tracking-tighter text-white relative transition-all duration-500 ease-out group-hover:skew-x-[-15deg] group-hover:text-accent-alt group-hover:drop-shadow-[0_0_30px_rgba(234,255,0,0.8)]">
               RECON
             </div>
           </div>
-          <div className="overflow-visible mix-blend-screen flex justify-end md:justify-start">
-            <div ref={title2Ref} className="font-brand text-[clamp(60px,16vw,250px)] leading-[0.8] tracking-tighter text-white transition-all duration-500 ease-out group-hover:skew-x-[15deg] group-hover:text-transparent group-hover:[-webkit-text-stroke:2px_#8b5cf6] md:ml-[10vw]">
-              <span className="opacity-0 group-hover:opacity-100 absolute -translate-x-full pr-4 text-[clamp(40px,8vw,120px)] text-accent-alt blur-[2px] mt-8">{"// "}</span>
+          <div className="overflow-visible mix-blend-screen flex justify-start">
+            <div ref={title2Ref} className="font-brand text-[clamp(50px,14vw,250px)] leading-[0.8] tracking-tighter text-white transition-all duration-500 ease-out group-hover:skew-x-[15deg] group-hover:text-transparent group-hover:[-webkit-text-stroke:2px_#8b5cf6] ml-4 md:ml-[10vw]">
+              <span className="opacity-0 group-hover:opacity-100 absolute -translate-x-full pr-2 md:pr-4 text-[clamp(30px,7vw,120px)] text-accent-alt blur-[2px] mt-6 md:mt-8">{"// "}</span>
               2026
             </div>
           </div>
@@ -126,21 +126,21 @@ export default function Hero() {
         </div>
 
         {/* Bottom Row */}
-        <div className="flex justify-between items-end w-full">
+        <div className="flex justify-start md:justify-between items-end w-full">
           <div ref={descRef} className="font-body text-[13px] opacity-60 leading-relaxed max-w-sm hidden md:block">
             <p>Phase 01: Infiltration & Persistence.</p>
             <p>Phase 02: Privilege Escalation.</p>
             <p>Phase 03: System DOMINATION.</p>
           </div>
-          <div ref={dateRef} className="text-right">
-            <div className="font-brand text-[3vw] font-bold text-white tracking-wider">19–21 APR</div>
+          <div ref={dateRef} className="text-left md:text-right">
+            <div className="font-brand text-[6vw] sm:text-[4vw] md:text-[3vw] font-bold text-white tracking-wider">19–21 APR</div>
             <div className="font-mono text-[11px] text-terminal-green tracking-widest mt-1">VIT-AP UNIVERSITY</div>
             <div className="font-mono text-[9px] text-white/30 tracking-widest mt-0.5">AMARAVATI, ANDHRA PRADESH</div>
           </div>
         </div>
 
         {/* Scroll Indicator */}
-        <div ref={scrollIndRef} className="absolute right-8 bottom-16 flex flex-col items-center gap-4">
+        <div ref={scrollIndRef} className="absolute right-8 bottom-16 hidden md:flex flex-col items-center gap-4">
           <span className="font-mono text-[9px] text-terminal-green tracking-[0.3em] rotate-90 origin-center mb-8">SCROLL</span>
           <div className="w-[1px] h-[60px] bg-white/10 relative overflow-hidden">
             <div className="absolute w-full scroll-indicator-line bg-terminal-green"></div>
