@@ -15,7 +15,7 @@ export default function Timeline() {
       className="reveal relative flex min-h-svh items-center px-4 sm:px-8 lg:px-12"
     >
       <div className="mx-auto w-full max-w-6xl">
-        <span className="section-label mb-8 block">// 03 TIMELINE</span>
+        <span className="section-label mb-8 block">{"// 03 TIMELINE"}</span>
 
         {/* Desktop: 3-column layout */}
         <div className="hidden gap-8 lg:grid lg:grid-cols-3">

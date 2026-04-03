@@ -60,7 +60,7 @@ export default function Operations() {
       className="relative flex min-h-svh items-center px-4 sm:px-8 lg:px-12"
     >
       <div className="mx-auto w-full max-w-6xl">
-        <span className="section-label mb-8 block">// 02 OPERATIONS</span>
+        <span className="section-label mb-8 block">{"// 02 OPERATIONS"}</span>
 
         {/* Desktop bento grid: 3 cols, 2 rows */}
         <div

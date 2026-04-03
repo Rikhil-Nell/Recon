@@ -20,7 +20,7 @@ export default function MissionBrief() {
       className="reveal relative flex min-h-svh items-center px-4 sm:px-8 lg:px-12"
     >
       <div className="mx-auto w-full max-w-6xl">
-        <span className="section-label mb-8 block">// 01 MISSION</span>
+        <span className="section-label mb-8 block">{"// 01 MISSION"}</span>
 
         <div className="flex flex-col gap-12 lg:flex-row lg:gap-16">
           {/* Left column — value prop */}
