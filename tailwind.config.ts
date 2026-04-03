@@ -12,9 +12,8 @@ const config: Config = {
         background: "var(--bg)",
         surface: "var(--surface)",
         fg: "var(--fg)",
-        "terminal-green": "var(--accent)",
-        "electric-blue": "var(--accent2)",
-        "accent": "var(--accent)",
+        accent: "var(--accent)",
+        "accent-2": "var(--accent2)",
         "accent-alt": "var(--accent-alt)",
         outline: "var(--outline)",
         dim: "var(--dim)",
@@ -26,21 +25,6 @@ const config: Config = {
         headline: ["var(--font-space-grotesk)", "sans-serif"],
         mono: ["var(--font-jetbrains-mono)", "monospace"],
         body: ["var(--font-geist-mono)", "monospace"],
-      },
-      animation: {
-        "lenis-scroll": "none",
-        ticker: "ticker 20s linear infinite",
-        "marquee-r": "marqueeR 28s linear infinite",
-      },
-      keyframes: {
-        ticker: {
-          "0%": { transform: "translateX(0)" },
-          "100%": { transform: "translateX(-50%)" },
-        },
-        marqueeR: {
-          "0%": { transform: "translateX(-50%)" },
-          "100%": { transform: "translateX(0)" },
-        },
       },
     },
   },
