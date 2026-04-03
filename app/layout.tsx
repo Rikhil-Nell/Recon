@@ -3,6 +3,7 @@ import { Michroma, Space_Grotesk, JetBrains_Mono, Share_Tech_Mono } from "next/f
 import "./globals.css";
 import LenisProvider from "@/components/providers/LenisProvider";
 import Navigation from "@/components/nav/Navigation";
+import ScrollProgress from "@/components/ui/ScrollProgress";
 
 const michroma = Michroma({ weight: "400", subsets: ["latin"], variable: "--font-michroma", display: "swap" });
 const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-space-grotesk", display: "swap" });
@@ -39,6 +40,7 @@ export default function RootLayout({
     <html lang="en" className={`${michroma.variable} ${spaceGrotesk.variable} ${jetBrainsMono.variable} ${shareTechMono.variable}`}>
       <body className="font-body antialiased selection:bg-accent selection:text-background overflow-x-hidden">
         <LenisProvider>
+          <ScrollProgress />
           <Navigation />
           <main>{children}</main>
         </LenisProvider>
