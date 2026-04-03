@@ -1,85 +1,69 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import Link from "next/link";
 import { X } from "lucide-react";
-import { gsap } from "@/lib/gsap";
+import { navLinks } from "@/lib/data";
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
 }
 
-const links = [
-  { name: "TRACKS", href: "#tracks" },
-  { name: "SCHEDULE", href: "#schedule" },
-  { name: "STAFF", href: "#staff" },
-  { name: "FAQ", href: "#faq" },
-];
-
 export default function MobileMenu({ isOpen, onClose }: Props) {
-  const overlayRef = useRef<HTMLDivElement>(null);
-  const linksRef = useRef<HTMLAnchorElement[]>([]);
-
   useEffect(() => {
-    if (!overlayRef.current) return;
-
     if (isOpen) {
-      gsap.to(overlayRef.current, {
-        clipPath: "inset(0 0 0% 0)",
-        duration: 0.6,
-        ease: "power4.inOut",
-        display: "flex",
-      });
-
-      gsap.fromTo(
-        linksRef.current,
-        { y: 30, opacity: 0 },
-        { y: 0, opacity: 1, stagger: 0.08, delay: 0.3, duration: 0.5, ease: "power3.out" }
-      );
+      document.body.style.overflow = "hidden";
     } else {
-      gsap.to(overlayRef.current, {
-        clipPath: "inset(0 0 100% 0)",
-        duration: 0.5,
-        ease: "power4.inOut",
-        onComplete: () => {
-          if (overlayRef.current) overlayRef.current.style.display = "none";
-        },
-      });
+      document.body.style.overflow = "";
     }
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [isOpen]);
 
   return (
     <div
-      ref={overlayRef}
-      className="fixed inset-0 bg-black z-[500] flex-col items-center justify-center hidden"
-      style={{ clipPath: "inset(0 0 100% 0)" }}
+      className={`fixed inset-0 z-[500] flex flex-col bg-background transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        isOpen ? "translate-y-0" : "-translate-y-full"
+      }`}
     >
-      <button onClick={onClose} className="absolute top-8 right-8 text-terminal-green hover:text-white transition-colors">
-        <X size={32} />
-      </button>
+      <div className="flex h-16 items-center justify-between px-4 sm:px-8">
+        <span className="font-brand text-lg tracking-[0.2em] text-fg">RECON</span>
+        <button
+          onClick={onClose}
+          className="text-fg transition-colors hover:text-accent-alt"
+          aria-label="Close menu"
+        >
+          <X size={24} />
+        </button>
+      </div>
 
-      <div className="flex flex-col gap-12 text-center w-full px-8">
-        {links.map((link, i) => (
+      <div className="flex flex-1 flex-col items-center justify-center gap-8">
+        {navLinks.map((link, i) => (
           <Link
-            key={i}
+            key={link.label}
             href={link.href}
             onClick={onClose}
-            ref={(el) => {
-              if (el) linksRef.current[i] = el;
-            }}
-            className="group relative flex flex-col items-center justify-center font-brand text-5xl md:text-6xl uppercase tracking-widest text-white hover:text-terminal-green transition-all duration-300"
+            className="font-headline text-3xl uppercase tracking-wider text-fg transition-colors hover:text-accent-alt sm:text-4xl"
+            style={{ transitionDelay: isOpen ? `${i * 50}ms` : "0ms" }}
           >
-            <span className="font-mono text-[10px] absolute left-4 top-1 text-white/30 group-hover:text-terminal-green/50">
-              0{i + 1}/04
-            </span>
-            <span className="group-hover:translate-x-2 transition-transform duration-300">{link.name}</span>
+            {link.label}
           </Link>
         ))}
       </div>
 
-      <div className="absolute bottom-8 w-full border-t border-white/10 pt-6 px-8 flex justify-center text-center">
-        <span className="font-mono text-[10px] text-white/40 tracking-widest">RECON 2026 // VIT-AP // APR 19-21</span>
+      <div className="border-t border-border-dim p-6 text-center">
+        <a
+          href="#register"
+          onClick={onClose}
+          className="btn-primary inline-block rounded px-8 py-3 text-base"
+        >
+          Register Now
+        </a>
+        <p className="mt-4 font-mono text-[10px] tracking-widest text-dim">
+          RECON 2026 // VIT-AP // APR 19-21
+        </p>
       </div>
     </div>
   );
