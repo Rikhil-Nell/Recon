@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import { Michroma, Space_Grotesk, JetBrains_Mono, Share_Tech_Mono } from "next/font/google";
 import "./globals.css";
 import LenisProvider from "@/components/providers/LenisProvider";
-import CustomCursor from "@/components/cursor/CustomCursor";
-import PageTransition from "@/components/transitions/PageTransition";
 import Navigation from "@/components/nav/Navigation";
 
 const michroma = Michroma({ weight: "400", subsets: ["latin"], variable: "--font-michroma", display: "swap" });
@@ -13,10 +11,10 @@ const shareTechMono = Share_Tech_Mono({ weight: "400", subsets: ["latin"], varia
 
 export const metadata: Metadata = {
   title: "RECON 2026 — National Workshop on System Security",
-  description: "A 3-day cyber operations environment...",
+  description: "A 3-day DEFCON-style cybersecurity fest at VIT-AP. Overnight CTF, KOTH, 10+ security villages, expert talks. Apr 19-21, 2026.",
   openGraph: {
-    title: "RECON 2026",
-    description: "National Workshop on System Security",
+    title: "RECON 2026 — National Workshop on System Security",
+    description: "A 3-day DEFCON-style cybersecurity fest at VIT-AP. Overnight CTF, KOTH, 10+ security villages, expert talks. Apr 19-21, 2026.",
     url: "https://reconhq.tech",
     siteName: "RECON 2026",
     images: [
@@ -39,11 +37,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${michroma.variable} ${spaceGrotesk.variable} ${jetBrainsMono.variable} ${shareTechMono.variable}`}>
-      <body className="font-body cursor-none antialiased selection:bg-terminal-green selection:text-black overflow-x-hidden">
+      <body className="font-body antialiased selection:bg-accent selection:text-background overflow-x-hidden">
         <LenisProvider>
-          <CustomCursor />
-          <div id="scroll-progress" className="fixed top-0 left-0 h-[2px] bg-terminal-green z-[9999] w-0"></div>
-          <PageTransition />
           <Navigation />
           <main>{children}</main>
         </LenisProvider>
