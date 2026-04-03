@@ -1,3 +1,160 @@
+// --- Landing page data ---
+
+export interface OperationCard {
+  name: string;
+  category: string;
+  description: string;
+  difficulty: 1 | 2 | 3 | 4 | 5;
+  duration?: string;
+  flagship?: boolean;
+}
+
+export interface TimelineMilestone {
+  time: string;
+  event: string;
+  overnight?: boolean;
+}
+
+export interface TimelineDay {
+  label: string;
+  date: string;
+  milestones: TimelineMilestone[];
+}
+
+export interface MiniFAQ {
+  question: string;
+  answer: string;
+}
+
+export const operationsData: OperationCard[] = [
+  {
+    name: "CTF",
+    category: "COMPETITION",
+    description: "Jeopardy-style challenges across web, pwn, crypto, forensics, misc, and OSINT.",
+    difficulty: 3,
+    duration: "12hr Overnight",
+    flagship: true,
+  },
+  {
+    name: "KOTH",
+    category: "COMPETITION",
+    description: "Attack/defend target boxes. Points accrue per hold interval. Resets every 30-60 min.",
+    difficulty: 5,
+    duration: "8hr Overnight",
+    flagship: true,
+  },
+  {
+    name: "Hardware Badge + IoT Village",
+    category: "VILLAGE",
+    description: "Solder your own badge, explore JTAG/UART interfaces, and firmware hardening basics.",
+    difficulty: 4,
+  },
+  {
+    name: "Web Exploit Dojo",
+    category: "VILLAGE",
+    description: "Guided OWASP top 10 exploitation on sandboxed vulnerable apps. Beginner-friendly.",
+    difficulty: 1,
+  },
+  {
+    name: "OSINT Corner",
+    category: "VILLAGE",
+    description: "Time-boxed investigation puzzles using public data and synthetic personas.",
+    difficulty: 2,
+  },
+  {
+    name: "Forensics Sprint",
+    category: "VILLAGE",
+    description: "30-min mini-cases: memory dumps, pcap analysis, log triage, stego basics.",
+    difficulty: 3,
+  },
+];
+
+export const timelineData: TimelineDay[] = [
+  {
+    label: "DAY 1",
+    date: "APR 19",
+    milestones: [
+      { time: "09:30", event: "Gates Open" },
+      { time: "10:00", event: "Inauguration" },
+      { time: "11:00", event: "Talk 1" },
+      { time: "13:30", event: "Talk 2" },
+      { time: "15:00", event: "All Stalls Open" },
+      { time: "17:00", event: "CTF Briefing" },
+      { time: "18:00", event: "CTF Begins", overnight: true },
+    ],
+  },
+  {
+    label: "DAY 2",
+    date: "APR 20",
+    milestones: [
+      { time: "06:00", event: "CTF Ends" },
+      { time: "10:00", event: "Recovery & Clinics" },
+      { time: "13:30", event: "Talk 3" },
+      { time: "14:30", event: "Talk 4" },
+      { time: "15:30", event: "All Stalls Open" },
+      { time: "21:30", event: "KOTH Briefing" },
+      { time: "22:00", event: "KOTH Begins", overnight: true },
+    ],
+  },
+  {
+    label: "DAY 3",
+    date: "APR 21",
+    milestones: [
+      { time: "06:00", event: "KOTH Ends" },
+      { time: "10:30", event: "Adjudication" },
+      { time: "14:00", event: "Lightning Talks" },
+      { time: "16:00", event: "Awards Ceremony" },
+      { time: "17:00", event: "Closing & Teardown" },
+    ],
+  },
+];
+
+export const miniFaqData: MiniFAQ[] = [
+  {
+    question: "Who can participate?",
+    answer: "Any college student from any institution across India. All skill levels welcome — we have beginner-friendly tracks.",
+  },
+  {
+    question: "What should I bring?",
+    answer: "Laptop, charger, ethernet adapter (recommended), and curiosity. VMs and tools guide shared pre-event.",
+  },
+  {
+    question: "How do I register?",
+    answer: "Click Register Now, fill the form. Registration is open. Limited to 600 seats.",
+  },
+];
+
+export const navLinks = [
+  { label: "Home", href: "/" },
+  { label: "Schedule", href: "/schedule" },
+  { label: "Prizes", href: "/prizes" },
+  { label: "Team", href: "/team" },
+  { label: "Partners", href: "/partners" },
+  { label: "Gallery", href: "/gallery" },
+  { label: "FAQ", href: "/faq" },
+  { label: "Contact", href: "/contact" },
+];
+
+export const socialLinks = [
+  { platform: "Instagram", url: "#" },
+  { platform: "LinkedIn", url: "#" },
+  { platform: "Twitter", url: "#" },
+  { platform: "Discord", url: "#" },
+];
+
+export const sponsorPlaceholders = [
+  "VIT-AP University",
+  "IIT Madras",
+  "ISEA",
+  "Open Source Community",
+  "Null Chapter",
+  "HackTheBox",
+  "OffSec",
+  "Partner 8",
+];
+
+// --- Existing page data (used by schedule, team, FAQ, etc.) ---
+
 export interface Track {
   id: string;
   icon: string;
