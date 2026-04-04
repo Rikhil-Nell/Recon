@@ -39,7 +39,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${michroma.variable} ${spaceGrotesk.variable} ${jetBrainsMono.variable} ${shareTechMono.variable}`}>
-      <body className="font-body cursor-none antialiased selection:bg-terminal-green selection:text-black overflow-x-hidden">
+      <body className="font-body md:cursor-none antialiased selection:bg-terminal-green selection:text-black overflow-x-hidden">
         <LenisProvider>
           <CustomCursor />
           <div id="scroll-progress" className="fixed top-0 left-0 h-[2px] bg-terminal-green z-[9999] w-0"></div>

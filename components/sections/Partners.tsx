@@ -31,7 +31,7 @@ export default function Partners() {
   });
 
   return (
-    <section ref={sectionRef} id="partners" className="py-32 px-8 lg:px-24 bg-white/5 border-t border-b border-white/5 text-center">
+    <section ref={sectionRef} id="partners" className="py-16 md:py-32 px-4 md:px-8 lg:px-24 bg-white/5 border-t border-b border-white/5 text-center">
       <div className="max-w-[1000px] mx-auto">
         <DiagnosticLabel text="// ALLIED ENTITIES" />
         <h2 className="font-brand text-3xl md:text-5xl text-white uppercase mt-6 mb-16 tracking-widest">

@@ -141,7 +141,8 @@ body {
 /* LENIS SCROLL OPTIMIZATIONS */
 html.lenis, html.lenis body {
   height: auto;
-  width: 100vw;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 .lenis.lenis-smooth {

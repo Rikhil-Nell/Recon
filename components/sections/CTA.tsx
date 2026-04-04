@@ -79,10 +79,10 @@ export default function CTA() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-6">
-            <MagneticButton className="btn-fill px-10 py-5 font-mono text-sm tracking-widest uppercase font-bold text-center rounded-lg text-zinc-100">
+            <MagneticButton href="https://luma.com/v933kdr1" external={true} className="btn-fill px-10 py-5 font-mono text-sm tracking-widest uppercase font-bold text-center rounded-lg text-zinc-100">
               REGISTER NOW →
             </MagneticButton>
-            <MagneticButton href="#faq" className="border border-white/20 bg-transparent text-white px-10 py-5 font-mono text-sm tracking-widest uppercase hover:border-white transition-colors text-center">
+            <MagneticButton href="#tracks" className="border border-white/20 bg-transparent text-white px-10 py-5 font-mono text-sm tracking-widest uppercase hover:border-white transition-colors text-center">
               VIEW DOSSIER
             </MagneticButton>
           </div>
@@ -98,9 +98,9 @@ export default function CTA() {
         <div className="px-4 md:px-8 lg:px-16 py-8 flex flex-col md:flex-row justify-between items-center gap-4 mt-8 opacity-50 font-mono text-[10px] tracking-widest uppercase border-t border-white/5">
           <div>RECON 2026 // VIT-AP UNIVERSITY</div>
           <div className="flex gap-8">
-            <a href="#" className="hover:text-terminal-green transition-colors">TWITTER (X)</a>
-            <a href="#" className="hover:text-terminal-green transition-colors">DISCORD</a>
-            <a href="#" className="hover:text-terminal-green transition-colors">INSTAGRAM</a>
+            <a href="https://x.com" target="_blank" rel="noopener noreferrer" className="hover:text-terminal-green transition-colors">TWITTER (X)</a>
+            <a href="https://discord.gg" target="_blank" rel="noopener noreferrer" className="hover:text-terminal-green transition-colors">DISCORD</a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-terminal-green transition-colors">INSTAGRAM</a>
           </div>
           <div>© {new Date().getFullYear()} ALL RIGHTS RESERVED.</div>
         </div>

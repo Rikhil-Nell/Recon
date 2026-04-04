@@ -78,6 +78,18 @@ export default function MobileMenu({ isOpen, onClose }: Props) {
         ))}
       </div>
 
+      <div className="mt-12 flex justify-center px-8">
+        <a
+          href="https://luma.com/v933kdr1"
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={onClose}
+          className="btn-fill px-10 py-5 font-mono text-sm tracking-widest uppercase font-bold text-center rounded-lg text-zinc-100 inline-block"
+        >
+          REGISTER NOW →
+        </a>
+      </div>
+
       <div className="absolute bottom-8 w-full border-t border-white/10 pt-6 px-8 flex justify-center text-center">
         <span className="font-mono text-[10px] text-white/40 tracking-widest">RECON 2026 // VIT-AP // APR 19-21</span>
       </div>
