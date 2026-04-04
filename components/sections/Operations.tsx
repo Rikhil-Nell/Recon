@@ -22,7 +22,7 @@ function DifficultyBar({ level }: { level: number }) {
 function Card({ card }: { card: OperationCard }) {
   return (
     <div
-      className={`reveal group flex flex-col justify-between border border-border-dim bg-surface p-5 transition-colors hover:border-accent sm:p-6 ${
+      className={`reveal card-glow group flex flex-col justify-between border border-border-dim bg-surface p-5 sm:p-6 ${
         card.flagship ? "min-h-[180px]" : ""
       }`}
     >

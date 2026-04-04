@@ -41,7 +41,7 @@ export default function CountdownTimer() {
       <div className="flex gap-3 sm:gap-4">
         {["DAYS", "HRS", "MIN", "SEC"].map((label) => (
           <div key={label} className="flex flex-col items-center">
-            <div className="flex h-14 w-14 items-center justify-center border border-border font-mono text-xl text-fg sm:h-16 sm:w-16 sm:text-2xl">
+            <div className="flex h-14 w-14 items-center justify-center border border-border countdown-box font-mono text-xl text-fg sm:h-16 sm:w-16 sm:text-2xl">
               --
             </div>
             <span className="mt-1.5 font-mono text-[10px] tracking-widest text-dim">{label}</span>
@@ -62,7 +62,7 @@ export default function CountdownTimer() {
     <div className="flex gap-3 sm:gap-4">
       {segments.map(({ value, label }) => (
         <div key={label} className="flex flex-col items-center">
-          <div className="flex h-14 w-14 items-center justify-center border border-border font-mono text-xl text-fg sm:h-16 sm:w-16 sm:text-2xl">
+          <div className="flex h-14 w-14 items-center justify-center border border-border countdown-box font-mono text-xl text-fg sm:h-16 sm:w-16 sm:text-2xl">
             {pad(value)}
           </div>
           <span className="mt-1.5 font-mono text-[10px] tracking-widest text-dim">{label}</span>

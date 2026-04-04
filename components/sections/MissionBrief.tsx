@@ -19,7 +19,8 @@ export default function MissionBrief() {
       id="mission"
       className="reveal relative flex min-h-svh items-center px-4 sm:px-8 lg:px-12"
     >
-      <div className="mx-auto w-full max-w-6xl">
+      <div className="gradient-section pointer-events-none absolute inset-0" aria-hidden="true" />
+      <div className="relative z-10 mx-auto w-full max-w-6xl">
         <span className="section-label mb-8 block">{"// 01 MISSION"}</span>
 
         <div className="flex flex-col gap-12 lg:flex-row lg:gap-16">

@@ -3,16 +3,17 @@
 @tailwind utilities;
 
 :root {
-  --bg: #090614;
-  --surface: #120c23;
+  --bg: #05020e;
+  --surface: #0d0a1a;
   --fg: #f4f4f5;
   --accent: #8b5cf6;
   --accent2: #a78bfa;
-  --accent-alt: #eaff00;
+  --accent-alt: #c4b5fd;
   --outline: #2e1f4d;
   --dim: rgba(244, 244, 245, 0.4);
-  --border: rgba(139, 92, 246, 0.2);
-  --border-dim: rgba(255, 255, 255, 0.08);
+  --border: rgba(139, 92, 246, 0.15);
+  --border-dim: rgba(255, 255, 255, 0.06);
+  --glow: rgba(139, 92, 246, 0.08);
 }
 
 body {
@@ -24,7 +25,14 @@ body {
 .section-divider {
   width: 100%;
   height: 1px;
-  background: var(--border-dim);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(139, 92, 246, 0.25) 20%,
+    rgba(167, 139, 250, 0.4) 50%,
+    rgba(139, 92, 246, 0.25) 80%,
+    transparent 100%
+  );
 }
 
 /* Section label (e.g., // 01 MISSION) */
@@ -58,30 +66,166 @@ body {
 
 /* Button styles */
 .btn-primary {
-  background-color: var(--accent-alt);
-  color: var(--bg);
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+  color: white;
   font-family: var(--font-space-grotesk), sans-serif;
   font-weight: 600;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+  border: 1px solid rgba(139, 92, 246, 0.3);
 }
 
 .btn-primary:hover {
   transform: scale(1.02);
-  box-shadow: 0 0 20px rgba(234, 255, 0, 0.2);
+  box-shadow: 0 0 30px rgba(139, 92, 246, 0.3), 0 0 60px rgba(139, 92, 246, 0.1);
 }
 
 .btn-ghost {
-  border: 1px solid var(--fg);
-  color: var(--fg);
+  border: 1px solid rgba(167, 139, 250, 0.3);
+  color: var(--accent2);
   font-family: var(--font-space-grotesk), sans-serif;
   font-weight: 600;
-  transition: border-color 0.2s ease, color 0.2s ease;
+  transition: border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .btn-ghost:hover {
-  border-color: var(--accent-alt);
-  color: var(--accent-alt);
+  border-color: var(--accent);
+  color: var(--fg);
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.1);
 }
+
+/* Gradient backgrounds */
+.gradient-radial {
+  background: radial-gradient(ellipse at 50% 0%, var(--glow) 0%, transparent 70%);
+}
+
+.gradient-section {
+  background: linear-gradient(180deg, transparent 0%, var(--glow) 50%, transparent 100%);
+}
+
+/* Glow line separator */
+.glow-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(139, 92, 246, 0.3) 20%,
+    rgba(167, 139, 250, 0.5) 50%,
+    rgba(139, 92, 246, 0.3) 80%,
+    transparent 100%
+  );
+}
+
+/* Enhanced reveal animations */
+.reveal-up {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-scale.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal-left.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Card hover glow */
+.card-glow {
+  position: relative;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-glow:hover {
+  border-color: rgba(139, 92, 246, 0.4);
+  box-shadow: 0 0 30px rgba(139, 92, 246, 0.08), inset 0 1px 0 rgba(139, 92, 246, 0.1);
+}
+
+/* Subtle pulse for countdown boxes */
+@keyframes subtle-pulse {
+  0%, 100% { border-color: rgba(139, 92, 246, 0.2); }
+  50% { border-color: rgba(139, 92, 246, 0.4); }
+}
+
+.countdown-box {
+  animation: subtle-pulse 3s ease-in-out infinite;
+}
+
+/* Text shimmer effect for headings */
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.text-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--fg) 0%,
+    var(--accent2) 25%,
+    var(--fg) 50%,
+    var(--accent2) 75%,
+    var(--fg) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 8s linear infinite;
+}
+
+/* Floating animation for decorative elements */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Nav link underline animation */
+.nav-link {
+  position: relative;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--accent);
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+/* Stagger delays extended */
+.reveal-stagger > .reveal:nth-child(7) { transition-delay: 0.6s; }
+.reveal-stagger > .reveal:nth-child(8) { transition-delay: 0.7s; }
 
 /* LENIS SCROLL OPTIMIZATIONS */
 html.lenis, html.lenis body {

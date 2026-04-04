@@ -20,7 +20,7 @@ export default function Deploy() {
 
         <div className="relative z-10">
           <h2
-            className="font-headline font-bold text-fg"
+            className="text-shimmer font-headline font-bold"
             style={{ fontSize: "clamp(1.5rem, 3vw, 2.5rem)" }}
           >
             Secure Your Spot

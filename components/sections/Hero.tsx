@@ -14,6 +14,7 @@ export default function Hero() {
       className="reveal relative flex min-h-svh flex-col items-center justify-center px-4 sm:px-8"
     >
       <TopoBg />
+      <div className="gradient-radial pointer-events-none absolute inset-0" aria-hidden="true" />
 
       <div className="relative z-10 flex flex-col items-center text-center">
         {/* Tagline */}
@@ -23,13 +24,13 @@ export default function Hero() {
 
         {/* Wordmark */}
         <h1
-          className="font-brand leading-none text-fg"
+          className="text-shimmer font-brand leading-none"
           style={{ fontSize: "clamp(3rem, 8vw, 8rem)" }}
         >
           RECON
         </h1>
         <p
-          className="font-brand leading-none text-fg"
+          className="mt-1 font-brand leading-none text-accent2"
           style={{ fontSize: "clamp(1.5rem, 4vw, 4rem)" }}
         >
           2026
@@ -49,13 +50,13 @@ export default function Hero() {
         <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:gap-4">
           <a
             href="#register"
-            className="btn-primary rounded px-8 py-3 text-center text-sm sm:text-base"
+            className="btn-primary rounded-md px-8 py-3 text-center text-sm sm:text-base"
           >
             Register Now
           </a>
           <a
             href="/schedule"
-            className="btn-ghost rounded px-8 py-3 text-center text-sm sm:text-base"
+            className="btn-ghost rounded-md px-8 py-3 text-center text-sm sm:text-base"
           >
             View Schedule
           </a>

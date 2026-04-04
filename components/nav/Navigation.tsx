@@ -21,7 +21,7 @@ export default function Navigation() {
       <nav
         className={`fixed top-0 z-[100] flex h-16 w-full items-center justify-between px-4 transition-all duration-300 sm:px-8 lg:px-12 ${
           scrolled
-            ? "border-b border-border-dim bg-background/80 backdrop-blur-xl"
+            ? "border-b border-border-dim bg-background/90 backdrop-blur-xl"
             : "bg-transparent"
         }`}
       >
@@ -36,7 +36,7 @@ export default function Navigation() {
             <Link
               key={link.label}
               href={link.href}
-              className="text-dim transition-colors hover:text-accent-alt"
+              className="nav-link text-dim transition-colors hover:text-fg"
             >
               {link.label}
             </Link>
