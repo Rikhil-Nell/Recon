@@ -12,6 +12,7 @@ export interface OperationCard {
 export interface TimelineMilestone {
   time: string;
   event: string;
+  detail?: string;
   overnight?: boolean;
 }
 
@@ -78,32 +79,32 @@ export const timelineData: TimelineDay[] = [
       { time: "10:00", event: "Inauguration" },
       { time: "11:00", event: "Talk 1" },
       { time: "13:30", event: "Talk 2" },
-      { time: "15:00", event: "All Stalls Open" },
-      { time: "17:00", event: "CTF Briefing" },
-      { time: "18:00", event: "CTF Begins", overnight: true },
+      { time: "15:00", event: "All Stalls Open", detail: "10+ villages & side events" },
+      { time: "17:00", event: "CTF Briefing", detail: "Rules, scoring & infra walkthrough" },
+      { time: "18:00", event: "CTF Begins", detail: "12hr Jeopardy-style, 20-30 challenges", overnight: true },
     ],
   },
   {
     label: "DAY 2",
     date: "APR 20",
     milestones: [
-      { time: "06:00", event: "CTF Ends" },
-      { time: "10:00", event: "Recovery & Clinics" },
+      { time: "06:00", event: "CTF Ends", detail: "Scoreboard freeze & results" },
+      { time: "10:00", event: "Recovery & Clinics", detail: "Career clinic, resume teardowns" },
       { time: "13:30", event: "Talk 3" },
       { time: "14:30", event: "Talk 4" },
       { time: "15:30", event: "All Stalls Open" },
-      { time: "21:30", event: "KOTH Briefing" },
-      { time: "22:00", event: "KOTH Begins", overnight: true },
+      { time: "21:30", event: "KOTH Briefing", detail: "Team assignments & target info" },
+      { time: "22:00", event: "KOTH Begins", detail: "8hr Attack/Defend, live target boxes", overnight: true },
     ],
   },
   {
     label: "DAY 3",
     date: "APR 21",
     milestones: [
-      { time: "06:00", event: "KOTH Ends" },
-      { time: "10:30", event: "Adjudication" },
-      { time: "14:00", event: "Lightning Talks" },
-      { time: "16:00", event: "Awards Ceremony" },
+      { time: "06:00", event: "KOTH Ends", detail: "Final hill ownership tallied" },
+      { time: "10:30", event: "Adjudication", detail: "Score verification & disputes" },
+      { time: "14:00", event: "Lightning Talks", detail: "Community presentations, 5 min each" },
+      { time: "16:00", event: "Awards Ceremony", detail: "CTF, KOTH & village prizes" },
       { time: "17:00", event: "Closing & Teardown" },
     ],
   },

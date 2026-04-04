@@ -12,7 +12,7 @@ export default function Timeline() {
     <section
       ref={ref as React.RefObject<HTMLElement>}
       id="timeline"
-      className="reveal relative flex min-h-svh items-center px-4 sm:px-8 lg:px-12"
+      className="reveal relative px-4 py-24 sm:px-8 lg:px-12 lg:py-32"
     >
       <div className="mx-auto w-full max-w-6xl">
         <span className="section-label mb-8 block">{"// 03 TIMELINE"}</span>
@@ -37,9 +37,16 @@ export default function Timeline() {
                     <span className="w-12 shrink-0 font-mono text-sm text-accent">
                       {m.time}
                     </span>
-                    <span className="font-body text-sm text-fg">
-                      {m.event}
-                    </span>
+                    <div>
+                      <span className="font-body text-sm text-fg">
+                        {m.event}
+                      </span>
+                      {m.detail && (
+                        <p className="font-body text-xs text-dim">
+                          {m.detail}
+                        </p>
+                      )}
+                    </div>
                   </li>
                 ))}
               </ul>
@@ -80,9 +87,16 @@ export default function Timeline() {
                       <span className="w-12 shrink-0 font-mono text-sm text-accent">
                         {m.time}
                       </span>
-                      <span className="font-body text-sm text-fg">
-                        {m.event}
-                      </span>
+                      <div>
+                        <span className="font-body text-sm text-fg">
+                          {m.event}
+                        </span>
+                        {m.detail && (
+                          <p className="font-body text-xs text-dim">
+                            {m.detail}
+                          </p>
+                        )}
+                      </div>
                     </li>
                   ))}
                 </ul>

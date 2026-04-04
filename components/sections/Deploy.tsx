@@ -15,7 +15,7 @@ export default function Deploy() {
       className="reveal relative"
     >
       {/* CTA Block */}
-      <div className="relative flex min-h-[50svh] flex-col items-center justify-center px-4 py-20 text-center sm:px-8">
+      <div className="relative flex flex-col items-center justify-center px-4 py-20 text-center sm:px-8 lg:py-28">
         <TopoBg />
 
         <div className="relative z-10">

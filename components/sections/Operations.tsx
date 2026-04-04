@@ -4,6 +4,13 @@ import { useInViewChildren } from "@/hooks/useInView";
 import { operationsData } from "@/lib/data";
 import type { OperationCard } from "@/lib/data";
 
+const moreEvents = [
+  { name: "AI Red-Team Lab", desc: "Adversarial ML & prompt injection techniques" },
+  { name: "NFC Lock Hunt", desc: "Physical security challenges with NFC tags" },
+  { name: "Gaming Arena", desc: "Competitive gaming & cybersec-themed challenges" },
+  { name: "Career Clinic", desc: "Resume teardowns & industry networking" },
+];
+
 function DifficultyBar({ level }: { level: number }) {
   return (
     <div className="flex gap-1">
@@ -57,7 +64,7 @@ export default function Operations() {
   return (
     <section
       id="operations"
-      className="relative flex min-h-svh items-center px-4 sm:px-8 lg:px-12"
+      className="relative px-4 py-24 sm:px-8 lg:px-12 lg:py-32"
     >
       <div className="mx-auto w-full max-w-6xl">
         <span className="section-label mb-8 block">{"// 02 OPERATIONS"}</span>
@@ -102,11 +109,33 @@ export default function Operations() {
           ))}
         </div>
 
+        {/* More Events */}
+        <div className="mt-8">
+          <p className="mb-4 font-mono text-xs uppercase tracking-[0.2em] text-dim">
+            More Events
+          </p>
+          <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+            {moreEvents.map(({ name, desc }) => (
+              <div
+                key={name}
+                className="border border-border-dim bg-surface p-3"
+              >
+                <p className="font-headline text-sm font-semibold text-fg">
+                  {name}
+                </p>
+                <p className="mt-1 font-body text-xs leading-snug text-dim">
+                  {desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+
         <a
           href="/events"
-          className="mt-8 inline-block font-mono text-sm tracking-wider text-accent transition-colors hover:text-accent-alt"
+          className="mt-6 inline-block font-mono text-sm tracking-wider text-accent transition-colors hover:text-accent-alt"
         >
-          View all 10+ events &rarr;
+          View all events &rarr;
         </a>
 
         <div className="section-divider mt-16" />

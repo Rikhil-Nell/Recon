@@ -9,6 +9,13 @@ const stats = [
   { value: "80K+", label: "Prize Pool" },
 ];
 
+const highlights = [
+  { name: "Overnight CTF", desc: "12hr jeopardy-style, 20-30 challenges" },
+  { name: "Overnight KOTH", desc: "8hr attack/defend, live target boxes" },
+  { name: "10+ Villages", desc: "Hardware, OSINT, Forensics, AI, Web Security" },
+  { name: "Expert Talks", desc: "Industry speakers, Q&A sessions" },
+];
+
 export default function MissionBrief() {
   const sectionRef = useInView();
   const statsRef = useInViewChildren();
@@ -17,7 +24,7 @@ export default function MissionBrief() {
     <section
       ref={sectionRef as React.RefObject<HTMLElement>}
       id="mission"
-      className="reveal relative flex min-h-svh items-center px-4 sm:px-8 lg:px-12"
+      className="reveal relative px-4 py-24 sm:px-8 lg:px-12 lg:py-32"
     >
       <div className="gradient-section pointer-events-none absolute inset-0" aria-hidden="true" />
       <div className="relative z-10 mx-auto w-full max-w-6xl">
@@ -40,6 +47,23 @@ export default function MissionBrief() {
               10+ security villages, expert talks, and hands-on training —
               built by students who take security seriously.
             </p>
+
+            {/* Feature highlights */}
+            <div className="mt-8 grid grid-cols-2 gap-3 lg:grid-cols-4">
+              {highlights.map(({ name, desc }) => (
+                <div
+                  key={name}
+                  className="border-l-2 border-accent pl-3"
+                >
+                  <p className="font-headline text-sm font-bold text-fg">
+                    {name}
+                  </p>
+                  <p className="mt-0.5 font-body text-xs leading-snug text-dim">
+                    {desc}
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Right column — stats */}
