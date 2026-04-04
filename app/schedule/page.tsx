@@ -202,7 +202,7 @@ export default function SchedulePage() {
       {/* ambient glow */}
       <div className="pointer-events-none fixed inset-0 gradient-radial opacity-60" />
 
-      <div className="relative mx-auto max-w-4xl px-4 sm:px-6">
+      <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6">
         {/* ── header ──────────────────────────────────────────── */}
         <header className="mb-12">
           <span className="section-label">{"// SCHEDULE"}</span>
