@@ -58,6 +58,9 @@ export default function MagneticButton({ children, href, onClick, className = ""
         </a>
       );
     }
+    if (href.startsWith("#")) {
+      return <a href={href}>{content}</a>;
+    }
     return <Link href={href} scroll={false}>{content}</Link>;
   }
 
