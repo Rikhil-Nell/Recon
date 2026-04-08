@@ -1,36 +1,87 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Recon
+
+Recon is a Vite + React + TypeScript web app for the RECON 2026 cybersecurity event experience.
+
+It ships a stylized, animated landing page with section-based content for hero, events, schedule, team, prizes, and footer modules.
+
+## Features
+
+- Single-page event site with modular React components
+- Animated UI and motion effects via Framer Motion
+- Data-driven content in a central source file
+- Utility-first styling with Tailwind CSS (v4)
+- Fast dev/build workflow using Vite
+
+## Tech Stack
+
+- React 19
+- TypeScript 6
+- Vite 8
+- Tailwind CSS 4
+- Framer Motion
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+
+- npm 9+
+
+### Install
+
+```bash
+npm install
+```
+
+### Run in Development
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+By default, Vite serves the app at <http://localhost:5173>.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- `npm run dev` - start development server
+- `npm run build` - type-check and build for production
+- `npm run preview` - preview the production build locally
 
-## Learn More
+## Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```text
+src/
+  App.tsx              # Main page composition
+  data.ts              # Event content (stats, events, schedule, team, partners)
+  hooks.ts             # Shared hooks
+  shader.ts            # Shader/background related logic
+  index.css            # Global styles
+  main.tsx             # App entry point
+  components/
+    Hero.tsx
+    About.tsx
+    Events.tsx
+    Schedule.tsx
+    Team.tsx
+    Prizes.tsx
+    Footer.tsx
+    ...
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Content Updates
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- Update event copy, stats, schedule, team, and partner data in `src/data.ts`.
+- Update visuals and section behavior in `src/components/*`.
+- Adjust global style tokens/effects in `src/index.css`.
 
-## Deploy on Vercel
+## Build for Production
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+npm run build
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+The optimized output is generated in the `dist/` folder.
+
+## Notes
+
+No explicit license is currently defined in `package.json`.
