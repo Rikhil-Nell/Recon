@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import GlyphGrid from './GlyphGrid';
 
 export default function HUD() {
     const [time, setTime] = useState(new Date());
@@ -25,7 +24,7 @@ export default function HUD() {
         <>
             {/* Bottom-left: Glyph corner + HUD inset */}
             <div className="fixed bottom-3 left-3 z-50 pointer-events-none hidden md:flex flex-col items-start gap-1" aria-hidden="true">
-                <GlyphGrid type="circles" cols={5} rows={2} className="opacity-40" />
+
                 <div className="pl-1 flex flex-col gap-0.5">
                     <span className="font-mono text-[9px] tracking-wider uppercase text-faint/70">
                         CLIENT: {client}
@@ -37,12 +36,11 @@ export default function HUD() {
                         DEPTH: {depth}
                     </span>
                 </div>
-                <GlyphGrid type="braille" cols={6} rows={1} className="opacity-30" />
             </div>
 
             {/* Bottom-right: Glyph corner + HUD inset */}
             <div className="fixed bottom-3 right-3 z-50 pointer-events-none hidden md:flex flex-col items-end gap-1" aria-hidden="true">
-                <GlyphGrid type="hex" cols={4} rows={2} className="opacity-40" />
+
                 <div className="pr-1 flex flex-col gap-0.5 items-end">
                     <span className="font-mono text-[9px] tracking-wider uppercase text-faint/70">
                         UTC: {utc}&ensp;LOCAL: {local}
@@ -54,7 +52,6 @@ export default function HUD() {
                         ZONE: {tz}&ensp;STATUS: <span className="text-paper/60">● ON</span>
                     </span>
                 </div>
-                <GlyphGrid type="blocks" cols={5} rows={1} className="opacity-30" />
             </div>
         </>
     );
