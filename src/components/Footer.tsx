@@ -36,9 +36,24 @@ function useDiagnostics() {
 }
 
 const FOOTER_LINKS = [
-    { heading: 'Event', items: ['CTF Arena', 'Workshops', 'Schedule', 'Prizes'] },
-    { heading: 'Community', items: ['Discord', 'Twitter/X', 'LinkedIn', 'GitHub'] },
-    { heading: 'Resources', items: ['Rules', 'FAQ', 'Code of Conduct', 'Contact'] },
+    {
+        heading: 'Community',
+        items: [
+            { label: 'Discord', href: 'https://discord.gg/xJdRgYndSJ' },
+            { label: 'Twitter/X', href: 'https://x.com/Recon2k26/with_replies' },
+            { label: 'LinkedIn', href: 'https://www.linkedin.com/in/recon-events/' },
+            { label: 'Instagram', href: 'https://www.instagram.com/recon_2k26/' },
+        ],
+    },
+    {
+        heading: 'Resources',
+        items: [
+            { label: 'Rules', href: '#' },
+            { label: 'FAQ', href: '#' },
+            { label: 'Code of Conduct', href: '#' },
+            { label: 'Contact', href: '#' },
+        ],
+    },
 ];
 
 export default function Footer() {
@@ -67,7 +82,7 @@ export default function Footer() {
                             <ScrambleText text="Register Now" tag="span" speed={12} />
                         </a>
                         <a
-                            href="https://discord.gg/reconhq"
+                            href="https://discord.gg/xJdRgYndSJ"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="font-mono text-xs tracking-[0.2em] uppercase px-8 py-3.5 border border-cream/30 text-muted hover:border-paper/40 hover:text-paper transition-colors duration-200"
@@ -98,10 +113,15 @@ export default function Footer() {
                                     </span>
                                     <ul className="space-y-2">
                                         {col.items.map((item) => (
-                                            <li key={item}>
-                                                <span className="font-mono text-[11px] text-muted hover:text-paper transition-colors cursor-pointer">
-                                                    {item}
-                                                </span>
+                                            <li key={item.label}>
+                                                <a
+                                                    href={item.href}
+                                                    target={item.href !== '#' ? '_blank' : undefined}
+                                                    rel={item.href !== '#' ? 'noopener noreferrer' : undefined}
+                                                    className="font-mono text-[11px] text-muted hover:text-paper transition-colors"
+                                                >
+                                                    {item.label}
+                                                </a>
                                             </li>
                                         ))}
                                     </ul>
