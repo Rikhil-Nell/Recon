@@ -91,6 +91,18 @@ export default function Navbar() {
                                     {label}
                                 </Link>
                             ))}
+                            <Link
+                                to="/faq"
+                                className={`font-mono text-xs tracking-[0.2em] uppercase transition-colors ${pathname === '/faq' ? 'text-paper' : 'text-muted hover:text-paper'}`}
+                            >
+                                FAQ
+                            </Link>
+                            <Link
+                                to="/contact"
+                                className={`font-mono text-xs tracking-[0.2em] uppercase transition-colors ${pathname === '/contact' ? 'text-paper' : 'text-muted hover:text-paper'}`}
+                            >
+                                Contact
+                            </Link>
                             <a
                                 href="https://luma.com/v933kdr1"
                                 target="_blank"
@@ -99,6 +111,28 @@ export default function Navbar() {
                             >
                                 Register
                             </a>
+
+                            {/* Social links */}
+                            <div className="pt-4 border-t border-edge/50">
+                                <div className="flex flex-wrap justify-center gap-4">
+                                    {[
+                                        { label: 'Discord', href: 'https://discord.gg/xJdRgYndSJ' },
+                                        { label: 'Twitter / X', href: 'https://x.com/Recon2k26/with_replies' },
+                                        { label: 'LinkedIn', href: 'https://www.linkedin.com/in/recon-events/' },
+                                        { label: 'Instagram', href: 'https://www.instagram.com/recon_2k26/' },
+                                    ].map(({ label, href }) => (
+                                        <a
+                                            key={label}
+                                            href={href}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="font-mono text-[11px] text-muted hover:text-paper transition-colors"
+                                        >
+                                            {label}
+                                        </a>
+                                    ))}
+                                </div>
+                            </div>
                         </div>
                     </motion.div>
                 )}
