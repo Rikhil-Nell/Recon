@@ -28,12 +28,14 @@ export default function Hero() {
                     style={{ y: imageY, opacity: imageOpacity }}
                     className="absolute inset-0"
                 >
-                    <img
-                        src="/hands.webp"
-                        alt="RECON 2026"
-                        className="w-full h-full object-cover object-top sm:object-center select-none"
-                        draggable={false}
-                    />
+                    <div className="absolute inset-0">
+                        <img
+                            src="/hands.webp"
+                            alt="RECON 2026"
+                            className="absolute sm:top-1/2 top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 rotate-90 sm:rotate-0 w-[100vh] h-[100vw] sm:w-full sm:h-full object-contain select-none"
+                            draggable={false}
+                        />
+                    </div>
                     {/* Bottom fade into void */}
                     <div className="absolute inset-x-0 bottom-0 h-64 bg-linear-to-t from-void via-void/70 to-transparent" />
                     {/* Top fade */}

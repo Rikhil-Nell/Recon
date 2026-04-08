@@ -6,6 +6,8 @@ import Schedule from './components/Schedule';
 import Team from './components/Team';
 import Prizes from './components/Prizes';
 import Sponsors from './components/Sponsors';
+import FAQ from './components/FAQ';
+import Contact from './components/Contact';
 
 export default function App() {
     return (
@@ -18,6 +20,8 @@ export default function App() {
                     <Route path="/people" element={<Team />} />
                     <Route path="/prizes" element={<Prizes />} />
                     <Route path="/sponsors" element={<Sponsors />} />
+                    <Route path="/faq" element={<FAQ />} />
+                    <Route path="/contact" element={<Contact />} />
                 </Route>
             </Routes>
         </BrowserRouter>
