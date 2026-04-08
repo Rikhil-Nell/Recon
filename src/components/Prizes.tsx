@@ -20,7 +20,7 @@ export default function Prizes() {
             <div className="max-w-5xl mx-auto">
                 <Label>Prize Pool & Partners</Label>
                 <h2 className="font-display text-2xl md:text-3xl text-paper tracking-tight mb-3">
-                    ₹20,00,000+ in <span className="text-paper/80">Prizes & Perks</span>
+                    ₹15,00,000+ in <span className="text-paper/80">Prizes & Perks</span>
                 </h2>
                 <p className="font-body text-sm text-muted mb-10 max-w-2xl">
                     Cash, certifications, training vouchers, tools, and swag from our incredible sponsor lineup.
@@ -44,17 +44,33 @@ export default function Prizes() {
                 </Stagger>
 
                 {/* Community Partners */}
+                {/* Community allies */}
                 {communityPartners.length > 0 && (
-                    <div className="mt-12">
-                        <Label>Community</Label>
-                        <div className="flex flex-wrap gap-3">
-                            {communityPartners.map((name) => (
-                                <span
-                                    key={name}
-                                    className="font-mono text-xs tracking-[0.15em] text-muted border border-edge px-4 py-2 bg-panel/20"
+                    <div>
+                        <div className="flex items-center gap-4 mb-6 mt-12">
+                            <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-cream/60">
+                                Community Allies
+                            </span>
+                            <span className="flex-1 h-px bg-edge" />
+                        </div>
+                        <div className="flex flex-wrap gap-6">
+                            {communityPartners.map((cp) => (
+                                <a
+                                    key={cp.name}
+                                    href={cp.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="group flex items-center gap-3 border border-edge bg-panel/20 px-5 py-3 hover:border-paper/30 transition-colors"
                                 >
-                                    {name}
-                                </span>
+                                    <img
+                                        src={cp.logo}
+                                        alt={cp.name}
+                                        className="h-8 max-w-25 object-contain opacity-60 group-hover:opacity-100 transition-all duration-200 filter grayscale sepia group-hover:sepia-0"
+                                    />
+                                    <span className="font-mono text-[11px] tracking-wider text-muted group-hover:text-paper transition-colors">
+                                        {cp.name}
+                                    </span>
+                                </a>
                             ))}
                         </div>
                     </div>

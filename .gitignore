@@ -13,8 +13,11 @@
 /.next/
 /out/
 
-# production
+# Production / Build
+/dist
+/dist-ssr
 /build
+/out
 
 # misc
 .DS_Store
