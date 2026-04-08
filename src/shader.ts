@@ -87,23 +87,23 @@ void main(){
 
   float d = bayer4(gl_FragCoord.xy);
 
-  // Brighter warm palette — visible at normal brightness
-  vec3 deep   = vec3(0.040, 0.035, 0.025);
-  vec3 mid    = vec3(0.070, 0.060, 0.045);
-  vec3 bright = vec3(0.100, 0.090, 0.070);
-  vec3 peak   = vec3(0.120, 0.105, 0.080);
+  // Cool near-black palette — minimal warmth, deep void feel
+  vec3 deep   = vec3(0.018, 0.018, 0.020);
+  vec3 mid    = vec3(0.032, 0.032, 0.036);
+  vec3 bright = vec3(0.046, 0.046, 0.050);
+  vec3 peak   = vec3(0.056, 0.056, 0.062);
 
   // Dithered base
   vec3 color = mix(deep, mid, step(d, combined));
-  // Fold highlights
-  color = mix(color, bright, smoothstep(0.4, 0.7, combined) * 0.1);
-  // Sharp crease peaks
-  color = mix(color, peak, smoothstep(0.65, 0.85, combined) * 0.1);
+  // Fold highlights — reduced density
+  color = mix(color, bright, smoothstep(0.4, 0.7, combined) * 0.055);
+  // Sharp crease peaks — reduced density
+  color = mix(color, peak, smoothstep(0.65, 0.85, combined) * 0.055);
 
-  // Warm ambient shifting
+  // Subtle cool ambient — removed warm glow entirely
   float gn = noise(warp * 8.0 + t * 0.5);
-  vec3 warmGlow = vec3(0.18, 0.14, 0.09);
-  color = mix(color, warmGlow, smoothstep(0.5, 0.75, gn) * 0.1);
+  vec3 coolGlow = vec3(0.05, 0.052, 0.060);
+  color = mix(color, coolGlow, smoothstep(0.6, 0.8, gn) * 0.04);
 
   fragColor = vec4(color, 1.0);
 }`;
