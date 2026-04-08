@@ -1,25 +1,29 @@
 import { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import ScrambleText from './ScrambleText';
 
 const NAV_LINKS = [
-    { label: 'About', href: '#about' },
-    { label: 'Events', href: '#events' },
-    { label: 'Schedule', href: '#schedule' },
-    { label: 'Team', href: '#team' },
-    { label: 'Prizes', href: '#prizes' },
-    { label: 'Partners', href: '#partners' },
+    { label: 'Events', to: '/events' },
+    { label: 'Schedule', to: '/schedule' },
+    { label: 'People', to: '/people' },
+    { label: 'Prizes', to: '/prizes' },
+    { label: 'Sponsors', to: '/sponsors' },
 ];
 
 export default function Navbar() {
     const [scrolled, setScrolled] = useState(false);
     const [open, setOpen] = useState(false);
+    const { pathname } = useLocation();
 
     useEffect(() => {
         const handler = () => setScrolled(window.scrollY > 40);
         window.addEventListener('scroll', handler, { passive: true });
         return () => window.removeEventListener('scroll', handler);
     }, []);
+
+    // Close mobile menu on route change
+    useEffect(() => { setOpen(false); }, [pathname]);
 
     return (
         <nav
@@ -28,20 +32,21 @@ export default function Navbar() {
         >
             <div className="max-w-7xl mx-auto px-6 h-14 flex items-center justify-between">
                 {/* Logo */}
-                <a href="#" className="font-display text-sm tracking-[0.3em] text-paper uppercase">
+                <Link to="/" className="font-display text-sm tracking-[0.3em] text-paper uppercase">
                     RECON
-                </a>
+                </Link>
 
                 {/* Desktop links */}
                 <div className="hidden md:flex items-center gap-8">
-                    {NAV_LINKS.map(({ label, href }) => (
-                        <a
-                            key={href}
-                            href={href}
-                            className="font-mono text-[11px] tracking-[0.2em] uppercase text-muted hover:text-paper transition-colors duration-200"
+                    {NAV_LINKS.map(({ label, to }) => (
+                        <Link
+                            key={to}
+                            to={to}
+                            className={`font-mono text-[11px] tracking-[0.2em] uppercase transition-colors duration-200 ${pathname === to ? 'text-paper' : 'text-muted hover:text-paper'
+                                }`}
                         >
                             <ScrambleText text={label} tag="span" speed={12} />
-                        </a>
+                        </Link>
                     ))}
                     <a
                         href="https://luma.com/v933kdr1"
@@ -76,15 +81,15 @@ export default function Navbar() {
                         className="md:hidden overflow-hidden bg-dark/95 backdrop-blur-xl border-b border-edge"
                     >
                         <div className="flex flex-col p-6 gap-4">
-                            {NAV_LINKS.map(({ label, href }) => (
-                                <a
-                                    key={href}
-                                    href={href}
-                                    onClick={() => setOpen(false)}
-                                    className="font-mono text-xs tracking-[0.2em] uppercase text-muted hover:text-paper transition-colors"
+                            {NAV_LINKS.map(({ label, to }) => (
+                                <Link
+                                    key={to}
+                                    to={to}
+                                    className={`font-mono text-xs tracking-[0.2em] uppercase transition-colors ${pathname === to ? 'text-paper' : 'text-muted hover:text-paper'
+                                        }`}
                                 >
                                     {label}
-                                </a>
+                                </Link>
                             ))}
                             <a
                                 href="https://luma.com/v933kdr1"

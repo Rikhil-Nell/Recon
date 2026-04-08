@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import GlyphGrid from './GlyphGrid';
 import ScrambleText from './ScrambleText';
@@ -28,7 +29,7 @@ export default function Hero() {
                     className="absolute inset-0"
                 >
                     <img
-                        src="/hands-darkmode.png"
+                        src="/hands.webp"
                         alt="RECON 2026"
                         className="w-full h-full object-cover object-top sm:object-center select-none"
                         draggable={false}
@@ -82,12 +83,12 @@ export default function Hero() {
                     >
                         <ScrambleText text="Register Now" tag="span" speed={15} />
                     </a>
-                    <a
-                        href="#events"
+                    <Link
+                        to="/events"
                         className="font-mono text-xs tracking-[0.2em] uppercase px-6 py-3 border border-cream/30 text-cream/70 hover:border-paper/50 hover:text-paper transition-colors duration-200 text-center"
                     >
                         <ScrambleText text="Explore Events" tag="span" speed={15} />
-                    </a>
+                    </Link>
                 </motion.div>
 
                 {/* Bottom glyph strip */}
