@@ -105,11 +105,11 @@ function AboutSection() {
                         <div className="absolute bottom-0 left-0 w-5 h-5 border-b border-l border-paper/40 z-20" />
                         <div className="absolute bottom-0 right-0 w-5 h-5 border-b border-r border-paper/40 z-20" />
 
-                        {/* ASCII art background image */}
+                        {/* ASCII art background image — desktop only */}
                         <img
                             src="/satellite_disk_ascii.png"
                             alt=""
-                            className="absolute right-[-50px] top-20 h-full w-auto object-contain scale-125 origin-right opacity-100 select-none pointer-events-none"
+                            className="hidden sm:block absolute right-[-50px] top-20 h-full w-auto object-contain scale-125 origin-right opacity-100 select-none pointer-events-none"
                             draggable={false}
                         />
 
