@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Section, Label } from './ui';
 import GlyphGrid from './GlyphGrid';
 import Marquee from './Marquee';
@@ -49,9 +50,9 @@ const FOOTER_LINKS = [
         heading: 'Resources',
         items: [
             { label: 'Rules', href: '#' },
-            { label: 'FAQ', href: '#' },
+            { label: 'FAQ', href: '/faq' },
             { label: 'Code of Conduct', href: '#' },
-            { label: 'Contact', href: '#' },
+            { label: 'Contact', href: '/contact' },
         ],
     },
 ];
@@ -114,14 +115,24 @@ export default function Footer() {
                                     <ul className="space-y-2">
                                         {col.items.map((item) => (
                                             <li key={item.label}>
-                                                <a
-                                                    href={item.href}
-                                                    target={item.href !== '#' ? '_blank' : undefined}
-                                                    rel={item.href !== '#' ? 'noopener noreferrer' : undefined}
-                                                    className="font-mono text-[11px] text-muted hover:text-paper transition-colors"
-                                                >
-                                                    {item.label}
-                                                </a>
+                                                {item.href.startsWith('/') ? (
+                                                    <Link
+                                                        to={item.href}
+                                                        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                                                        className="font-mono text-[11px] text-muted hover:text-paper transition-colors"
+                                                    >
+                                                        {item.label}
+                                                    </Link>
+                                                ) : (
+                                                    <a
+                                                        href={item.href}
+                                                        target={item.href !== '#' ? '_blank' : undefined}
+                                                        rel={item.href !== '#' ? 'noopener noreferrer' : undefined}
+                                                        className="font-mono text-[11px] text-muted hover:text-paper transition-colors"
+                                                    >
+                                                        {item.label}
+                                                    </a>
+                                                )}
                                             </li>
                                         ))}
                                     </ul>
