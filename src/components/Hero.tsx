@@ -32,7 +32,7 @@ export default function Hero() {
                         <img
                             src="/hands.webp"
                             alt="RECON 2026"
-                            className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 rotate-90 sm:rotate-0 w-[100vh] h-[100vw] sm:w-full sm:h-full object-contain select-none"
+                            className="absolute sm:top-1/2 top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 rotate-90 sm:rotate-0 w-[100vh] h-[100vw] sm:w-full sm:h-full object-contain select-none"
                             draggable={false}
                         />
                     </div>
