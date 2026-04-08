@@ -59,7 +59,7 @@ export default function Footer() {
                     </p>
                     <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
                         <a
-                            href="https://recon.vit.ac.in"
+                            href="https://luma.com/v933kdr1"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="font-mono text-xs tracking-[0.2em] uppercase px-8 py-3.5 bg-paper text-void hover:bg-cream transition-colors duration-200"
@@ -84,7 +84,7 @@ export default function Footer() {
                     {/* Left — about + links */}
                     <div>
                         <span className="font-display text-sm tracking-[0.3em] text-paper uppercase">
-                            RECON<span className="text-faint ml-1">_26</span>
+                            RECON
                         </span>
                         <p className="mt-4 font-body text-xs text-muted leading-relaxed max-w-md">
                             South India's largest campus cybersecurity event. Organized by ReconHQ at VIT-AP University, Amaravati.

@@ -75,7 +75,7 @@ export default function Hero() {
                     className="mt-8 flex flex-col sm:flex-row gap-3"
                 >
                     <a
-                        href="https://recon.vit.ac.in"
+                        href="https://luma.com/v933kdr1"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="font-mono text-xs tracking-[0.2em] uppercase px-6 py-3 bg-paper text-void hover:bg-cream transition-colors duration-200 text-center"

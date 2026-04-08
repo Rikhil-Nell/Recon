@@ -30,7 +30,6 @@ export default function Navbar() {
                 {/* Logo */}
                 <a href="#" className="font-display text-sm tracking-[0.3em] text-paper uppercase">
                     RECON
-                    <span className="text-faint ml-1">_26</span>
                 </a>
 
                 {/* Desktop links */}
@@ -45,7 +44,7 @@ export default function Navbar() {
                         </a>
                     ))}
                     <a
-                        href="https://recon.vit.ac.in"
+                        href="https://luma.com/v933kdr1"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="font-mono text-[11px] tracking-[0.2em] uppercase px-4 py-1.5 border border-paper/30 text-paper hover:bg-paper/10 transition-colors duration-200"
@@ -88,7 +87,7 @@ export default function Navbar() {
                                 </a>
                             ))}
                             <a
-                                href="https://recon.vit.ac.in"
+                                href="https://luma.com/v933kdr1"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="font-mono text-xs tracking-[0.2em] uppercase px-4 py-2 border border-paper/30 text-paper text-center hover:bg-paper/10 transition-colors mt-2"
