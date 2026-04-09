@@ -44,7 +44,7 @@ export interface Partner {
     name: string;
     description: string;
     value?: string;
-    tier: 'title' | 'co-title' | 'gold' | 'silver' | 'community';
+    tier: 'title' | 'co-title' | 'strategic' | 'technical' | 'gold' | 'silver' | 'community';
     logo: string;
     url: string;
     /** Relative display height of the logo: sm=32px, md=40px, lg=48px */
@@ -186,7 +186,32 @@ export const team: TeamMember[] = [
 
 /* ── Speakers ─────────────────────────────────────────────────── */
 export const speakers: Speaker[] = [
-    { name: 'TBA', handle: undefined, role: 'Speaker', bio: 'Speaker details coming soon.', photo: undefined },
+    {
+        name: 'Vaibhav Lakhani',
+        role: 'Senior Consultant, Offensive Security — Kroll',
+        bio: 'Senior Consultant in Offensive Security at Kroll, specialising in penetration testing. Recognised among the top 15 Hackers by NCIIPC; holds OSCP, CRTO, CRT, CPSA, CEH & eJPT certifications. Udemy instructor and frequent speaker at colleges across India.',
+        url: 'https://github.com/vlakhani28/DVMA',
+        photo: '/people/vaibhav-lakhani.jpg'
+    },
+    {
+        name: 'Ansh Bhawanani',
+        role: 'Security Analyst — HackerOne',
+        bio: 'OSCE3-certified application security specialist at HackerOne, focused on real-world exploitation techniques. Known for breaking down advanced offensive security concepts on YouTube, backed by hands-on vulnerability research experience.',
+        photo: '/people/ansh-bhawnani.jpg'
+    },
+    {
+        name: 'Nithin Chenthur Prabhu',
+        role: 'Associate MDR Analyst — Unit 42, Palo Alto Networks',
+        bio: 'Associate MDR Analyst at Unit 42, Palo Alto Networks. Ex-Captain of Team bi0s, author of DFIR Labs, and two-time winner of the Digital Forensics Challenge International (2023 & 2024).',
+        photo: '/people/nithin-chenthur.jpg'
+    },
+    {
+        name: 'Abhiram Kumar',
+        role: 'Independent Security Researcher',
+        bio: 'Independent security researcher specialising in DFIR and author of MemLabs — CTF-styled memory forensics labs. Former captain of CTF team bi0s and organiser of InCTF and bi0sCTF.',
+        url: 'https://github.com/stuxnet999',
+        photo: '/people/abhiram-kumar-patiballa.jpg'
+    },
 ];
 
 /* ── Mentors ──────────────────────────────────────────────────── */
@@ -275,20 +300,37 @@ export const mentors: Mentor[] = [
 
 /* ── Partners ─────────────────────────────────────────────────── */
 export const partners: Partner[] = [
+    // Title
     { name: 'Hackers Daddy', description: 'Title sponsor — premium cybersecurity training & certifications.', value: '₹7,00,000', tier: 'title', logo: '/logos/hackers-daddy.png', url: 'https://hackersdaddy.com', size: 'lg', fix: 'brighten' },
-    { name: 'APISec University', description: 'Co-title sponsor — API security education platform.', value: '₹7,00,000', tier: 'co-title', logo: '/logos/apisec.png', url: 'https://www.apisecuniversity.com', size: 'lg' },
+    { name: 'IIT Madras', description: 'Academic partner — Indian Institute of Technology Madras.', tier: 'title', logo: '/logos/iit_m.png', url: 'https://www.iitm.ac.in', size: 'lg' },
+    { name: 'VIT-AP University', description: 'Host institution — VIT-AP University, Amaravati.', tier: 'title', logo: '/logos/vitap.png', url: 'https://vitap.ac.in', size: 'lg' },
+    { name: 'APISec University', description: 'API security education platform.', value: '₹7,00,000', tier: 'title', logo: '/logos/apisec.png', url: 'https://www.apisecuniversity.com', size: 'lg' },
+    // Co-title
+    { name: 'ISEA', description: 'Information Security Education & Awareness, a CERT-In / MeitY initiative.', tier: 'technical', logo: '/logos/isea.png', url: 'https://isea.gov.in', size: 'md' },
+    { name: 'MeitY', description: 'Ministry of Electronics & Information Technology, Government of India.', tier: 'technical', logo: '/logos/meity.png', url: 'https://www.meity.gov.in', size: 'md' },
+    // Strategic
+    { name: 'Magsmen', description: 'Strategic partner — digital marketing & brand strategy.', tier: 'strategic', logo: '/logos/magsmen.png', url: 'https://magsmen.com/', size: 'md' },
+    // Technical
+    { name: 'AWS', description: 'Technical partner — Amazon Web Services cloud infrastructure.', tier: 'technical', logo: '/logos/aws.png', url: 'https://aws.amazon.com', size: 'md' },
+    { name: 'Digital Fortress', description: 'Protect your digital world with password-less authentication.', tier: 'technical', logo: '/logos/df.png', url: 'https://digitalfortress.in/', size: 'md' },
+    { name: 'LemonPeak', description: 'Technical partner — infrastructure & cloud services.', tier: 'technical', logo: '/logos/lemonpeak.png', url: 'https://www.lemonpeak.com/', size: 'md' },
+    // Gold
     { name: 'Altered Security', description: 'Gold sponsor — advanced red team & AD training.', value: '₹47,000', tier: 'gold', logo: '/logos/altered-security.png', url: 'https://www.intruderssecurity.com', size: 'md' },
     { name: 'INE', description: 'Gold sponsor — eLearnSecurity & cybersecurity cert training.', value: '~₹28,000', tier: 'gold', logo: '/logos/ine.png', url: 'https://ine.com', size: 'sm', fix: 'brighten' },
     { name: 'zSecurity', description: 'Gold sponsor — ethical hacking courses & resources.', tier: 'gold', logo: '/logos/zsecurity.png', url: 'https://zsecurity.org', size: 'md', fix: 'brighten' },
-    { name: 'TheXSSRat', description: 'Silver sponsor — bug bounty mentorship & community.', value: '₹3,27,000', tier: 'silver', logo: '/logos/thexssrat.png', url: 'https://thexssrat.com', size: 'lg' },
-    { name: 'Hackviser', description: 'Silver sponsor — cybersecurity advisory & training.', tier: 'silver', logo: '/logos/hackviser.png', url: 'https://hackviser.com', size: 'sm', fix: 'brighten' },
+    // Silver
     { name: 'Caido', description: 'Silver sponsor — next-gen web security testing proxy.', value: '₹1,02,000', tier: 'silver', logo: '/logos/caido.png', url: 'https://caido.io', size: 'md', fix: 'invert' },
-    { name: '.xyz Domains', description: 'Silver sponsor — domain registrar for the next generation.', value: '₹35,000', tier: 'silver', logo: '/logos/xyz.png', url: 'https://gen.xyz', size: 'sm', fix: 'invert' },
+    { name: 'Hackviser', description: 'Silver sponsor — cybersecurity advisory & training.', tier: 'silver', logo: '/logos/hackviser.png', url: 'https://hackviser.com', size: 'sm', fix: 'brighten' },
     { name: 'Hacktronix', description: 'Silver sponsor — hardware hacking tools & education.', tier: 'silver', logo: '/logos/hacktronix.png', url: 'https://hacktronics.co.in', size: 'lg' },
-    { name: 'OSMSEC', description: 'Community partner — open-source security collective.', tier: 'community', logo: '/logos/osmsec.png', url: 'https://osmsec.com', size: 'sm' },
-    { name: 'OSEN', description: 'Community partner — open security education network.', tier: 'community', logo: '/logos/osen.png', url: 'https://osen.in', size: 'lg' },
-    { name: 'HackTheBox Mumbai', description: 'Community partner — local HackTheBox chapter connecting Mumbai-based security enthusiasts.', tier: 'community', logo: '/logos/htb-mumbai.png', url: 'https://www.hackthebox.com', size: 'md' },
+    { name: 'TheXSSRat', description: 'Silver sponsor — bug bounty mentorship & community.', value: '₹3,27,000', tier: 'silver', logo: '/logos/thexssrat.png', url: 'https://thexssrat.com', size: 'lg' },
+    { name: '.xyz Domains', description: 'Silver sponsor — domain registrar for the next generation.', value: '₹35,000', tier: 'silver', logo: '/logos/xyz.png', url: 'https://gen.xyz', size: 'sm', fix: 'invert' },
+    // Community
     { name: 'BSides Vizag', description: 'Community partner — grassroots security conference in Visakhapatnam fostering local infosec culture.', tier: 'community', logo: '/logos/bsides-vizag.png', url: 'https://bsidesvizag.in', size: 'md' },
+    { name: 'HackTheBox Mumbai', description: 'Community partner — local HackTheBox chapter connecting Mumbai-based security enthusiasts.', tier: 'community', logo: '/logos/htb-mumbai.png', url: 'https://www.hackthebox.com', size: 'md' },
+    { name: 'null', description: 'null, the open security community.', tier: 'community', logo: '/logos/null.png', url: 'https://null.community', size: 'sm' },
+    { name: 'OSC', description: 'Open Source Community.', tier: 'community', logo: '/logos/osc.png', url: 'https://www.instagram.com/osc.vitap/', size: 'sm' },
+    { name: 'OSEN', description: 'Community partner — open security education network.', tier: 'community', logo: '/logos/osen.png', url: 'https://osen.in', size: 'lg' },
+    { name: 'OSMSEC', description: 'Community partner — open-source security collective.', tier: 'community', logo: '/logos/osmsec.png', url: 'https://osmsec.com', size: 'sm' },
 ];
 
 export const communityPartners = [
