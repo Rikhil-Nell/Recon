@@ -1,20 +1,20 @@
 @import "tailwindcss";
 
 @theme {
-    --color-void: #060504;
-    --color-dark: #0c0a07;
-    --color-panel: #121009;
-    --color-edge: #211d16;
-    --color-soft: #302b24;
-    --color-paper: #FDF6E3;
-    --color-cream: #EDE4CF;
-    --color-muted: #B8AD98;
-    --color-ink: #3B3228;
-    --color-faint: #5C534A;
-    --color-neon: #4ADE80;
-    --color-alert: #EF4444;
-    --color-signal: #FBBF24;
-    --color-info: #60A5FA;
+    --color-void: #080810;
+    --color-dark: #0d0d18;
+    --color-panel: #141426;
+    --color-edge: #2a2a3d;
+    --color-soft: #3a3a54;
+    --color-paper: #f5f4f9;
+    --color-cream: #d8d3e6;
+    --color-muted: #b4adc8;
+    --color-ink: #2e2a3a;
+    --color-faint: #7a738f;
+    --color-neon: #b08cff;
+    --color-alert: #f25555;
+    --color-signal: #f0c36a;
+    --color-info: #8fb0ff;
     --font-family-display: "Michroma", "Arial Black", sans-serif;
     --font-family-body: "Geist", system-ui, -apple-system, sans-serif;
     --font-family-mono: "Geist Mono", "SF Mono", "Consolas", monospace;
@@ -154,11 +154,11 @@ body {
     inset: 0;
     z-index: 9998;
     pointer-events: none;
-    background: repeating-linear-gradient(0deg,
-            transparent,
-            transparent 2px,
-            rgba(13, 11, 8, 0.04) 2px,
-            rgba(13, 11, 8, 0.04) 4px);
+            background: repeating-linear-gradient(0deg,
+                transparent,
+                transparent 2px,
+                rgba(24, 22, 36, 0.06) 2px,
+                rgba(24, 22, 36, 0.06) 4px);
     mix-blend-mode: multiply;
 }
 
@@ -182,6 +182,6 @@ body {
     height: 3px;
     z-index: 9997;
     pointer-events: none;
-    background: linear-gradient(90deg, transparent, rgba(253, 246, 227, 0.06), transparent);
+    background: linear-gradient(90deg, transparent, rgba(245, 244, 249, 0.12), transparent);
     animation: scanline-sweep 6s linear infinite;
 }

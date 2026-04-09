@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { schedule } from '../data';
 import { Section, Label } from './ui';
 import ScrambleText from './ScrambleText';
+import Seo from './Seo';
 
 const DAYS = Object.keys(schedule);
 
@@ -10,12 +11,21 @@ export default function Schedule() {
     const [active, setActive] = useState(DAYS[0]);
 
     return (
-        <Section id="schedule" className="py-24 px-6">
-            <div className="max-w-5xl mx-auto">
-                <Label>Schedule</Label>
-                <h2 className="font-display text-2xl md:text-3xl text-paper tracking-tight mb-8">
-                    <ScrambleText text="3-Day " tag="span" speed={15} /><span className="text-paper/80">Operations Timeline</span>
-                </h2>
+        <>
+            <Seo
+                title="Schedule"
+                description="3-day timeline for RECON 2026, including CTF and King of the Hill operations."
+                path="/schedule"
+            />
+            <Section id="schedule" className="py-24 px-6">
+                <div className="max-w-5xl mx-auto">
+                    <Label>Schedule</Label>
+                    <h1 className="font-display text-3xl md:text-4xl text-paper tracking-tight mb-3">
+                        <ScrambleText text="Schedule" tag="span" speed={15} />
+                    </h1>
+                    <h2 className="font-display text-2xl md:text-3xl text-paper tracking-tight mb-8">
+                        <ScrambleText text="3-Day " tag="span" speed={15} /><span className="text-paper/80">Operations Timeline</span>
+                    </h2>
 
                 {/* Day tabs */}
                 <div className="inline-flex gap-1 mb-8 border border-edge">
@@ -67,7 +77,8 @@ export default function Schedule() {
                         ))}
                     </motion.div>
                 </AnimatePresence>
-            </div>
-        </Section>
+                </div>
+            </Section>
+        </>
     );
 }

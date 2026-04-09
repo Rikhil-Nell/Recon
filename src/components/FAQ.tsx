@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Section, Label } from './ui';
 import ScrambleText from './ScrambleText';
 import GlyphGrid from './GlyphGrid';
+import Seo from './Seo';
 
 interface FAQItem {
     q: string;
@@ -141,73 +142,80 @@ function FAQAccordion({ item }: { item: FAQItem }) {
 
 export default function FAQ() {
     return (
-        <Section id="faq" className="py-24 px-6">
-            <div className="max-w-3xl mx-auto">
-                {/* Header */}
-                <div className="flex items-start justify-between mb-2">
-                    <Label>FAQ</Label>
-                    <GlyphGrid type="hex" cols={4} rows={2} className="hidden sm:block opacity-30" />
-                </div>
+        <>
+            <Seo
+                title="FAQ"
+                description="Answers to common questions about registration, events, venue, and prizes."
+                path="/faq"
+            />
+            <Section id="faq" className="py-24 px-6">
+                <div className="max-w-3xl mx-auto">
+                    {/* Header */}
+                    <div className="flex items-start justify-between mb-2">
+                        <Label>FAQ</Label>
+                        <GlyphGrid type="hex" cols={4} rows={2} className="hidden sm:block opacity-30" />
+                    </div>
 
-                <h1 className="font-display text-3xl md:text-4xl text-paper tracking-tight leading-tight mb-3">
-                    <ScrambleText text="Frequently Asked" tag="span" speed={16} />
-                    <br />
-                    <span className="text-paper/70">Questions</span>
-                </h1>
-                <p className="font-body text-sm text-muted mb-12 max-w-xl">
-                    Everything you need to know about RECON 2026. Can't find what you're looking for?{' '}
-                    <Link to="/contact" className="text-paper/80 hover:text-paper underline underline-offset-2 transition-colors">
-                        Contact us.
-                    </Link>
-                </p>
-
-                {/* FAQ sections */}
-                <div className="space-y-10">
-                    {FAQS.map((section) => (
-                        <div key={section.category}>
-                            {/* Section heading */}
-                            <div className="flex items-center gap-3 mb-1">
-                                <span className="w-4 h-px bg-paper/30" />
-                                <span className="font-mono text-[10px] tracking-[0.35em] uppercase text-paper/50">
-                                    {section.category}
-                                </span>
-                            </div>
-                            <div className="border border-edge bg-panel/20 px-5">
-                                {section.items.map((item) => (
-                                    <FAQAccordion key={item.q} item={item} />
-                                ))}
-                            </div>
-                        </div>
-                    ))}
-                </div>
-
-                {/* Still have questions */}
-                <div className="mt-14 border border-edge bg-panel/30 p-6">
-                    <div className="absolute top-0 left-0 w-4 h-4 border-t border-l border-paper/30" />
-                    <p className="font-mono text-[10px] tracking-[0.35em] uppercase text-cream/50 mb-3">
-                        Still have questions?
-                    </p>
-                    <p className="font-body text-sm text-muted leading-relaxed mb-5">
-                        Reach out to us on Discord — our team is online daily and will get back to you within a few hours.
-                    </p>
-                    <div className="flex flex-col sm:flex-row gap-3">
-                        <a
-                            href="https://discord.gg/xJdRgYndSJ"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="font-mono text-xs tracking-[0.2em] uppercase px-5 py-2.5 bg-paper text-void hover:bg-cream transition-colors duration-200 text-center"
-                        >
-                            Join Discord
-                        </a>
-                        <Link
-                            to="/contact"
-                            className="font-mono text-xs tracking-[0.2em] uppercase px-5 py-2.5 border border-cream/30 text-muted hover:border-paper/40 hover:text-paper transition-colors duration-200 text-center"
-                        >
-                            Contact Page
+                    <h1 className="font-display text-3xl md:text-4xl text-paper tracking-tight leading-tight mb-3">
+                        <ScrambleText text="Frequently Asked" tag="span" speed={16} />
+                        <br />
+                        <span className="text-paper/70">Questions</span>
+                    </h1>
+                    <p className="font-body text-sm text-muted mb-12 max-w-xl">
+                        Everything you need to know about RECON 2026. Can't find what you're looking for?{' '}
+                        <Link to="/contact" className="text-paper/80 hover:text-paper underline underline-offset-2 transition-colors">
+                            Contact us.
                         </Link>
+                    </p>
+
+                    {/* FAQ sections */}
+                    <div className="space-y-10">
+                        {FAQS.map((section) => (
+                            <div key={section.category}>
+                                {/* Section heading */}
+                                <div className="flex items-center gap-3 mb-1">
+                                    <span className="w-4 h-px bg-paper/30" />
+                                    <span className="font-mono text-[10px] tracking-[0.35em] uppercase text-paper/50">
+                                        {section.category}
+                                    </span>
+                                </div>
+                                <div className="border border-edge bg-panel/20 px-5">
+                                    {section.items.map((item) => (
+                                        <FAQAccordion key={item.q} item={item} />
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Still have questions */}
+                    <div className="mt-14 border border-edge bg-panel/30 p-6">
+                        <div className="absolute top-0 left-0 w-4 h-4 border-t border-l border-paper/30" />
+                        <p className="font-mono text-[10px] tracking-[0.35em] uppercase text-cream/50 mb-3">
+                            Still have questions?
+                        </p>
+                        <p className="font-body text-sm text-muted leading-relaxed mb-5">
+                            Reach out to us on Discord — our team is online daily and will get back to you within a few hours.
+                        </p>
+                        <div className="flex flex-col sm:flex-row gap-3">
+                            <a
+                                href="https://discord.gg/xJdRgYndSJ"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="font-mono text-xs tracking-[0.2em] uppercase px-5 py-2.5 bg-paper text-void hover:bg-cream transition-colors duration-200 text-center"
+                            >
+                                Join Discord
+                            </a>
+                            <Link
+                                to="/contact"
+                                className="font-mono text-xs tracking-[0.2em] uppercase px-5 py-2.5 border border-cream/30 text-muted hover:border-paper/40 hover:text-paper transition-colors duration-200 text-center"
+                            >
+                                Contact Page
+                            </Link>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </Section>
+            </Section>
+        </>
     );
 }

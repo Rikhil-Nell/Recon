@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { partners, communityPartners } from '../data';
 import { Section, Label, Tag, Stagger, staggerChild } from './ui';
 import CornerFrame from './CornerFrame';
+import Seo from './Seo';
 
 const tierOrder: Record<string, number> = { title: 0, 'co-title': 1, gold: 2, silver: 3, strategic: 4, technical: 5, community: 6 };
 const tierLabel: Record<string, string> = {
@@ -18,12 +19,18 @@ export default function Prizes() {
     const sorted = [...partners].sort((a, b) => tierOrder[a.tier] - tierOrder[b.tier]);
 
     return (
-        <Section id="prizes" className="py-24 px-6">
-            <div className="max-w-5xl mx-auto">
-                <Label>Prize Pool & Partners</Label>
-                <h2 className="font-display text-2xl md:text-3xl text-paper tracking-tight mb-3">
-                    ₹15,00,000+ in <span className="text-paper/80">Prizes & Perks</span>
-                </h2>
+        <>
+            <Seo
+                title="Prizes & Partners"
+                description="Prize pool, perks, and sponsor contributions for RECON 2026."
+                path="/prizes"
+            />
+            <Section id="prizes" className="py-24 px-6">
+                <div className="max-w-5xl mx-auto">
+                    <Label>Prize Pool & Partners</Label>
+                    <h1 className="font-display text-2xl md:text-3xl text-paper tracking-tight mb-3">
+                        ₹15,00,000+ in <span className="text-paper/80">Prizes & Perks</span>
+                    </h1>
                 <p className="font-body text-sm text-muted mb-10 max-w-2xl">
                     Cash, certifications, training vouchers, tools, and swag from our incredible sponsor lineup.
                 </p>
@@ -79,7 +86,8 @@ export default function Prizes() {
                         </div>
                     </div>
                 )}
-            </div>
-        </Section>
+                </div>
+            </Section>
+        </>
     );
 }
