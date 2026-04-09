@@ -1,6 +1,7 @@
 import { partners, type Partner } from '../data';
 import { Section, Label } from './ui';
 import GlyphGrid from './GlyphGrid';
+import Seo from './Seo';
 
 const TIER_ORDER = ['title', 'co-title', 'gold', 'silver', 'strategic', 'technical', 'community'] as const;
 const TIER_LABELS: Record<string, string> = {
@@ -38,66 +39,76 @@ export default function Sponsors() {
     })).filter((g) => g.items.length > 0);
 
     return (
-        <Section className="py-24 px-6">
-            <div className="max-w-6xl mx-auto">
-                <div className="flex items-start justify-between">
-                    <Label>Sponsors &amp; Partners</Label>
-                    <GlyphGrid type="hex" cols={4} rows={2} className="hidden md:block opacity-30" />
-                </div>
+        <>
+            <Seo
+                title="Sponsors"
+                description="Organizations and partners powering RECON 2026."
+                path="/sponsors"
+            />
+            <Section className="py-24 px-6">
+                <div className="max-w-6xl mx-auto">
+                    <div className="flex items-start justify-between">
+                        <Label>Sponsors &amp; Partners</Label>
+                        <GlyphGrid type="hex" cols={4} rows={2} className="hidden md:block opacity-30" />
+                    </div>
 
-                <h2 className="font-display text-3xl md:text-4xl text-paper tracking-tight leading-tight mt-2">
-                    Powered by the security community
-                </h2>
-                <p className="mt-4 font-body text-sm text-muted leading-relaxed max-w-2xl">
-                    RECON 2026 is made possible by organizations that believe in building the next generation of security talent.
-                </p>
+                    <h1 className="font-display text-3xl md:text-4xl text-paper tracking-tight leading-tight mt-2">
+                        Sponsors &amp; Partners
+                    </h1>
+                    <h2 className="font-display text-xl md:text-2xl text-paper/80 tracking-tight leading-tight mt-2">
+                        Powered by the security community
+                    </h2>
+                    <p className="mt-4 font-body text-sm text-muted leading-relaxed max-w-2xl">
+                        RECON 2026 is made possible by organizations that believe in building the next generation of security talent.
+                    </p>
 
-                <div className="mt-16 space-y-16">
-                    {grouped.map((group) => (
-                        <div key={group.tier}>
-                            <div className="flex items-center gap-4 mb-6">
-                                <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-cream/60">
-                                    {group.label}
-                                </span>
-                                <span className="flex-1 h-px bg-edge" />
+                    <div className="mt-16 space-y-16">
+                        {grouped.map((group) => (
+                            <div key={group.tier}>
+                                <div className="flex items-center gap-4 mb-6">
+                                    <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-cream/60">
+                                        {group.label}
+                                    </span>
+                                    <span className="flex-1 h-px bg-edge" />
+                                </div>
+
+                                <div className={`grid gap-6 ${group.tier === 'title' || group.tier === 'co-title'
+                                    ? 'grid-cols-1 md:grid-cols-2'
+                                    : group.tier === 'strategic' || group.tier === 'technical'
+                                        ? 'grid-cols-1 sm:grid-cols-2'
+                                        : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
+                                    }`}>
+                                    {group.items.map((partner) => (
+                                        <a
+                                            key={partner.name}
+                                            href={partner.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="group border border-edge bg-panel/30 p-6 hover:border-paper/30 transition-colors duration-200"
+                                        >
+                                            <div className="h-12 flex items-center mb-4">
+                                                <img
+                                                    src={partner.logo}
+                                                    alt={partner.name}
+                                                    className={logoImgClass(partner)}
+                                                    loading="lazy"
+                                                    decoding="async"
+                                                />
+                                            </div>
+                                            <h3 className="font-display text-lg text-paper">{partner.name}</h3>
+                                            <p className="mt-1 font-body text-xs text-muted leading-relaxed">
+                                                {partner.description.replace(/^.*?—\s*/, '')}
+                                            </p>
+                                        </a>
+                                    ))}
+                                </div>
                             </div>
-
-                            <div className={`grid gap-6 ${group.tier === 'title' || group.tier === 'co-title'
-                                ? 'grid-cols-1 md:grid-cols-2'
-                                : group.tier === 'strategic' || group.tier === 'technical'
-                                    ? 'grid-cols-1 sm:grid-cols-2'
-                                    : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
-                                }`}>
-                                {group.items.map((partner) => (
-                                    <a
-                                        key={partner.name}
-                                        href={partner.url}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="group border border-edge bg-panel/30 p-6 hover:border-paper/30 transition-colors duration-200"
-                                    >
-                                        <div className="h-12 flex items-center mb-4">
-                                            <img
-                                                src={partner.logo}
-                                                alt={partner.name}
-                                                className={logoImgClass(partner)}
-                                                loading="lazy"
-                                                decoding="async"
-                                            />
-                                        </div>
-                                        <h3 className="font-display text-lg text-paper">{partner.name}</h3>
-                                        <p className="mt-1 font-body text-xs text-muted leading-relaxed">
-                                            {partner.description.replace(/^.*?—\s*/, '')}
-                                        </p>
-                                    </a>
-                                ))}
-                            </div>
-                        </div>
-                    ))}
+                        ))}
 
 
+                    </div>
                 </div>
-            </div>
-        </Section>
+            </Section>
+        </>
     );
 }

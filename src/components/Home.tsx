@@ -6,6 +6,8 @@ import { Label } from './ui';
 import { stats, partners, type Partner } from '../data';
 import { useCountUp } from '../hooks';
 import ScrambleText from './ScrambleText';
+import Seo from './Seo';
+import { DEFAULT_DESCRIPTION, DEFAULT_IMAGE, SITE_NAME, SITE_URL } from '../seo';
 
 const SIZE_CLASS: Record<NonNullable<Partner['size']>, string> = {
     sm: 'max-h-8',
@@ -166,8 +168,51 @@ function AboutSection() {
 
 /* ── Home page ────────────────────────────────────────────────── */
 export default function Home() {
+    const baseUrl = SITE_URL.endsWith('/') ? SITE_URL.slice(0, -1) : SITE_URL;
+    const eventJsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'Event',
+        name: SITE_NAME,
+        description: DEFAULT_DESCRIPTION,
+        startDate: '2026-04-19',
+        endDate: '2026-04-21',
+        eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
+        eventStatus: 'https://schema.org/EventScheduled',
+        location: {
+            '@type': 'Place',
+            name: 'VIT-AP University',
+            address: {
+                '@type': 'PostalAddress',
+                streetAddress: 'Near Inavolu, Beside AP Secretariat',
+                addressLocality: 'Amaravati',
+                addressRegion: 'Andhra Pradesh',
+                postalCode: '522237',
+                addressCountry: 'IN',
+            },
+        },
+        organizer: {
+            '@type': 'Organization',
+            name: 'ReconHQ',
+            ...(baseUrl ? { url: baseUrl } : {}),
+            sameAs: [
+                'https://discord.gg/xJdRgYndSJ',
+                'https://www.instagram.com/recon_2k26/',
+                'https://x.com/Recon2k26/with_replies',
+                'https://www.linkedin.com/in/recon-events/',
+            ],
+        },
+        ...(baseUrl ? { url: `${baseUrl}/`, image: [`${baseUrl}${DEFAULT_IMAGE}`] } : {}),
+    };
+
     return (
         <>
+            <Seo
+                title="RECON 2026"
+                description={DEFAULT_DESCRIPTION}
+                path="/"
+                image={DEFAULT_IMAGE}
+                jsonLd={eventJsonLd}
+            />
             <Hero />
 
             <div className="relative z-10 border-y border-edge/30">

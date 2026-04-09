@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { team, speakers, mentors, type TeamMember, type Speaker, type Mentor } from '../data';
 import { Section, Label } from './ui';
 import ScrambleText from './ScrambleText';
+import Seo from './Seo';
 
 const TABS = ['Organizers', 'Speakers', 'Mentors'] as const;
 type Tab = typeof TABS[number];
@@ -132,13 +133,19 @@ export default function Team() {
     const [active, setActive] = useState<Tab>('Organizers');
 
     return (
-        <Section id="people" className="py-24 px-6">
-            <div className="max-w-6xl mx-auto">
-                <Label>People</Label>
-                <h2 className="font-display text-2xl md:text-3xl text-paper tracking-tight mb-8">
-                    <ScrambleText text="The minds behind " tag="span" speed={15} />
-                    <span className="text-paper/80">RECON</span>
-                </h2>
+        <>
+            <Seo
+                title="People"
+                description="Organizers, speakers, and mentors behind RECON 2026."
+                path="/people"
+            />
+            <Section id="people" className="py-24 px-6">
+                <div className="max-w-6xl mx-auto">
+                    <Label>People</Label>
+                    <h1 className="font-display text-2xl md:text-3xl text-paper tracking-tight mb-8">
+                        <ScrambleText text="The minds behind " tag="span" speed={15} />
+                        <span className="text-paper/80">RECON</span>
+                    </h1>
 
                 {/* Tabs */}
                 <div className="inline-flex gap-1 mb-10 border border-edge">
@@ -168,7 +175,8 @@ export default function Team() {
                         {active === 'Mentors' && <MentorCards />}
                     </motion.div>
                 </AnimatePresence>
-            </div>
-        </Section>
+                </div>
+            </Section>
+        </>
     );
 }

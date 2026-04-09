@@ -4,6 +4,7 @@ import { Section, Label, Tag, Stagger, staggerChild } from './ui';
 import CornerFrame from './CornerFrame';
 import ScrambleText from './ScrambleText';
 import type { SiteEvent } from '../data';
+import Seo from './Seo';
 
 function EventCard({ event }: { event: SiteEvent }) {
     return (
@@ -30,31 +31,42 @@ function EventCard({ event }: { event: SiteEvent }) {
 
 export default function Events() {
     return (
-        <Section id="events" className="py-24 px-6">
-            <div className="max-w-5xl mx-auto">
-                <Label>Events</Label>
+        <>
+            <Seo
+                title="Events"
+                description="CTF, King of the Hill, and 10+ side events across hardware, AppSec, and forensics at RECON 2026."
+                path="/events"
+            />
+            <Section id="events" className="py-24 px-6">
+                <div className="max-w-5xl mx-auto">
+                    <Label>Events</Label>
 
-                {/* Flagship */}
-                <h2 className="font-display text-2xl md:text-3xl text-paper tracking-tight mb-8">
-                    <ScrambleText text="Flagship " tag="span" speed={15} /> <span className="text-paper/80">Competitions</span>
-                </h2>
-                <Stagger className="grid md:grid-cols-2 gap-4 mb-16">
-                    {flagshipEvents.map((e) => (
-                        <EventCard key={e.title} event={e} />
-                    ))}
-                </Stagger>
+                    <h1 className="font-display text-3xl md:text-4xl text-paper tracking-tight mb-4">
+                        Events at <span className="text-paper/80">RECON 2026</span>
+                    </h1>
 
-                {/* Side events */}
-                <Label>Side Events</Label>
-                <h2 className="font-display text-xl md:text-2xl text-paper tracking-tight mb-8">
-                    10 Zones of <span className="text-paper/80">Chaos</span>
-                </h2>
-                <Stagger className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4" delay={0.06}>
-                    {sideEvents.map((e) => (
-                        <EventCard key={e.title} event={e} />
-                    ))}
-                </Stagger>
-            </div>
-        </Section>
+                    {/* Flagship */}
+                    <h2 className="font-display text-2xl md:text-3xl text-paper tracking-tight mb-8">
+                        <ScrambleText text="Flagship " tag="span" speed={15} /> <span className="text-paper/80">Competitions</span>
+                    </h2>
+                    <Stagger className="grid md:grid-cols-2 gap-4 mb-16">
+                        {flagshipEvents.map((e) => (
+                            <EventCard key={e.title} event={e} />
+                        ))}
+                    </Stagger>
+
+                    {/* Side events */}
+                    <Label>Side Events</Label>
+                    <h2 className="font-display text-xl md:text-2xl text-paper tracking-tight mb-8">
+                        10 Zones of <span className="text-paper/80">Chaos</span>
+                    </h2>
+                    <Stagger className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4" delay={0.06}>
+                        {sideEvents.map((e) => (
+                            <EventCard key={e.title} event={e} />
+                        ))}
+                    </Stagger>
+                </div>
+            </Section>
+        </>
     );
 }
