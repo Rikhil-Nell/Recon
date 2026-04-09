@@ -170,15 +170,18 @@ export const schedule: Record<string, ScheduleItem[]> = {
 
 /* ── Team ──────────────────────────────────────────────────────── */
 export const team: TeamMember[] = [
-    { code: 'ED', name: 'Rikhil', role: 'Executive Director' },
-    { code: 'CTO', name: 'Abhiram', role: 'Chief Technology Officer' },
+    { code: 'ED', name: 'Rikhil', role: 'Executive Director', photo: 'https://media.licdn.com/dms/image/v2/D5603AQHmSw8t-AHLJA/profile-displayphoto-shrink_400_400/B56ZT77H3CHQAk-/0/1739393369312?e=1777507200&v=beta&t=iS3sMqyugkbqep3882NAUyz1OKLCE3KZz5axZj41RRY' },
+    { code: 'CTO', name: 'Abhiram', role: 'Chief Technology Officer', photo: 'https://media.licdn.com/dms/image/v2/D5603AQEZXk7JGQifNw/profile-displayphoto-scale_400_400/B56Zyzrx3iGoAg-/0/1772541129853?e=1777507200&v=beta&t=MmoT_2YwBHna8tUV7_-HNQxLTWkcmguvYhvhbiNU_0U' },
     { code: 'OPS', name: 'Faariz', role: 'Operations Lead' },
-    { code: 'INFRA', name: 'Izhaan & Surya', role: 'Infrastructure Leads' },
-    { code: 'CTF', name: 'Vikhyat & Swarnim', role: 'CTF Leads' },
+    { code: 'INFRA', name: 'Izhaan', role: 'Infrastructure Lead' },
+    { code: 'INFRA', name: 'Surya', role: 'Infrastructure Lead' },
+    { code: 'CTF', name: 'Vikhyat', role: 'CTF Lead' },
+    { code: 'CTF', name: 'Swarnim', role: 'CTF Lead' },
     { code: 'SPK', name: 'Aditya', role: 'Speakers & Outreach' },
     { code: 'BIZ', name: 'Ayushi', role: 'Business & Sponsorships' },
     { code: 'DSN', name: 'Jahnvi', role: 'Design Lead' },
-    { code: 'LOG', name: 'Reet & Dharineesh', role: 'Logistics Leads' },
+    { code: 'LOG', name: 'Reet', role: 'Logistics Lead' },
+    { code: 'LOG', name: 'Dharineesh', role: 'Logistics Lead' },
 ];
 
 /* ── Speakers ─────────────────────────────────────────────────── */
