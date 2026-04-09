@@ -143,7 +143,7 @@ function AboutSection() {
 
                                 <p className="mt-3 font-body text-sm text-cream/70 leading-relaxed max-w-md">
                                     Whether you're a seasoned red-teamer or writing your first exploit,
-                                    RECON has a track for you. Join 1200+ hackers, compete for ₹1.5M+ in prizes,
+                                    RECON has a track for you. Join 600+ hackers, compete for ₹1.5M+ in prizes,
                                     and connect with the community.
                                 </p>
 
