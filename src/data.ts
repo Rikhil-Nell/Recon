@@ -188,7 +188,86 @@ export const speakers: Speaker[] = [
 
 /* ── Mentors ──────────────────────────────────────────────────── */
 export const mentors: Mentor[] = [
-    { name: 'TBA', handle: undefined, role: 'Mentor', bio: 'Mentor details coming soon.', photo: undefined },
+    // Investigator
+    {
+        name: 'Prof. Chester Rebeiro',
+        role: 'Professor, Dept. of CSE — IIT Madras',
+        bio: 'Investigator, RECON 2026. Faculty at IIT Madras specialising in computer security and hardware security.',
+        photo: 'https://www.cse.iitm.ac.in/~chester/pubs/chet.png',
+        url: 'https://www.cse.iitm.ac.in/~chester/',
+    },
+    // Conveners
+    {
+        name: 'Dr. Sibi Chakkaravarthy Sethuraman',
+        role: 'Associate Professor, School of CSE — VIT-AP',
+        bio: 'Convener, RECON 2026. Researcher in cybersecurity, malware analysis, and threat intelligence.',
+        photo: 'https://vitap-backend.s3.ap-south-1.amazonaws.com/Dr_Sibi_Chakkaravarthy_S_70084_0587_206cccb3ec.avif',
+        url: 'https://vitap.ac.in/School%20of%20Computer%20Science%20and%20Engineering%20(SCOPE)/faculty/chakkaravarthy.sibi',
+    },
+    {
+        name: 'Dr. Sudhakar Ilango',
+        role: 'Faculty, School of CSE — VIT-AP',
+        bio: 'Convener, RECON 2026.',
+        photo: 'https://vitap-backend.s3.ap-south-1.amazonaws.com/Dr_Sudhakar_Ilango_70087_IMG_4727_SCOPE_68f8caba72.avif',
+        url: 'https://vitap.ac.in/School%20of%20Computer%20Science%20and%20Engineering%20(SCOPE)/faculty/sudhakar.ilango',
+    },
+    {
+        name: 'Dr. Hari Seetha',
+        role: 'Faculty, School of CSE — VIT-AP',
+        bio: 'Convener, RECON 2026.',
+        photo: 'https://vitap-backend.s3.ap-south-1.amazonaws.com/Dr_Hari_Seetha_SCOPE_0741_2b647e6904.avif',
+        url: 'https://vitap.ac.in/School%20of%20Computer%20Science%20and%20Engineering%20(SCOPE)/faculty/seetha.hari',
+    },
+    // Coordinators
+    {
+        name: 'Dr. Ganesh Reddy Karri',
+        role: 'Faculty — VIT-AP',
+        bio: 'Coordinator, RECON 2026.',
+        photo: 'https://vitap-backend.s3.ap-south-1.amazonaws.com/Dr_Ganesh_Reddy_Karri_70140_IMG_4952_SCOPE_3e82aa165c.avif',
+        url: 'https://vitap.ac.in/School%20of%20Computer%20Science%20and%20Engineering%20(SCOPE)/faculty/ganesh.reddy',
+    },
+    {
+        name: 'Dr. Nandha Kumar R',
+        role: 'Faculty — VIT-AP',
+        bio: 'Coordinator, RECON 2026.',
+        photo: 'https://vitap-backend.s3.ap-south-1.amazonaws.com/Dr_R_Nandha_Kumar_IMG_6597_SCOPE_36b1aaa52e.avif',
+        url: 'https://vitap.ac.in/School%20of%20Computer%20Science%20and%20Engineering%20(SCOPE)/faculty/nandha.r',
+    },
+    {
+        name: 'Dr. Varun Kumar K A',
+        role: 'Faculty — VIT-AP',
+        bio: 'Coordinator, RECON 2026.',
+        photo: 'https://vitap-backend.s3.ap-south-1.amazonaws.com/Dr_Varunkumar_Anantharaman_SCOPE_65e381a08d.avif',
+        url: 'https://vitap.ac.in/School%20of%20Computer%20Science%20and%20Engineering%20(SCOPE)/faculty/varunkumar.ka',
+    },
+    {
+        name: 'Dr. Kothandaraman D',
+        role: 'Faculty — VIT-AP',
+        bio: 'Coordinator, RECON 2026.',
+        photo: 'https://vitap-backend.s3.ap-south-1.amazonaws.com/70647_Dr_D_Kothandaraman_SCOPE_1220_cf0f61fafa.avif',
+        url: 'https://vitap.ac.in/School%20of%20Computer%20Science%20and%20Engineering%20(SCOPE)/faculty/kothandaraman.d',
+    },
+    {
+        name: 'Dr. Kumar Debasis',
+        role: 'Faculty — VIT-AP',
+        bio: 'Coordinator, RECON 2026.',
+        photo: 'https://vitap-backend.s3.ap-south-1.amazonaws.com/70151_Dr_Kumar_Debasis_SCOPE_1288_d8423a5417.avif',
+        url: 'https://vitap.ac.in/School%20of%20Computer%20Science%20and%20Engineering%20(SCOPE)/faculty/kumar.debasis',
+    },
+    {
+        name: 'Dr. Thangam S',
+        role: 'Faculty — VIT-AP',
+        bio: 'Coordinator, RECON 2026.',
+        photo: 'https://vitap-backend.s3.ap-south-1.amazonaws.com/Dr_THANGAM_SIVANANTHAM_SCOPE_995e08ebc2.avif',
+        url: 'https://vitap.ac.in/School%20of%20Computer%20Science%20and%20Engineering%20(SCOPE)/faculty/thangam.s',
+    },
+    {
+        name: 'Dr. Ajith Jubilson',
+        role: 'Faculty — VIT-AP',
+        bio: 'Coordinator, RECON 2026.',
+        photo: 'https://vitap-backend.s3.ap-south-1.amazonaws.com/Dr_E_Ajith_Jubilson_SCOPE_1956_20273c1217.avif',
+        url: 'https://vitap.ac.in/School%20of%20Computer%20Science%20and%20Engineering%20(SCOPE)/faculty/ajith.jubilson',
+    },
 ];
 
 /* ── Partners ─────────────────────────────────────────────────── */
