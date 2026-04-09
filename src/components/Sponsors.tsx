@@ -2,10 +2,12 @@ import { partners, communityPartners, type Partner } from '../data';
 import { Section, Label } from './ui';
 import GlyphGrid from './GlyphGrid';
 
-const TIER_ORDER = ['title', 'co-title', 'gold', 'silver', 'community'] as const;
+const TIER_ORDER = ['title', 'co-title', 'strategic', 'technical', 'gold', 'silver', 'community'] as const;
 const TIER_LABELS: Record<string, string> = {
     title: 'Title Sponsor',
     'co-title': 'Co-Title Sponsor',
+    strategic: 'Strategic Partner',
+    technical: 'Technical Partner',
     gold: 'Gold Sponsors',
     silver: 'Silver Sponsors',
     community: 'Community Partners',
@@ -62,7 +64,9 @@ export default function Sponsors() {
 
                             <div className={`grid gap-6 ${group.tier === 'title' || group.tier === 'co-title'
                                 ? 'grid-cols-1 md:grid-cols-2'
-                                : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
+                                : group.tier === 'strategic' || group.tier === 'technical'
+                                    ? 'grid-cols-1 sm:grid-cols-2'
+                                    : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
                                 }`}>
                                 {group.items.map((partner) => (
                                     <a
