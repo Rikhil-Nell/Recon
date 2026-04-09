@@ -49,9 +49,7 @@ const FOOTER_LINKS = [
     {
         heading: 'Resources',
         items: [
-            { label: 'Rules', href: '#' },
             { label: 'FAQ', href: '/faq' },
-            { label: 'Code of Conduct', href: '#' },
             { label: 'Contact', href: '/contact' },
         ],
     },
