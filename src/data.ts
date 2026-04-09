@@ -44,7 +44,7 @@ export interface Partner {
     name: string;
     description: string;
     value?: string;
-    tier: 'title' | 'co-title' | 'gold' | 'silver' | 'community';
+    tier: 'title' | 'co-title' | 'strategic' | 'technical' | 'gold' | 'silver' | 'community';
     logo: string;
     url: string;
     /** Relative display height of the logo: sm=32px, md=40px, lg=48px */
@@ -170,43 +170,167 @@ export const schedule: Record<string, ScheduleItem[]> = {
 
 /* ── Team ──────────────────────────────────────────────────────── */
 export const team: TeamMember[] = [
-    { code: 'ED', name: 'Rikhil', role: 'Executive Director' },
-    { code: 'CTO', name: 'Abhiram', role: 'Chief Technology Officer' },
+    { code: 'ED', name: 'Rikhil', role: 'Executive Director', photo: 'https://media.licdn.com/dms/image/v2/D5603AQHmSw8t-AHLJA/profile-displayphoto-shrink_400_400/B56ZT77H3CHQAk-/0/1739393369312?e=1777507200&v=beta&t=iS3sMqyugkbqep3882NAUyz1OKLCE3KZz5axZj41RRY' },
+    { code: 'CTO', name: 'Abhiram', role: 'Chief Technology Officer', photo: 'https://media.licdn.com/dms/image/v2/D5603AQEZXk7JGQifNw/profile-displayphoto-scale_400_400/B56Zyzrx3iGoAg-/0/1772541129853?e=1777507200&v=beta&t=MmoT_2YwBHna8tUV7_-HNQxLTWkcmguvYhvhbiNU_0U' },
     { code: 'OPS', name: 'Faariz', role: 'Operations Lead' },
-    { code: 'INFRA', name: 'Izhaan & Surya', role: 'Infrastructure Leads' },
-    { code: 'CTF', name: 'Vikhyat & Swarnim', role: 'CTF Leads' },
+    { code: 'INFRA', name: 'Izhaan', role: 'Infrastructure Lead' },
+    { code: 'INFRA', name: 'Surya', role: 'Infrastructure Lead' },
+    { code: 'CTF', name: 'Vikhyat', role: 'CTF Lead' },
+    { code: 'CTF', name: 'Swarnim', role: 'CTF Lead' },
     { code: 'SPK', name: 'Aditya', role: 'Speakers & Outreach' },
     { code: 'BIZ', name: 'Ayushi', role: 'Business & Sponsorships' },
     { code: 'DSN', name: 'Jahnvi', role: 'Design Lead' },
-    { code: 'LOG', name: 'Reet & Dharineesh', role: 'Logistics Leads' },
+    { code: 'LOG', name: 'Reet', role: 'Logistics Lead' },
+    { code: 'LOG', name: 'Dharineesh', role: 'Logistics Lead' },
 ];
 
 /* ── Speakers ─────────────────────────────────────────────────── */
 export const speakers: Speaker[] = [
-    { name: 'TBA', handle: undefined, role: 'Speaker', bio: 'Speaker details coming soon.', photo: undefined },
+    {
+        name: 'Vaibhav Lakhani',
+        role: 'Senior Consultant, Offensive Security — Kroll',
+        bio: 'Senior Consultant in Offensive Security at Kroll, specialising in penetration testing. Recognised among the top 15 Hackers by NCIIPC; holds OSCP, CRTO, CRT, CPSA, CEH & eJPT certifications. Udemy instructor and frequent speaker at colleges across India.',
+        url: 'https://github.com/vlakhani28/DVMA',
+        photo: '/people/vaibhav-lakhani.jpg'
+    },
+    {
+        name: 'Ansh Bhawanani',
+        role: 'Security Analyst — HackerOne',
+        bio: 'OSCE3-certified application security specialist at HackerOne, focused on real-world exploitation techniques. Known for breaking down advanced offensive security concepts on YouTube, backed by hands-on vulnerability research experience.',
+        photo: '/people/ansh-bhawnani.jpg'
+    },
+    {
+        name: 'Nithin Chenthur Prabhu',
+        role: 'Associate MDR Analyst — Unit 42, Palo Alto Networks',
+        bio: 'Associate MDR Analyst at Unit 42, Palo Alto Networks. Ex-Captain of Team bi0s, author of DFIR Labs, and two-time winner of the Digital Forensics Challenge International (2023 & 2024).',
+        photo: '/people/nithin-chenthur.jpg'
+    },
+    {
+        name: 'Abhiram Kumar',
+        role: 'Independent Security Researcher',
+        bio: 'Independent security researcher specialising in DFIR and author of MemLabs — CTF-styled memory forensics labs. Former captain of CTF team bi0s and organiser of InCTF and bi0sCTF.',
+        url: 'https://github.com/stuxnet999',
+        photo: '/people/abhiram-kumar-patiballa.jpg'
+    },
 ];
 
 /* ── Mentors ──────────────────────────────────────────────────── */
 export const mentors: Mentor[] = [
-    { name: 'TBA', handle: undefined, role: 'Mentor', bio: 'Mentor details coming soon.', photo: undefined },
+    // Investigator
+    {
+        name: 'Prof. Chester Rebeiro',
+        role: 'Professor, Dept. of CSE — IIT Madras',
+        bio: 'Investigator, RECON 2026. Faculty at IIT Madras specialising in computer security and hardware security.',
+        photo: 'https://www.cse.iitm.ac.in/~chester/pubs/chet.png',
+        url: 'https://www.cse.iitm.ac.in/~chester/',
+    },
+    // Conveners
+    {
+        name: 'Dr. Sibi Chakkaravarthy Sethuraman',
+        role: 'Associate Professor, School of CSE — VIT-AP',
+        bio: 'Convener, RECON 2026. Researcher in cybersecurity, malware analysis, and threat intelligence.',
+        photo: 'https://vitap-backend.s3.ap-south-1.amazonaws.com/Dr_Sibi_Chakkaravarthy_S_70084_0587_206cccb3ec.avif',
+        url: 'https://vitap.ac.in/School%20of%20Computer%20Science%20and%20Engineering%20(SCOPE)/faculty/chakkaravarthy.sibi',
+    },
+    {
+        name: 'Dr. Sudhakar Ilango',
+        role: 'Faculty, School of CSE — VIT-AP',
+        bio: 'Convener, RECON 2026.',
+        photo: 'https://vitap-backend.s3.ap-south-1.amazonaws.com/Dr_Sudhakar_Ilango_70087_IMG_4727_SCOPE_68f8caba72.avif',
+        url: 'https://vitap.ac.in/School%20of%20Computer%20Science%20and%20Engineering%20(SCOPE)/faculty/sudhakar.ilango',
+    },
+    {
+        name: 'Dr. Hari Seetha',
+        role: 'Faculty, School of CSE — VIT-AP',
+        bio: 'Convener, RECON 2026.',
+        photo: 'https://vitap-backend.s3.ap-south-1.amazonaws.com/Dr_Hari_Seetha_SCOPE_0741_2b647e6904.avif',
+        url: 'https://vitap.ac.in/School%20of%20Computer%20Science%20and%20Engineering%20(SCOPE)/faculty/seetha.hari',
+    },
+    // Coordinators
+    {
+        name: 'Dr. Ganesh Reddy Karri',
+        role: 'Faculty — VIT-AP',
+        bio: 'Coordinator, RECON 2026.',
+        photo: 'https://vitap-backend.s3.ap-south-1.amazonaws.com/Dr_Ganesh_Reddy_Karri_70140_IMG_4952_SCOPE_3e82aa165c.avif',
+        url: 'https://vitap.ac.in/School%20of%20Computer%20Science%20and%20Engineering%20(SCOPE)/faculty/ganesh.reddy',
+    },
+    {
+        name: 'Dr. Nandha Kumar R',
+        role: 'Faculty — VIT-AP',
+        bio: 'Coordinator, RECON 2026.',
+        photo: 'https://vitap-backend.s3.ap-south-1.amazonaws.com/Dr_R_Nandha_Kumar_IMG_6597_SCOPE_36b1aaa52e.avif',
+        url: 'https://vitap.ac.in/School%20of%20Computer%20Science%20and%20Engineering%20(SCOPE)/faculty/nandha.r',
+    },
+    {
+        name: 'Dr. Varun Kumar K A',
+        role: 'Faculty — VIT-AP',
+        bio: 'Coordinator, RECON 2026.',
+        photo: 'https://vitap-backend.s3.ap-south-1.amazonaws.com/Dr_Varunkumar_Anantharaman_SCOPE_65e381a08d.avif',
+        url: 'https://vitap.ac.in/School%20of%20Computer%20Science%20and%20Engineering%20(SCOPE)/faculty/varunkumar.ka',
+    },
+    {
+        name: 'Dr. Kothandaraman D',
+        role: 'Faculty — VIT-AP',
+        bio: 'Coordinator, RECON 2026.',
+        photo: 'https://vitap-backend.s3.ap-south-1.amazonaws.com/70647_Dr_D_Kothandaraman_SCOPE_1220_cf0f61fafa.avif',
+        url: 'https://vitap.ac.in/School%20of%20Computer%20Science%20and%20Engineering%20(SCOPE)/faculty/kothandaraman.d',
+    },
+    {
+        name: 'Dr. Kumar Debasis',
+        role: 'Faculty — VIT-AP',
+        bio: 'Coordinator, RECON 2026.',
+        photo: 'https://vitap-backend.s3.ap-south-1.amazonaws.com/70151_Dr_Kumar_Debasis_SCOPE_1288_d8423a5417.avif',
+        url: 'https://vitap.ac.in/School%20of%20Computer%20Science%20and%20Engineering%20(SCOPE)/faculty/kumar.debasis',
+    },
+    {
+        name: 'Dr. Thangam S',
+        role: 'Faculty — VIT-AP',
+        bio: 'Coordinator, RECON 2026.',
+        photo: 'https://vitap-backend.s3.ap-south-1.amazonaws.com/Dr_THANGAM_SIVANANTHAM_SCOPE_995e08ebc2.avif',
+        url: 'https://vitap.ac.in/School%20of%20Computer%20Science%20and%20Engineering%20(SCOPE)/faculty/thangam.s',
+    },
+    {
+        name: 'Dr. Ajith Jubilson',
+        role: 'Faculty — VIT-AP',
+        bio: 'Coordinator, RECON 2026.',
+        photo: 'https://vitap-backend.s3.ap-south-1.amazonaws.com/Dr_E_Ajith_Jubilson_SCOPE_1956_20273c1217.avif',
+        url: 'https://vitap.ac.in/School%20of%20Computer%20Science%20and%20Engineering%20(SCOPE)/faculty/ajith.jubilson',
+    },
 ];
 
 /* ── Partners ─────────────────────────────────────────────────── */
 export const partners: Partner[] = [
+    // Title
     { name: 'Hackers Daddy', description: 'Title sponsor — premium cybersecurity training & certifications.', value: '₹7,00,000', tier: 'title', logo: '/logos/hackers-daddy.png', url: 'https://hackersdaddy.com', size: 'lg', fix: 'brighten' },
-    { name: 'APISec University', description: 'Co-title sponsor — API security education platform.', value: '₹7,00,000', tier: 'co-title', logo: '/logos/apisec.png', url: 'https://www.apisecuniversity.com', size: 'lg' },
+    { name: 'IIT Madras', description: 'Academic partner — Indian Institute of Technology Madras.', tier: 'title', logo: '/logos/iit_m.png', url: 'https://www.iitm.ac.in', size: 'lg' },
+    { name: 'VIT-AP University', description: 'Host institution — VIT-AP University, Amaravati.', tier: 'title', logo: '/logos/vitap.png', url: 'https://vitap.ac.in', size: 'lg', fix: 'brighten' },
+    { name: 'APISec University', description: 'API security education platform.', value: '₹7,00,000', tier: 'title', logo: '/logos/apisec.png', url: 'https://www.apisecuniversity.com', size: 'lg' },
+    // Co-title
+    { name: 'ISEA', description: 'Information Security Education & Awareness, a CERT-In / MeitY initiative.', tier: 'technical', logo: '/logos/isea.png', url: 'https://isea.gov.in', size: 'md' },
+    { name: 'MeitY', description: 'Ministry of Electronics & Information Technology, Government of India.', tier: 'technical', logo: '/logos/meity.png', url: 'https://www.meity.gov.in', size: 'md' },
+    // Strategic
+    { name: 'Magsmen', description: 'Strategic partner — digital marketing & brand strategy.', tier: 'strategic', logo: '/logos/magsmen.png', url: 'https://magsmen.com/', size: 'md' },
+    // Technical
+    { name: 'AWS', description: 'Technical partner — Amazon Web Services cloud infrastructure.', tier: 'technical', logo: '/logos/aws.png', url: 'https://aws.amazon.com', size: 'md' },
+    { name: 'Digital Fortress', description: 'Protect your digital world with password-less authentication.', tier: 'technical', logo: '/logos/df.png', url: 'https://digitalfortress.in/', size: 'md' },
+    { name: 'LemonPeak', description: 'Technical partner — infrastructure & cloud services.', tier: 'technical', logo: '/logos/lemonpeak.png', url: 'https://www.lemonpeak.com/', size: 'md' },
+    // Gold
     { name: 'Altered Security', description: 'Gold sponsor — advanced red team & AD training.', value: '₹47,000', tier: 'gold', logo: '/logos/altered-security.png', url: 'https://www.intruderssecurity.com', size: 'md' },
     { name: 'INE', description: 'Gold sponsor — eLearnSecurity & cybersecurity cert training.', value: '~₹28,000', tier: 'gold', logo: '/logos/ine.png', url: 'https://ine.com', size: 'sm', fix: 'brighten' },
     { name: 'zSecurity', description: 'Gold sponsor — ethical hacking courses & resources.', tier: 'gold', logo: '/logos/zsecurity.png', url: 'https://zsecurity.org', size: 'md', fix: 'brighten' },
-    { name: 'TheXSSRat', description: 'Silver sponsor — bug bounty mentorship & community.', value: '₹3,27,000', tier: 'silver', logo: '/logos/thexssrat.png', url: 'https://thexssrat.com', size: 'lg' },
-    { name: 'Hackviser', description: 'Silver sponsor — cybersecurity advisory & training.', tier: 'silver', logo: '/logos/hackviser.png', url: 'https://hackviser.com', size: 'sm', fix: 'brighten' },
+    // Silver
     { name: 'Caido', description: 'Silver sponsor — next-gen web security testing proxy.', value: '₹1,02,000', tier: 'silver', logo: '/logos/caido.png', url: 'https://caido.io', size: 'md', fix: 'invert' },
-    { name: '.xyz Domains', description: 'Silver sponsor — domain registrar for the next generation.', value: '₹35,000', tier: 'silver', logo: '/logos/xyz.png', url: 'https://gen.xyz', size: 'sm', fix: 'invert' },
+    { name: 'Hackviser', description: 'Silver sponsor — cybersecurity advisory & training.', tier: 'silver', logo: '/logos/hackviser.png', url: 'https://hackviser.com', size: 'sm', fix: 'brighten' },
     { name: 'Hacktronix', description: 'Silver sponsor — hardware hacking tools & education.', tier: 'silver', logo: '/logos/hacktronix.png', url: 'https://hacktronics.co.in', size: 'lg' },
-    { name: 'OSMSEC', description: 'Community partner — open-source security collective.', tier: 'community', logo: '/logos/osmsec.png', url: 'https://osmsec.com', size: 'sm' },
-    { name: 'OSEN', description: 'Community partner — open security education network.', tier: 'community', logo: '/logos/osen.png', url: 'https://osen.in', size: 'lg' },
-    { name: 'HackTheBox Mumbai', description: 'Community partner — local HackTheBox chapter connecting Mumbai-based security enthusiasts.', tier: 'community', logo: '/logos/htb-mumbai.png', url: 'https://www.hackthebox.com', size: 'md' },
+    { name: 'TheXSSRat', description: 'Silver sponsor — bug bounty mentorship & community.', value: '₹3,27,000', tier: 'silver', logo: '/logos/thexssrat.png', url: 'https://thexssrat.com', size: 'lg' },
+    { name: '.xyz Domains', description: 'Silver sponsor — domain registrar for the next generation.', value: '₹35,000', tier: 'silver', logo: '/logos/xyz.png', url: 'https://gen.xyz', size: 'sm', fix: 'invert' },
+    // Community
     { name: 'BSides Vizag', description: 'Community partner — grassroots security conference in Visakhapatnam fostering local infosec culture.', tier: 'community', logo: '/logos/bsides-vizag.png', url: 'https://bsidesvizag.in', size: 'md' },
+    { name: 'HackTheBox Mumbai', description: 'Community partner — local HackTheBox chapter connecting Mumbai-based security enthusiasts.', tier: 'community', logo: '/logos/htb-mumbai.png', url: 'https://www.hackthebox.com', size: 'md' },
+    { name: 'null', description: 'null, the open security community.', tier: 'community', logo: '/logos/null.png', url: 'https://null.community', size: 'sm' },
+    { name: 'OSC', description: 'Open Source Community.', tier: 'community', logo: '/logos/osc.png', url: 'https://www.instagram.com/osc.vitap/', size: 'sm' },
+    { name: 'OSEN', description: 'Community partner — open security education network.', tier: 'community', logo: '/logos/osen.png', url: 'https://osen.in', size: 'lg' },
+    { name: 'OSMSEC', description: 'Community partner — open-source security collective.', tier: 'community', logo: '/logos/osmsec.png', url: 'https://osmsec.com', size: 'sm' },
 ];
 
 export const communityPartners = [

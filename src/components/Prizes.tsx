@@ -3,12 +3,14 @@ import { partners, communityPartners } from '../data';
 import { Section, Label, Tag, Stagger, staggerChild } from './ui';
 import CornerFrame from './CornerFrame';
 
-const tierOrder = { title: 0, 'co-title': 1, gold: 2, silver: 3, community: 4 } as const;
+const tierOrder: Record<string, number> = { title: 0, 'co-title': 1, gold: 2, silver: 3, strategic: 4, technical: 5, community: 6 };
 const tierLabel: Record<string, string> = {
     title: 'TITLE',
     'co-title': 'CO-TITLE',
     gold: 'GOLD',
     silver: 'SILVER',
+    strategic: 'STRATEGIC',
+    technical: 'TECHNICAL',
     community: 'COMMUNITY',
 };
 
