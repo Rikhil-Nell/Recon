@@ -1,15 +1,15 @@
-import { partners, communityPartners, type Partner } from '../data';
+import { partners, type Partner } from '../data';
 import { Section, Label } from './ui';
 import GlyphGrid from './GlyphGrid';
 
-const TIER_ORDER = ['title', 'co-title', 'strategic', 'technical', 'gold', 'silver', 'community'] as const;
+const TIER_ORDER = ['title', 'co-title', 'gold', 'silver', 'strategic', 'technical', 'community'] as const;
 const TIER_LABELS: Record<string, string> = {
     title: 'Title Sponsor',
     'co-title': 'Co-Title Sponsor',
-    strategic: 'Strategic Partner',
-    technical: 'Technical Partner',
     gold: 'Gold Sponsors',
     silver: 'Silver Sponsors',
+    strategic: 'Strategic Partner',
+    technical: 'Technical Partner',
     community: 'Community Partners',
 };
 
