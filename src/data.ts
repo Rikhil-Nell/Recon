@@ -303,7 +303,7 @@ export const partners: Partner[] = [
     // Title
     { name: 'Hackers Daddy', description: 'Title sponsor — premium cybersecurity training & certifications.', value: '₹7,00,000', tier: 'title', logo: '/logos/hackers-daddy.png', url: 'https://hackersdaddy.com', size: 'lg', fix: 'brighten' },
     { name: 'IIT Madras', description: 'Academic partner — Indian Institute of Technology Madras.', tier: 'title', logo: '/logos/iit_m.png', url: 'https://www.iitm.ac.in', size: 'lg' },
-    { name: 'VIT-AP University', description: 'Host institution — VIT-AP University, Amaravati.', tier: 'title', logo: '/logos/vitap.png', url: 'https://vitap.ac.in', size: 'lg' },
+    { name: 'VIT-AP University', description: 'Host institution — VIT-AP University, Amaravati.', tier: 'title', logo: '/logos/vitap.png', url: 'https://vitap.ac.in', size: 'lg', fix: 'brighten' },
     { name: 'APISec University', description: 'API security education platform.', value: '₹7,00,000', tier: 'title', logo: '/logos/apisec.png', url: 'https://www.apisecuniversity.com', size: 'lg' },
     // Co-title
     { name: 'ISEA', description: 'Information Security Education & Awareness, a CERT-In / MeitY initiative.', tier: 'technical', logo: '/logos/isea.png', url: 'https://isea.gov.in', size: 'md' },
