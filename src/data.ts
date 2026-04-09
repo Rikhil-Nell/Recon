@@ -49,8 +49,8 @@ export interface Partner {
     url: string;
     /** Relative display height of the logo: sm=32px, md=40px, lg=48px */
     size?: 'sm' | 'md' | 'lg';
-    /** Color treatment: 'invert' = logo is dark/black (white variant used); 'brighten' = logo is faint (needs CSS brightness boost) */
-    fix?: 'invert' | 'brighten';
+    /** Color treatment: 'invert' = logo is dark/black (white variant used); 'brighten' = logo is faint; 'glow' = add light glow for dark text */
+    fix?: 'invert' | 'brighten' | 'glow';
 }
 
 /* ── Stats ────────────────────────────────────────────────────── */
@@ -312,7 +312,7 @@ export const partners: Partner[] = [
     { name: 'Magsmen', description: 'Strategic partner — digital marketing & brand strategy.', tier: 'strategic', logo: '/logos/magsmen.webp', url: 'https://magsmen.com/', size: 'md' },
     // Technical
     { name: 'AWS', description: 'Technical partner — Amazon Web Services cloud infrastructure.', tier: 'technical', logo: '/logos/aws.webp', url: 'https://aws.amazon.com', size: 'md' },
-    { name: 'Digital Fortress', description: 'Protect your digital world with password-less authentication.', tier: 'technical', logo: '/logos/df.webp', url: 'https://digitalfortress.in/', size: 'md' },
+    { name: 'Digital Fortress', description: 'Protect your digital world with password-less authentication.', tier: 'technical', logo: '/logos/df.webp', url: 'https://digitalfortress.in/', size: 'md', fix: 'glow' },
     { name: 'LemonPeak', description: 'Technical partner — infrastructure & cloud services.', tier: 'technical', logo: '/logos/lemonpeak.webp', url: 'https://www.lemonpeak.com/', size: 'md' },
     // Gold
     { name: 'Altered Security', description: 'Gold sponsor — advanced red team & AD training.', value: '₹47,000', tier: 'gold', logo: '/logos/altered-security.webp', url: 'https://www.intruderssecurity.com', size: 'md' },

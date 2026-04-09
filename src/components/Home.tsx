@@ -18,16 +18,15 @@ const SIZE_CLASS: Record<NonNullable<Partner['size']>, string> = {
 /* ── Sponsor logo strip (Hacktron-style) ──────────────────────── */
 const titleSponsors = partners.filter((p) => p.tier === 'title' || p.tier === 'co-title');
 const otherSponsors = partners.filter((p) => p.tier !== 'title' && p.tier !== 'co-title' && p.tier !== 'community');
+const logoWrapClass = 'group flex items-center justify-center px-2 py-2';
 
 function logoImgClass(partner: Partner) {
     const size = SIZE_CLASS[partner.size ?? 'md'];
-    // Base filter: grayscale → sepia gives a warm cream tone for light/coloured logos
-    // On hover: remove sepia for a crisp reveal; bump opacity
-    const base = `object-contain transition-all duration-200 opacity-70 group-hover:opacity-100 filter grayscale sepia group-hover:sepia-0 ${size}`;
-    // 'brighten' = logo is faint; boost brightness/contrast so it reads on dark bg
-    if (partner.fix === 'brighten') return `${base} brightness-125 contrast-110`;
-    // 'invert' = logo is already supplied as a white/-light variant; no extra CSS needed
-    return base;
+    const base = `object-contain transition-all duration-200 opacity-85 group-hover:opacity-100 filter ${size}`;
+    if (partner.fix === 'brighten') return `${base} brightness-130 contrast-115`;
+    if (partner.fix === 'invert') return `${base} brightness-120 contrast-125`;
+    if (partner.fix === 'glow') return `${base} brightness-120 contrast-120 drop-shadow-[0_0_6px_rgba(245,244,249,0.35)] drop-shadow-[0_0_2px_rgba(245,244,249,0.7)]`;
+    return `${base} brightness-110 contrast-110`;
 }
 function SponsorStrip() {
     return (
@@ -41,7 +40,7 @@ function SponsorStrip() {
 
                 <div className="flex flex-wrap items-center justify-center gap-12 md:gap-20">
                     {titleSponsors.map((s) => (
-                        <a key={s.name} href={s.url} target="_blank" rel="noopener noreferrer" className="group">
+                        <a key={s.name} href={s.url} target="_blank" rel="noopener noreferrer" className={logoWrapClass}>
                             <img
                                 src={s.logo}
                                 alt={s.name}
@@ -63,7 +62,7 @@ function SponsorStrip() {
 
                 <div className="flex flex-wrap items-center justify-center gap-8 md:gap-14">
                     {otherSponsors.map((s) => (
-                        <a key={s.name} href={s.url} target="_blank" rel="noopener noreferrer" className="group">
+                        <a key={s.name} href={s.url} target="_blank" rel="noopener noreferrer" className={logoWrapClass}>
                             <img
                                 src={s.logo}
                                 alt={s.name}
@@ -116,6 +115,9 @@ function AboutSection() {
                             src="/satellite_disk_ascii.webp"
                             alt=""
                             className="hidden sm:block absolute right-[-50px] top-20 h-full w-auto object-contain scale-125 origin-right opacity-100 select-none pointer-events-none"
+                            style={{
+                                filter: 'grayscale(100%) sepia(100%) hue-rotate(265deg) saturate(320%) brightness(1.05) contrast(1.05)',
+                            }}
                             draggable={false}
                             loading="lazy"
                             decoding="async"

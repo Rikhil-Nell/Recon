@@ -19,16 +19,15 @@ const SIZE_CLASS: Record<NonNullable<Partner['size']>, string> = {
     md: 'max-h-10',
     lg: 'max-h-12',
 };
+const logoPlateClass = 'h-12 flex items-center mb-4';
 
 function logoImgClass(partner: Partner) {
     const size = SIZE_CLASS[partner.size ?? 'md'];
-    // Base filter: grayscale → sepia gives a warm cream tone for light/coloured logos
-    // On hover: remove sepia for a crisp reveal; bump opacity
-    const base = `object-contain transition-all duration-200 opacity-70 group-hover:opacity-100 filter grayscale sepia group-hover:sepia-0 ${size}`;
-    // 'brighten' = logo is faint; boost brightness/contrast so it reads on dark bg
-    if (partner.fix === 'brighten') return `${base} brightness-125 contrast-110`;
-    // 'invert' = logo is already supplied as a white/-light variant; no extra CSS needed
-    return base;
+    const base = `object-contain transition-all duration-200 opacity-85 group-hover:opacity-100 filter ${size}`;
+    if (partner.fix === 'brighten') return `${base} brightness-130 contrast-115`;
+    if (partner.fix === 'invert') return `${base} brightness-120 contrast-125`;
+    if (partner.fix === 'glow') return `${base} brightness-120 contrast-120 drop-shadow-[0_0_6px_rgba(245,244,249,0.35)] drop-shadow-[0_0_2px_rgba(245,244,249,0.7)]`;
+    return `${base} brightness-110 contrast-110`;
 }
 
 export default function Sponsors() {
@@ -86,7 +85,7 @@ export default function Sponsors() {
                                             rel="noopener noreferrer"
                                             className="group border border-edge bg-panel/30 p-6 hover:border-paper/30 transition-colors duration-200"
                                         >
-                                            <div className="h-12 flex items-center mb-4">
+                                            <div className={logoPlateClass}>
                                                 <img
                                                     src={partner.logo}
                                                     alt={partner.name}
