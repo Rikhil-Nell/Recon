@@ -5,7 +5,7 @@ import { Section, Label } from './ui';
 import ScrambleText from './ScrambleText';
 import Seo from './Seo';
 
-const TABS = ['Organizers', 'Speakers', 'Mentors'] as const;
+const TABS = ['Mentors', 'Speakers', 'Organizers'] as const;
 type Tab = typeof TABS[number];
 
 /* ── Photo card shared across all three tabs ─────────────────── */
@@ -130,7 +130,7 @@ function MentorCards() {
 }
 
 export default function Team() {
-    const [active, setActive] = useState<Tab>('Organizers');
+    const [active, setActive] = useState<Tab>('Mentors');
 
     return (
         <>
@@ -170,9 +170,9 @@ export default function Team() {
                         exit={{ opacity: 0, y: -12 }}
                         transition={{ duration: 0.25 }}
                     >
-                        {active === 'Organizers' && <OrganizerCards />}
-                        {active === 'Speakers' && <SpeakerCards />}
                         {active === 'Mentors' && <MentorCards />}
+                        {active === 'Speakers' && <SpeakerCards />}
+                        {active === 'Organizers' && <OrganizerCards />}
                     </motion.div>
                 </AnimatePresence>
                 </div>
