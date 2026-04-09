@@ -55,8 +55,8 @@ export interface Partner {
 
 /* ── Stats ────────────────────────────────────────────────────── */
 export const stats = [
-    { label: 'Prize Pool', value: 150, prefix: '₹', suffix: 'K+', display: '₹150K+' },
-    { label: 'Hackers', value: 1200, suffix: '+', display: '1200+' },
+    { label: 'Prize Pool', value: 1.5, prefix: '₹', suffix: 'M+', display: '₹1.5M+' },
+    { label: 'Hackers', value: 600, suffix: '+', display: '600+' },
     { label: 'Events', value: 12, display: '12' },
     { label: 'Days', value: 3, display: '3' },
 ];
