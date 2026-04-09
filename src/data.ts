@@ -343,10 +343,10 @@ export const marqueeItems = [
     'RECON 2026',
     'VIT-AP UNIVERSITY',
     'HUNT. BREAK. DEFEND.',
-    '₹200K + PRIZE POOL',
+    '₹150K + PRIZE POOL',
     '3 DAYS',
     '12+ EVENTS',
-    '1200+ HACKERS',
+    '600+ HACKERS',
     'CTF × KOTH × HARDWARE × FORENSICS',
     'REGISTER NOW',
 ];
