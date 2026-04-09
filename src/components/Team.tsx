@@ -28,6 +28,8 @@ function PersonCard({ name, handle, role, bio, photo, code, url }: PersonCardPro
                         src={photo}
                         alt={name}
                         className="absolute inset-0 w-full h-full object-cover object-top filter grayscale sepia-50 dark:opacity-75 group-hover:opacity-100 group-hover:sepia-0 group-hover:grayscale-0 transition-all duration-300"
+                        loading="lazy"
+                        decoding="async"
                     />
                 ) : (
                     /* Placeholder — monogram grid */

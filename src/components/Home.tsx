@@ -44,6 +44,8 @@ function SponsorStrip() {
                                 src={s.logo}
                                 alt={s.name}
                                 className={logoImgClass(s)}
+                                loading="lazy"
+                                decoding="async"
                             />
                         </a>
                     ))}
@@ -64,6 +66,8 @@ function SponsorStrip() {
                                 src={s.logo}
                                 alt={s.name}
                                 className={logoImgClass(s)}
+                                loading="lazy"
+                                decoding="async"
                             />
                         </a>
                     ))}
@@ -107,10 +111,12 @@ function AboutSection() {
 
                         {/* ASCII art background image — desktop only */}
                         <img
-                            src="/satellite_disk_ascii.png"
+                            src="/satellite_disk_ascii.webp"
                             alt=""
                             className="hidden sm:block absolute right-[-50px] top-20 h-full w-auto object-contain scale-125 origin-right opacity-100 select-none pointer-events-none"
                             draggable={false}
+                            loading="lazy"
+                            decoding="async"
                         />
 
                         {/* Gradient overlays for readability */}
@@ -133,7 +139,7 @@ function AboutSection() {
 
                                 <p className="mt-3 font-body text-sm text-cream/70 leading-relaxed max-w-md">
                                     Whether you're a seasoned red-teamer or writing your first exploit,
-                                    RECON has a track for you. Join 1200+ hackers, compete for ₹150K+ in prizes,
+                                    RECON has a track for you. Join 1200+ hackers, compete for ₹1.5M+ in prizes,
                                     and connect with the community.
                                 </p>
 

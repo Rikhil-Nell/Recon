@@ -81,6 +81,8 @@ export default function Sponsors() {
                                                 src={partner.logo}
                                                 alt={partner.name}
                                                 className={logoImgClass(partner)}
+                                                loading="lazy"
+                                                decoding="async"
                                             />
                                         </div>
                                         <h3 className="font-display text-lg text-paper">{partner.name}</h3>

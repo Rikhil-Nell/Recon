@@ -68,6 +68,8 @@ export default function Prizes() {
                                         src={cp.logo}
                                         alt={cp.name}
                                         className="h-8 max-w-25 object-contain opacity-60 group-hover:opacity-100 transition-all duration-200 filter grayscale sepia group-hover:sepia-0"
+                                        loading="lazy"
+                                        decoding="async"
                                     />
                                     <span className="font-mono text-[11px] tracking-wider text-muted group-hover:text-paper transition-colors">
                                         {cp.name}
