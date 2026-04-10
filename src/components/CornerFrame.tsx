@@ -4,16 +4,18 @@ interface CornerFrameProps {
     children: ReactNode;
     className?: string;
     accent?: boolean;
+    size?: 'default' | 'lg';
 }
 
-export default function CornerFrame({ children, className = '', accent = false }: CornerFrameProps) {
+export default function CornerFrame({ children, className = '', accent = false, size = 'default' }: CornerFrameProps) {
     const color = accent ? 'border-paper/30' : 'border-edge';
     const cornerColor = accent ? 'bg-paper/50' : 'bg-soft';
+    const padding = size === 'lg' ? 'p-8 md:p-10' : 'p-6';
 
     return (
         <div className={`relative group ${className}`}>
             {/* Border container */}
-            <div className={`border ${color} bg-panel/60 backdrop-blur-sm p-6 transition-colors duration-300 group-hover:border-paper/25`}>
+            <div className={`border ${color} bg-panel/60 backdrop-blur-sm ${padding} transition-colors duration-300 group-hover:border-paper/25`}>
                 {children}
             </div>
             {/* Corner brackets */}
