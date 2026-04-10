@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { team, speakers, mentors, type TeamMember, type Speaker, type Mentor } from '../data';
+import { team, speakers, mentors, managementLeadership, type TeamMember, type Speaker, type Mentor } from '../data';
 import { Section, Label } from './ui';
 import ScrambleText from './ScrambleText';
 import Seo from './Seo';
 
-const TABS = ['Mentors', 'Speakers', 'Organizers'] as const;
+const TABS = ['Speakers', 'Mentors', 'Organizers'] as const;
 type Tab = typeof TABS[number];
 
 /* ── Photo card shared across all three tabs ─────────────────── */
@@ -112,25 +112,43 @@ function SpeakerCards() {
 }
 
 function MentorCards() {
+    const grouped = [
+        { key: 'leadership', label: 'Management / Leadership', items: managementLeadership },
+        { key: 'faculty', label: 'Faculty', items: mentors },
+    ].filter((group) => group.items.length > 0);
+
     return (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {mentors.map((m: Mentor) => (
-                <PersonCard
-                    key={m.name}
-                    name={m.name}
-                    handle={m.handle}
-                    role={m.role}
-                    bio={m.bio}
-                    photo={m.photo}
-                    url={m.url}
-                />
+        <div className="space-y-14">
+            {grouped.map((group) => (
+                <div key={group.key}>
+                    <div className="flex items-center gap-4 mb-6">
+                        <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-cream/60">
+                            {group.label}
+                        </span>
+                        <span className="flex-1 h-px bg-edge" />
+                    </div>
+
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        {group.items.map((m: Mentor) => (
+                            <PersonCard
+                                key={`${group.key}-${m.name}`}
+                                name={m.name}
+                                handle={m.handle}
+                                role={m.role}
+                                bio={m.bio}
+                                photo={m.photo}
+                                url={m.url}
+                            />
+                        ))}
+                    </div>
+                </div>
             ))}
         </div>
     );
 }
 
 export default function Team() {
-    const [active, setActive] = useState<Tab>('Mentors');
+    const [active, setActive] = useState<Tab>('Speakers');
 
     return (
         <>
@@ -170,8 +188,8 @@ export default function Team() {
                         exit={{ opacity: 0, y: -12 }}
                         transition={{ duration: 0.25 }}
                     >
-                        {active === 'Mentors' && <MentorCards />}
                         {active === 'Speakers' && <SpeakerCards />}
+                        {active === 'Mentors' && <MentorCards />}
                         {active === 'Organizers' && <OrganizerCards />}
                     </motion.div>
                 </AnimatePresence>

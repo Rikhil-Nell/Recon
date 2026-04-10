@@ -214,6 +214,58 @@ export const speakers: Speaker[] = [
     },
 ];
 
+/* ── Management / Leadership ──────────────────────────────────── */
+export const managementLeadership: Mentor[] = [
+    {
+        name: 'Dr. Sandhya Pentareddy',
+        role: 'Executive Director, VIT-AP',
+        bio: 'Executive Director at VIT-AP, leading strategic initiatives and operational growth for the Amaravati campus.',
+        photo: '/people/dr-sandhya-pentareddy.webp',
+    },
+    {
+        name: 'Ms. Kadhambari S. Viswanathan',
+        role: 'Assistant Vice President, VIT',
+        bio: 'Assistant Vice President at VIT, driving innovation-focused initiatives and next-generation academic leadership.',
+        photo: '/people/ms-kadhambari-s-viswanathan.webp',
+    },
+    {
+        name: 'Dr. G. Viswanathan',
+        role: 'Founder & Chancellor, VIT',
+        bio: 'Founder and Chancellor of VIT, recognized for shaping VIT into a leading institution for higher education and innovation in India.',
+        photo: '/people/dr-g-viswanathan.webp',
+    },
+    {
+        name: 'Dr. Sankar Viswanathan',
+        role: 'Vice-President, VIT',
+        bio: 'Vice-President at VIT, contributing to institutional strategy, academic growth, and long-term development across campuses.',
+        photo: '/people/dr-sankar-viswanathan.webp',
+    },
+    {
+        name: 'Dr. Sekar Viswanathan',
+        role: 'Vice-President, VIT',
+        bio: 'Vice-President at VIT, supporting leadership initiatives and advancing the university ecosystem through governance and outreach.',
+        photo: '/people/dr-sekar-viswanathan.webp',
+    },
+    {
+        name: 'Dr. G. V. Selvam',
+        role: 'Vice-President, VIT',
+        bio: 'Vice-President at VIT with a focus on academic quality, administration, and strengthening institutional excellence.',
+        photo: '/people/dr-g-v-selvam.webp',
+    },
+    {
+        name: 'Dr. P. Arulmozhivarman',
+        role: 'Vice-Chancellor (I/c), VIT-AP',
+        bio: 'Vice-Chancellor (I/c) of VIT-AP, leading academic and institutional direction with emphasis on research and innovation.',
+        photo: '/people/dr-arulmozhivaram.webp',
+    },
+    {
+        name: 'Dr. Jagadish Chandra Mudiganti',
+        role: 'Registrar, VIT-AP',
+        bio: 'Registrar at VIT-AP, overseeing key academic and administrative processes for effective institutional operations.',
+        photo: '/people/dr-jagadish-chandra-mudiganti.webp',
+    },
+];
+
 /* ── Mentors ──────────────────────────────────────────────────── */
 export const mentors: Mentor[] = [
     // Investigator
