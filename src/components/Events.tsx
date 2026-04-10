@@ -6,21 +6,27 @@ import ScrambleText from './ScrambleText';
 import type { SiteEvent } from '../data';
 import Seo from './Seo';
 
-function EventCard({ event }: { event: SiteEvent }) {
+function EventCard({ event, enlarged }: { event: SiteEvent; enlarged?: boolean }) {
     return (
-        <motion.div variants={staggerChild}>
-            <CornerFrame accent={event.flagship}>
+        <motion.div variants={staggerChild} className={enlarged ? 'min-h-[280px] md:min-h-[320px]' : ''}>
+            <CornerFrame accent={event.flagship} size={enlarged ? 'lg' : 'default'}>
                 <div className="flex flex-wrap gap-2 mb-3">
                     {event.tags.map((t) => (
                         <Tag key={t} accent={event.flagship}>{t}</Tag>
                     ))}
                 </div>
-                <h3 className="font-display text-lg text-paper tracking-tight">{event.title}</h3>
-                <p className="mt-2 font-body text-xs text-muted leading-relaxed">{event.description}</p>
+                <h3 className={`font-display text-paper tracking-tight ${enlarged ? 'text-xl md:text-2xl' : 'text-lg'}`}>
+                    {event.title}
+                </h3>
+                <p className={`font-body text-muted leading-relaxed ${enlarged ? 'mt-3 text-sm md:text-base' : 'mt-2 text-xs'}`}>
+                    {event.description}
+                </p>
                 {event.meta.length > 0 && (
-                    <div className="mt-3 flex flex-wrap gap-3">
+                    <div className={`flex flex-wrap gap-3 ${enlarged ? 'mt-4' : 'mt-3'}`}>
                         {event.meta.map((m) => (
-                            <span key={m} className="font-mono text-[10px] text-faint tracking-wider">{m}</span>
+                            <span key={m} className={`font-mono text-faint tracking-wider ${enlarged ? 'text-xs' : 'text-[10px]'}`}>
+                                {m}
+                            </span>
                         ))}
                     </div>
                 )}
@@ -49,9 +55,9 @@ export default function Events() {
                     <h2 className="font-display text-2xl md:text-3xl text-paper tracking-tight mb-8">
                         <ScrambleText text="Flagship " tag="span" speed={15} /> <span className="text-paper/80">Competitions</span>
                     </h2>
-                    <Stagger className="grid md:grid-cols-2 gap-4 mb-16">
+                    <Stagger className="grid md:grid-cols-2 gap-6 mb-16">
                         {flagshipEvents.map((e) => (
-                            <EventCard key={e.title} event={e} />
+                            <EventCard key={e.title} event={e} enlarged />
                         ))}
                     </Stagger>
 
