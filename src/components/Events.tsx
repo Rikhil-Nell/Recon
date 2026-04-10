@@ -5,6 +5,7 @@ import CornerFrame from './CornerFrame';
 import ScrambleText from './ScrambleText';
 import type { SiteEvent } from '../data';
 import Seo from './Seo';
+import { useMediaQuery } from '../hooks/useMediaQuery';
 
 function EventCard({ event, enlarged }: { event: SiteEvent; enlarged?: boolean }) {
     return (
@@ -32,6 +33,59 @@ function EventCard({ event, enlarged }: { event: SiteEvent; enlarged?: boolean }
                 )}
             </CornerFrame>
         </motion.div>
+    );
+}
+
+const zigzagEasing: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
+function ZonesOfChaos() {
+    const isDesktop = useMediaQuery('(min-width: 768px)');
+
+    return (
+        <div className="flex flex-col gap-6 md:gap-8 overflow-x-hidden">
+            {sideEvents.map((event, index) => {
+                const fromRight = index % 2 === 0;
+
+                return (
+                    <motion.div
+                        key={event.title}
+                        className={`flex ${fromRight ? 'justify-end' : 'justify-start'}`}
+                        initial={{
+                            opacity: 0,
+                            ...(isDesktop
+                                ? { x: fromRight ? 120 : -120 }
+                                : { y: 24 }),
+                        }}
+                        whileInView={{
+                            opacity: 1,
+                            ...(isDesktop ? { x: 0 } : { y: 0 }),
+                        }}
+                        viewport={{ once: true, margin: '-60px' }}
+                        transition={{
+                            duration: 0.55,
+                            ease: zigzagEasing,
+                            delay: index * 0.04,
+                        }}
+                    >
+                        <div className="w-full md:w-[75%] lg:w-[70%]">
+                            <CornerFrame>
+                                <div className="flex flex-wrap gap-2 mb-3">
+                                    {event.tags.map((t) => (
+                                        <Tag key={t}>{t}</Tag>
+                                    ))}
+                                </div>
+                                <h3 className="font-display text-lg text-paper tracking-tight">
+                                    {event.title}
+                                </h3>
+                                <p className="mt-2 font-body text-xs text-muted leading-relaxed">
+                                    {event.description}
+                                </p>
+                            </CornerFrame>
+                        </div>
+                    </motion.div>
+                );
+            })}
+        </div>
     );
 }
 
@@ -64,13 +118,9 @@ export default function Events() {
                     {/* Side events */}
                     <Label>Side Events</Label>
                     <h2 className="font-display text-xl md:text-2xl text-paper tracking-tight mb-8">
-                        10 Zones of <span className="text-paper/80">Chaos</span>
+                        9 Zones of <span className="text-paper/80">Chaos</span>
                     </h2>
-                    <Stagger className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4" delay={0.06}>
-                        {sideEvents.map((e) => (
-                            <EventCard key={e.title} event={e} />
-                        ))}
-                    </Stagger>
+                    <ZonesOfChaos />
                 </div>
             </Section>
         </>
