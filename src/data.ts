@@ -301,13 +301,12 @@ export const mentors: Mentor[] = [
 /* ── Partners ─────────────────────────────────────────────────── */
 export const partners: Partner[] = [
     // Title
+    { name: 'ISEA', description: 'Information Security Education & Awareness, a CERT-In / MeitY initiative.', tier: 'title', logo: '/logos/isea.webp', url: 'https://isea.gov.in', size: 'md' },
+    { name: 'MeitY', description: 'Ministry of Electronics & Information Technology, Government of India.', tier: 'title', logo: '/logos/meity.webp', url: 'https://www.meity.gov.in', size: 'md' },
     { name: 'Hackers Daddy', description: 'Title sponsor — premium cybersecurity training & certifications.', value: '₹7,00,000', tier: 'title', logo: '/logos/hackers-daddy.webp', url: 'https://hackersdaddy.com', size: 'lg', fix: 'brighten' },
     { name: 'IIT Madras', description: 'Academic partner — Indian Institute of Technology Madras.', tier: 'title', logo: '/logos/iit_m.webp', url: 'https://www.iitm.ac.in', size: 'lg' },
     { name: 'VIT-AP University', description: 'Host institution — VIT-AP University, Amaravati.', tier: 'title', logo: '/logos/vitap.webp', url: 'https://vitap.ac.in', size: 'lg', fix: 'brighten' },
     { name: 'APISec University', description: 'API security education platform.', value: '₹7,00,000', tier: 'title', logo: '/logos/apisec.webp', url: 'https://www.apisecuniversity.com', size: 'lg' },
-    // Co-title
-    { name: 'ISEA', description: 'Information Security Education & Awareness, a CERT-In / MeitY initiative.', tier: 'technical', logo: '/logos/isea.webp', url: 'https://isea.gov.in', size: 'md' },
-    { name: 'MeitY', description: 'Ministry of Electronics & Information Technology, Government of India.', tier: 'technical', logo: '/logos/meity.webp', url: 'https://www.meity.gov.in', size: 'md' },
     // Strategic
     { name: 'Magsmen', description: 'Strategic partner — digital marketing & brand strategy.', tier: 'strategic', logo: '/logos/magsmen.webp', url: 'https://magsmen.com/', size: 'md' },
     // Technical
