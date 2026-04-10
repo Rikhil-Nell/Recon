@@ -5,7 +5,7 @@ import { Section, Label } from './ui';
 import ScrambleText from './ScrambleText';
 import Seo from './Seo';
 
-const TABS = ['Speakers', 'Organizers', 'Mentors'] as const;
+const TABS = ['Speakers', 'Mentors', 'Organizers'] as const;
 type Tab = typeof TABS[number];
 
 /* ── Photo card shared across all three tabs ─────────────────── */
@@ -155,11 +155,10 @@ const MENTOR_GROUP_LABELS: Record<(typeof MENTOR_GROUP_ORDER)[number], string> =
 };
 
 function MentorCards() {
-    const grouped = MENTOR_GROUP_ORDER.map((key) => ({
-        key,
-        label: MENTOR_GROUP_LABELS[key],
-        items: key === 'leadership' ? managementLeadership : mentors,
-    })).filter((group) => group.items.length > 0);
+    const grouped = [
+        { key: 'leadership', label: 'Management / Leadership', items: managementLeadership },
+        { key: 'faculty', label: 'Faculty', items: mentors },
+    ].filter((group) => group.items.length > 0);
 
     return (
         <div className="space-y-14">
@@ -233,6 +232,7 @@ export default function Team() {
                         transition={{ duration: 0.25 }}
                     >
                         {active === 'Speakers' && <SpeakerCards />}
+                        {active === 'Mentors' && <MentorCards />}
                         {active === 'Organizers' && <OrganizerCards />}
                         {active === 'Mentors' && <MentorCards />}
                     </motion.div>
