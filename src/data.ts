@@ -229,18 +229,6 @@ export const speakers: Speaker[] = [
 /* ── Management / Leadership ──────────────────────────────────── */
 export const managementLeadership: Mentor[] = [
     {
-        name: 'Dr. Sandhya Pentareddy',
-        role: 'Executive Director, VIT-AP',
-        bio: 'Executive Director at VIT-AP, leading strategic initiatives and operational growth for the Amaravati campus.',
-        photo: '/people/dr-sandhya-pentareddy.webp',
-    },
-    {
-        name: 'Ms. Kadhambari S. Viswanathan',
-        role: 'Assistant Vice President, VIT',
-        bio: 'Assistant Vice President at VIT, driving innovation-focused initiatives and next-generation academic leadership.',
-        photo: '/people/ms-kadhambari-s-viswanathan.webp',
-    },
-    {
         name: 'Dr. G. Viswanathan',
         role: 'Founder & Chancellor, VIT',
         bio: 'Founder and Chancellor of VIT, recognized for shaping VIT into a leading institution for higher education and innovation in India.',
@@ -263,6 +251,18 @@ export const managementLeadership: Mentor[] = [
         role: 'Vice-President, VIT',
         bio: 'Vice-President at VIT with a focus on academic quality, administration, and strengthening institutional excellence.',
         photo: '/people/dr-g-v-selvam.webp',
+    },
+    {
+        name: 'Dr. Sandhya Pentareddy',
+        role: 'Executive Director, VIT-AP',
+        bio: 'Executive Director at VIT-AP, leading strategic initiatives and operational growth for the Amaravati campus.',
+        photo: '/people/dr-sandhya-pentareddy.webp',
+    },
+    {
+        name: 'Ms. Kadhambari S. Viswanathan',
+        role: 'Assistant Vice President, VIT',
+        bio: 'Assistant Vice President at VIT, driving innovation-focused initiatives and next-generation academic leadership.',
+        photo: '/people/ms-kadhambari-s-viswanathan.webp',
     },
     {
         name: 'Dr. P. Arulmozhivarman',
