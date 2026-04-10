@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useInView } from 'framer-motion';
 import Hero from './Hero';
 import Marquee from './Marquee';
@@ -24,6 +24,11 @@ const collaboratorInstitutions = partners.filter((p) => COLLABORATOR_NAMES.has(p
 const supportSponsors = partners.filter(
     (p) => p.tier !== 'community' && p.name !== HOST_INSTITUTION && !COLLABORATOR_NAMES.has(p.name),
 );
+const LANDING_SPONSOR_LOGOS = [
+    ...(hostInstitution ? [hostInstitution.logo] : []),
+    ...collaboratorInstitutions.map((p) => p.logo),
+    ...supportSponsors.map((p) => p.logo),
+];
 const logoWrapClass = 'group flex items-center justify-center px-2 py-2';
 
 function logoImgClass(partner: Partner) {
@@ -52,8 +57,9 @@ function SponsorStrip() {
                                                 src={hostInstitution.logo}
                                                 alt={hostInstitution.name}
                                                 className={logoImgClass(hostInstitution)}
-                                                loading="lazy"
-                                                decoding="async"
+                                                loading="eager"
+                                                fetchPriority="high"
+                                                decoding="sync"
                                             />
                                         </a>
                                     </div>
@@ -72,8 +78,9 @@ function SponsorStrip() {
                                                     src={institution.logo}
                                                     alt={institution.name}
                                                     className={logoImgClass(institution)}
-                                                    loading="lazy"
-                                                    decoding="async"
+                                                    loading="eager"
+                                                    fetchPriority="high"
+                                                    decoding="sync"
                                                 />
                                             </a>
                                         ))}
@@ -99,8 +106,9 @@ function SponsorStrip() {
                                 src={s.logo}
                                 alt={s.name}
                                 className={logoImgClass(s)}
-                                loading="lazy"
-                                decoding="async"
+                                loading="eager"
+                                fetchPriority="high"
+                                decoding="sync"
                             />
                         </a>
                     ))}
@@ -202,6 +210,15 @@ function AboutSection() {
 
 /* ── Home page ────────────────────────────────────────────────── */
 export default function Home() {
+    useEffect(() => {
+        // Warm logo assets early so sponsor strip appears without delayed image pop-in.
+        LANDING_SPONSOR_LOGOS.forEach((src) => {
+            const img = new Image();
+            img.decoding = 'async';
+            img.src = src;
+        });
+    }, []);
+
     const baseUrl = SITE_URL.endsWith('/') ? SITE_URL.slice(0, -1) : SITE_URL;
     const eventJsonLd = {
         '@context': 'https://schema.org',

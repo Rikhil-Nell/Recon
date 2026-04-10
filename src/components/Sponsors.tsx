@@ -109,7 +109,8 @@ export default function Sponsors() {
                                                             src={partner.logo}
                                                             alt={partner.name}
                                                             className={logoImgClass(partner)}
-                                                            loading="lazy"
+                                                            loading="eager"
+                                                            fetchPriority="high"
                                                             decoding="async"
                                                         />
                                                     </div>
@@ -142,7 +143,8 @@ export default function Sponsors() {
                                                         src={hostInstitution.logo}
                                                         alt={hostInstitution.name}
                                                         className={logoImgClass(hostInstitution)}
-                                                        loading="lazy"
+                                                        loading="eager"
+                                                        fetchPriority="high"
                                                         decoding="async"
                                                     />
                                                 </div>
@@ -189,7 +191,7 @@ export default function Sponsors() {
                                                     src={partner.logo}
                                                     alt={partner.name}
                                                     className={logoImgClass(partner)}
-                                                    loading="lazy"
+                                                    loading="eager"
                                                     decoding="async"
                                                 />
                                             </div>
