@@ -3,14 +3,27 @@ import { Section, Label } from './ui';
 import GlyphGrid from './GlyphGrid';
 import Seo from './Seo';
 
-const TIER_ORDER = ['title', 'co-title', 'gold', 'silver', 'strategic', 'technical', 'community'] as const;
+const HOST_INSTITUTION = 'VIT-AP University';
+const COLLABORATOR_NAMES = new Set(['IIT Madras']);
+const INSTITUTION_COPY: Record<string, { title: string; subtitle: string }> = {
+    'IIT Madras': {
+        title: 'IIT Madras',
+        subtitle: 'Indian Institute of Technology Madras',
+    },
+    'VIT-AP University': {
+        title: 'VIT-AP UNIVERSITY',
+        subtitle: 'Vellore Institute of Technology Andhra Pradesh',
+    },
+};
+
+const TIER_ORDER = ['title', 'co-title', 'technical', 'strategic', 'gold', 'silver', 'community'] as const;
 const TIER_LABELS: Record<string, string> = {
-    title: 'Title Sponsor',
-    'co-title': 'Co-Title Sponsor',
+    title: 'Title Sponsors',
+    'co-title': 'Co-Title Sponsors',
     gold: 'Gold Sponsors',
     silver: 'Silver Sponsors',
-    strategic: 'Strategic Partner',
-    technical: 'Technical Partner',
+    strategic: 'Strategic Partners',
+    technical: 'Technical Partners',
     community: 'Community Partners',
 };
 
@@ -31,10 +44,16 @@ function logoImgClass(partner: Partner) {
 }
 
 export default function Sponsors() {
+    const hostInstitution = partners.find((p) => p.name === HOST_INSTITUTION);
+    const collaborators = partners.filter((p) => COLLABORATOR_NAMES.has(p.name));
+    const sponsorPool = partners.filter(
+        (p) => p.name !== HOST_INSTITUTION && !COLLABORATOR_NAMES.has(p.name),
+    );
+
     const grouped = TIER_ORDER.map((tier) => ({
         tier,
         label: TIER_LABELS[tier],
-        items: partners.filter((p) => p.tier === tier),
+        items: sponsorPool.filter((p) => p.tier === tier),
     })).filter((g) => g.items.length > 0);
 
     return (
@@ -60,6 +79,86 @@ export default function Sponsors() {
                     <p className="mt-4 font-body text-sm text-muted leading-relaxed max-w-2xl">
                         RECON 2026 is made possible by organizations that believe in building the next generation of security talent.
                     </p>
+
+                    {(collaborators.length > 0 || hostInstitution) && (
+                        <div className="mt-12">
+                            <div className="flex items-center gap-4 mb-6">
+                                <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-cream/60">
+                                    Official Institutions
+                                </span>
+                                <span className="flex-1 h-px bg-edge" />
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {collaborators.length > 0 && (
+                                    <div className="border border-edge bg-panel/35 p-6">
+                                        <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-cream/60">
+                                            In Collaboration With
+                                        </span>
+                                        <div className="mt-4 flex flex-wrap items-center gap-6">
+                                            {collaborators.map((partner) => (
+                                                <a
+                                                    key={partner.name}
+                                                    href={partner.url}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="group block"
+                                                >
+                                                    <div className={logoPlateClass}>
+                                                        <img
+                                                            src={partner.logo}
+                                                            alt={partner.name}
+                                                            className={logoImgClass(partner)}
+                                                            loading="lazy"
+                                                            decoding="async"
+                                                        />
+                                                    </div>
+                                                    <h3 className="font-display text-sm text-paper leading-tight">
+                                                        {INSTITUTION_COPY[partner.name]?.title ?? partner.name}
+                                                    </h3>
+                                                    <p className="mt-1 font-body text-xs text-muted leading-relaxed max-w-[22rem]">
+                                                        {INSTITUTION_COPY[partner.name]?.subtitle ?? partner.description}
+                                                    </p>
+                                                </a>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {hostInstitution && (
+                                    <div className="border border-edge bg-panel/35 p-6">
+                                        <span className="font-mono text-[10px] tracking-[0.3em] uppercase text-cream/60">
+                                            Hosted By
+                                        </span>
+                                        <div className="mt-4 flex items-center gap-6">
+                                            <a
+                                                href={hostInstitution.url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="group block"
+                                            >
+                                                <div className={logoPlateClass}>
+                                                    <img
+                                                        src={hostInstitution.logo}
+                                                        alt={hostInstitution.name}
+                                                        className={logoImgClass(hostInstitution)}
+                                                        loading="lazy"
+                                                        decoding="async"
+                                                    />
+                                                </div>
+                                                <h3 className="font-display text-sm text-paper leading-tight">
+                                                    {INSTITUTION_COPY[hostInstitution.name]?.title ?? hostInstitution.name}
+                                                </h3>
+                                                <p className="mt-1 font-body text-xs text-muted leading-relaxed max-w-[22rem]">
+                                                    {INSTITUTION_COPY[hostInstitution.name]?.subtitle ?? hostInstitution.description}
+                                                </p>
+                                            </a>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
 
                     <div className="mt-16 space-y-16">
                         {grouped.map((group) => (
