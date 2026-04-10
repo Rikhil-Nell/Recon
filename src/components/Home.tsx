@@ -16,8 +16,14 @@ const SIZE_CLASS: Record<NonNullable<Partner['size']>, string> = {
 };
 
 /* ── Sponsor logo strip (Hacktron-style) ──────────────────────── */
-const titleSponsors = partners.filter((p) => p.tier === 'title' || p.tier === 'co-title');
-const otherSponsors = partners.filter((p) => p.tier !== 'title' && p.tier !== 'co-title' && p.tier !== 'community');
+const HOST_INSTITUTION = 'VIT-AP University';
+const COLLABORATOR_NAMES = new Set(['IIT Madras']);
+
+const hostInstitution = partners.find((p) => p.name === HOST_INSTITUTION);
+const collaboratorInstitutions = partners.filter((p) => COLLABORATOR_NAMES.has(p.name));
+const supportSponsors = partners.filter(
+    (p) => p.tier !== 'community' && p.name !== HOST_INSTITUTION && !COLLABORATOR_NAMES.has(p.name),
+);
 const logoWrapClass = 'group flex items-center justify-center px-2 py-2';
 
 function logoImgClass(partner: Partner) {
@@ -32,36 +38,62 @@ function SponsorStrip() {
     return (
         <section className="relative z-10 border-y border-edge px-6 py-14">
             <div className="max-w-6xl mx-auto">
+                {(hostInstitution || collaboratorInstitutions.length > 0) && (
+                    <>
+                        <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-10 mb-10">
+                            {hostInstitution && (
+                                <div className="text-center">
+                                    <span className="font-mono text-[10px] tracking-[0.4em] uppercase text-cream/50">
+                                        Hosted By
+                                    </span>
+                                    <div className="mt-4 flex items-center justify-center">
+                                        <a href={hostInstitution.url} target="_blank" rel="noopener noreferrer" className={logoWrapClass}>
+                                            <img
+                                                src={hostInstitution.logo}
+                                                alt={hostInstitution.name}
+                                                className={logoImgClass(hostInstitution)}
+                                                loading="lazy"
+                                                decoding="async"
+                                            />
+                                        </a>
+                                    </div>
+                                </div>
+                            )}
+
+                            {collaboratorInstitutions.length > 0 && (
+                                <div className="text-center">
+                                    <span className="font-mono text-[10px] tracking-[0.4em] uppercase text-cream/50">
+                                        In Collaboration With
+                                    </span>
+                                    <div className="mt-4 flex flex-wrap items-center justify-center gap-4">
+                                        {collaboratorInstitutions.map((institution) => (
+                                            <a key={institution.name} href={institution.url} target="_blank" rel="noopener noreferrer" className={logoWrapClass}>
+                                                <img
+                                                    src={institution.logo}
+                                                    alt={institution.name}
+                                                    className={logoImgClass(institution)}
+                                                    loading="lazy"
+                                                    decoding="async"
+                                                />
+                                            </a>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="h-px bg-edge/60 mb-10" />
+                    </>
+                )}
+
                 <div className="text-center mb-10">
                     <span className="font-mono text-[10px] tracking-[0.4em] uppercase text-cream/50">
-                        Sponsored By
-                    </span>
-                </div>
-
-                <div className="flex flex-wrap items-center justify-center gap-12 md:gap-20">
-                    {titleSponsors.map((s) => (
-                        <a key={s.name} href={s.url} target="_blank" rel="noopener noreferrer" className={logoWrapClass}>
-                            <img
-                                src={s.logo}
-                                alt={s.name}
-                                className={logoImgClass(s)}
-                                loading="lazy"
-                                decoding="async"
-                            />
-                        </a>
-                    ))}
-                </div>
-
-                <div className="flex items-center gap-4 my-8">
-                    <span className="flex-1 h-px bg-edge/50" />
-                    <span className="font-mono text-[9px] tracking-[0.3em] uppercase text-cream/40">
                         With Support From
                     </span>
-                    <span className="flex-1 h-px bg-edge/50" />
                 </div>
 
                 <div className="flex flex-wrap items-center justify-center gap-8 md:gap-14">
-                    {otherSponsors.map((s) => (
+                    {supportSponsors.map((s) => (
                         <a key={s.name} href={s.url} target="_blank" rel="noopener noreferrer" className={logoWrapClass}>
                             <img
                                 src={s.logo}
