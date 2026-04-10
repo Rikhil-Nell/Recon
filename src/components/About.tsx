@@ -41,7 +41,7 @@ export default function About() {
                         </p>
                         <p className="mt-3 font-body text-sm text-muted leading-relaxed">
                             Whether you're a seasoned red-teamer or writing your first exploit, RECON has a track for you.
-                            Join 1200+ hackers, compete for ₹20L+ in prizes, and connect with the community.
+                            Join 600+ hackers, compete for ₹1.5M+ in prizes, and connect with the community.
                         </p>
                     </div>
 

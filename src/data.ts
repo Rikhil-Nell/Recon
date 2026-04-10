@@ -27,6 +27,7 @@ export interface Speaker {
     handle?: string;
     role: string;
     bio: string;
+    badges?: string[];
     photo?: string;
     url?: string;
 }
@@ -188,29 +189,92 @@ export const team: TeamMember[] = [
 export const speakers: Speaker[] = [
     {
         name: 'Vaibhav Lakhani',
-        role: 'Senior Consultant, Offensive Security — Kroll',
-        bio: 'Senior Consultant in Offensive Security at Kroll, specialising in penetration testing. Recognised among the top 15 Hackers by NCIIPC; holds OSCP, CRTO, CRT, CPSA, CEH & eJPT certifications. Udemy instructor and frequent speaker at colleges across India.',
+        role: 'Senior Consultant, Offensive Security — Kroll | Hack The Box Mumbai',
+        bio: 'Senior Consultant in Offensive Security at Kroll and active with Hack The Box Mumbai. Recognized among the top 15 hackers by NCIIPC, with certifications including OSCP, CRTO, CRT, CPSA, CEH, and eJPT. Regular speaker and hands-on trainer focused on iOS/macOS pentesting and modern offensive workflows.',
+        badges: ['Kroll', 'Hack The Box Mumbai'],
         url: 'https://github.com/vlakhani28/DVMA',
         photo: '/people/vaibhav-lakhani.webp'
     },
     {
         name: 'Ansh Bhawanani',
-        role: 'Security Analyst — HackerOne',
-        bio: 'OSCE3-certified application security specialist at HackerOne, focused on real-world exploitation techniques. Known for breaking down advanced offensive security concepts on YouTube, backed by hands-on vulnerability research experience.',
+        role: 'Creator, Bitten Tech — Cybersecurity Educator',
+        bio: 'Creator of Bitten Tech, one of India\'s most-followed cybersecurity channels with 403K+ subscribers. OSCE3-certified and known for practical exploit education, bug bounty strategy, and real-world attack simulations that make advanced offensive concepts accessible to students and professionals alike.',
+        badges: ['Bitten Tech', '403K+ Subscribers'],
         photo: '/people/ansh-bhawnani.webp'
     },
     {
         name: 'Nithin Chenthur Prabhu',
         role: 'Associate MDR Analyst — Unit 42, Palo Alto Networks',
-        bio: 'Associate MDR Analyst at Unit 42, Palo Alto Networks. Ex-Captain of Team bi0s, author of DFIR Labs, and two-time winner of the Digital Forensics Challenge International (2023 & 2024).',
-        photo: '/people/nithin-chenthur.jpg'
+        bio: 'Associate MDR Analyst at Unit 42, Palo Alto Networks, with deep focus on DFIR and adversary investigation. Former captain of Team bi0s, author of DFIR Labs, and two-time winner of the Digital Forensics Challenge International (2023 and 2024).',
+        badges: ['Unit 42', 'Palo Alto Networks'],
+        photo: '/people/nithin-chenthur.webp'
     },
     {
         name: 'Abhiram Kumar',
-        role: 'Independent Security Researcher',
-        bio: 'Independent security researcher specialising in DFIR and author of MemLabs — CTF-styled memory forensics labs. Former captain of CTF team bi0s and organiser of InCTF and bi0sCTF.',
+        role: 'Security Researcher — Palo Alto Networks',
+        bio: 'Security researcher at Palo Alto Networks specializing in DFIR and memory forensics. Creator of MemLabs (CTF-style memory forensics labs), former captain of Team bi0s, and organizer of InCTF and bi0sCTF, with extensive experience in web-shell investigation and incident response workflows.',
+        badges: ['Palo Alto Networks', 'MemLabs Creator'],
         url: 'https://github.com/stuxnet999',
         photo: '/people/abhiram-kumar-patiballa.webp'
+    },
+    {
+        name: 'Dr. Praveen Kumar E',
+        role: 'Senior Security Engineer — Equiniti (EQ) x Notified DM India Pvt Ltd., Bangalore',
+        bio: 'Senior Security Engineer based in Bangalore with experience in enterprise security operations, secure engineering practices, and real-world threat response within large-scale product environments.',
+        badges: ['Equiniti (EQ)', 'Bangalore'],
+        photo: '/people/praveen-kumar-e.webp'
+    },
+];
+
+/* ── Management / Leadership ──────────────────────────────────── */
+export const managementLeadership: Mentor[] = [
+    {
+        name: 'Dr. G. Viswanathan',
+        role: 'Founder & Chancellor, VIT',
+        bio: 'Founder and Chancellor of VIT, recognized for shaping VIT into a leading institution for higher education and innovation in India.',
+        photo: '/people/dr-g-viswanathan.webp',
+    },
+    {
+        name: 'Dr. Sankar Viswanathan',
+        role: 'Vice-President, VIT',
+        bio: 'Vice-President at VIT, contributing to institutional strategy, academic growth, and long-term development across campuses.',
+        photo: '/people/dr-sankar-viswanathan.webp',
+    },
+    {
+        name: 'Dr. Sekar Viswanathan',
+        role: 'Vice-President, VIT',
+        bio: 'Vice-President at VIT, supporting leadership initiatives and advancing the university ecosystem through governance and outreach.',
+        photo: '/people/dr-sekar-viswanathan.webp',
+    },
+    {
+        name: 'Dr. G. V. Selvam',
+        role: 'Vice-President, VIT',
+        bio: 'Vice-President at VIT with a focus on academic quality, administration, and strengthening institutional excellence.',
+        photo: '/people/dr-g-v-selvam.webp',
+    },
+    {
+        name: 'Ms. Kadhambari S. Viswanathan',
+        role: 'Assistant Vice President, VIT',
+        bio: 'Assistant Vice President at VIT, driving innovation-focused initiatives and next-generation academic leadership.',
+        photo: '/people/ms-kadhambari-s-viswanathan.webp',
+    },
+    {
+        name: 'Dr. Sandhya Pentareddy',
+        role: 'Executive Director, VIT-AP',
+        bio: 'Executive Director at VIT-AP, leading strategic initiatives and operational growth for the Amaravati campus.',
+        photo: '/people/dr-sandhya-pentareddy.webp',
+    },
+    {
+        name: 'Dr. P. Arulmozhivarman',
+        role: 'Vice-Chancellor (I/c), VIT-AP',
+        bio: 'Vice-Chancellor (I/c) of VIT-AP, leading academic and institutional direction with emphasis on research and innovation.',
+        photo: '/people/dr-arulmozhivaram.webp',
+    },
+    {
+        name: 'Dr. Jagadish Chandra Mudiganti',
+        role: 'Registrar, VIT-AP',
+        bio: 'Registrar at VIT-AP, overseeing key academic and administrative processes for effective institutional operations.',
+        photo: '/people/dr-jagadish-chandra-mudiganti.webp',
     },
 ];
 
@@ -279,7 +343,7 @@ export const mentors: Mentor[] = [
     // Conveners
     {
         name: 'Dr. Sibi Chakkaravarthy Sethuraman',
-        role: 'Associate Professor, School of CSE — VIT-AP',
+        role: 'Director, Centres of Excellence — VIT-AP',
         bio: 'Convener, RECON 2026. Researcher in cybersecurity, malware analysis, and threat intelligence.',
         photo: 'https://vitap-backend.s3.ap-south-1.amazonaws.com/Dr_Sibi_Chakkaravarthy_S_70084_0587_206cccb3ec.avif',
         url: 'https://vitap.ac.in/School%20of%20Computer%20Science%20and%20Engineering%20(SCOPE)/faculty/chakkaravarthy.sibi',
@@ -394,7 +458,7 @@ export const marqueeItems = [
     'RECON 2026',
     'VIT-AP UNIVERSITY',
     'HUNT. BREAK. DEFEND.',
-    '₹150K + PRIZE POOL',
+    '₹1.5M + PRIZE POOL',
     '3 DAYS',
     '12+ EVENTS',
     '600+ HACKERS',

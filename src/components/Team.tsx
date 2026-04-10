@@ -14,16 +14,34 @@ interface PersonCardProps {
     handle?: string;
     role: string;
     bio?: string;
+    badges?: string[];
     photo?: string;
     code?: string; // organizer badge code
     url?: string;
+    spotlight?: boolean;
 }
 
-function PersonCard({ name, handle, role, bio, photo, code, url }: PersonCardProps) {
+function PersonCard({ name, handle, role, bio, badges, photo, code, url, spotlight = false }: PersonCardProps) {
+    const cardClass = spotlight
+        ? 'group border border-paper/30 bg-panel/35 hover:border-paper/55 transition-colors duration-300 overflow-hidden shadow-[0_0_0_1px_rgba(245,244,249,0.05),0_12px_30px_rgba(0,0,0,0.35)]'
+        : 'group border border-edge bg-panel/20 hover:border-paper/25 transition-colors duration-300 overflow-hidden';
+
+    const roleClass = spotlight
+        ? 'font-mono text-[10px] tracking-[0.24em] uppercase text-paper/85 leading-snug min-h-[2.4rem]'
+        : 'mt-1 font-mono text-[10px] tracking-[0.2em] uppercase text-muted';
+    const bioClass = spotlight
+        ? 'font-body text-[11px] text-cream/70 leading-relaxed line-clamp-4'
+        : 'mt-2 font-body text-[11px] text-cream/50 leading-relaxed line-clamp-3';
+
     const inner = (
-        <div className="group border border-edge bg-panel/20 hover:border-paper/25 transition-colors duration-300 overflow-hidden">
+        <div className={`${cardClass} h-full flex flex-col`}>
             {/* Photo area */}
-            <div className="relative w-full aspect-3/4 bg-panel/40 overflow-hidden">
+            <div className="relative w-full aspect-3/4 bg-panel/40 overflow-hidden shrink-0">
+                {spotlight && (
+                    <div className="absolute top-2 left-2 z-10 font-mono text-[9px] tracking-[0.22em] uppercase text-paper/85 bg-void/60 border border-paper/25 px-2 py-1">
+                        Featured Speaker
+                    </div>
+                )}
                 {photo ? (
                     <img
                         src={photo}
@@ -52,16 +70,28 @@ function PersonCard({ name, handle, role, bio, photo, code, url }: PersonCardPro
             </div>
 
             {/* Text */}
-            <div className="p-4">
+            <div className="p-4 flex flex-col gap-2 grow">
                 <div className="flex items-baseline gap-2 flex-wrap">
                     <span className="font-display text-sm text-paper tracking-tight leading-tight">{name}</span>
                     {handle && (
                         <span className="font-mono text-[10px] text-paper/45 tracking-wider">&quot;{handle}&quot;</span>
                     )}
                 </div>
-                <div className="mt-1 font-mono text-[10px] tracking-[0.2em] uppercase text-muted">{role}</div>
+                <div className={roleClass}>{role}</div>
+                {spotlight && badges && badges.length > 0 && (
+                    <div className="min-h-[1.8rem] flex flex-wrap gap-1">
+                        {badges.map((badge) => (
+                            <span
+                                key={badge}
+                                className="inline-flex items-center px-2 py-0.5 border border-paper/20 bg-void/45 font-mono text-[9px] tracking-[0.16em] uppercase text-paper/75"
+                            >
+                                {badge}
+                            </span>
+                        ))}
+                    </div>
+                )}
                 {bio && (
-                    <p className="mt-2 font-body text-[11px] text-cream/50 leading-relaxed line-clamp-3">{bio}</p>
+                    <p className={bioClass}>{bio}</p>
                 )}
             </div>
         </div>
@@ -95,21 +125,34 @@ function OrganizerCards() {
 
 function SpeakerCards() {
     return (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {speakers.map((s: Speaker) => (
-                <PersonCard
-                    key={s.name}
-                    name={s.name}
-                    handle={s.handle}
-                    role={s.role}
-                    bio={s.bio}
-                    photo={s.photo}
-                    url={s.url}
-                />
-            ))}
-        </div>
+        <>
+            <p className="mb-5 font-body text-sm text-cream/70 max-w-3xl leading-relaxed">
+                Recon 2026 speakers include nationally recognized offensive security educators and practitioners from top teams across industry.
+            </p>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                {speakers.map((s: Speaker) => (
+                    <PersonCard
+                        key={s.name}
+                        name={s.name}
+                        handle={s.handle}
+                        role={s.role}
+                        bio={s.bio}
+                        badges={s.badges}
+                        photo={s.photo}
+                        url={s.url}
+                        spotlight
+                    />
+                ))}
+            </div>
+        </>
     );
 }
+
+const MENTOR_GROUP_ORDER = ['leadership', 'faculty'] as const;
+const MENTOR_GROUP_LABELS: Record<(typeof MENTOR_GROUP_ORDER)[number], string> = {
+    leadership: 'Management / Leadership',
+    faculty: 'Faculty',
+};
 
 function MentorCards() {
     const grouped = [
@@ -191,6 +234,7 @@ export default function Team() {
                         {active === 'Speakers' && <SpeakerCards />}
                         {active === 'Mentors' && <MentorCards />}
                         {active === 'Organizers' && <OrganizerCards />}
+                        {active === 'Mentors' && <MentorCards />}
                     </motion.div>
                 </AnimatePresence>
                 </div>

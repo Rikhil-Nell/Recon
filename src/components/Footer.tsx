@@ -60,7 +60,7 @@ export default function Footer() {
     const diag = useDiagnostics();
 
     return (
-        <footer className="relative z-10">
+        <footer id="site-footer" className="relative z-[55] bg-void">
             {/* Register CTA */}
             <Section className="py-24 px-6 text-center">
                 <div className="max-w-3xl mx-auto">
@@ -168,7 +168,7 @@ export default function Footer() {
             </div>
 
             {/* Trust center */}
-            <div className="border-t border-edge px-6 py-3">
+            <div className="border-t border-edge px-6 py-4 bg-dark/30">
                 <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
                     <div className="flex items-center gap-3">
                         <span className="w-1.5 h-1.5 rounded-full bg-paper/60 animate-[pulse-neon_2s_ease-in-out_infinite]" />
@@ -186,8 +186,13 @@ export default function Footer() {
             </div>
 
             {/* Bottom marquee */}
-            <div className="border-t border-edge/50">
-                <Marquee speed="fast" separator="||" items={['RECON PoC', 'HUNT', 'BREAK', 'DEFEND', 'VIT-AP', 'CTF', 'KOTH']} />
+            <div className="border-t border-edge/50 bg-dark/20 py-2">
+                <Marquee
+                    className="py-1"
+                    speed="fast"
+                    separator="||"
+                    items={['RECON PoC', 'HUNT', 'BREAK', 'DEFEND', 'VIT-AP', 'CTF', 'KOTH']}
+                />
             </div>
 
             {/* Copyright */}

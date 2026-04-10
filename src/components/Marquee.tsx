@@ -14,7 +14,12 @@ export default function Marquee({
     separator = '◆',
 }: MarqueeProps) {
     const animClass = speed === 'fast' ? 'animate-marquee-fast' : 'animate-marquee';
-    const row = items.map((item) => `${item}  ${separator}  `).join('');
+    const sourceItems = items.length > 0 ? items : marqueeItems;
+    const loopItems = [...sourceItems];
+    while (loopItems.length < 18) {
+        loopItems.push(...sourceItems);
+    }
+    const row = loopItems.map((item) => `${item}  ${separator}  `).join('');
     // If className includes text-void, use that; otherwise default to text-faint
     const textClass = className.includes('text-void')
         ? 'font-mono text-[11px] tracking-[0.3em] uppercase text-void/80'
@@ -22,11 +27,11 @@ export default function Marquee({
 
     return (
         <div className={`overflow-hidden whitespace-nowrap ${className}`} aria-hidden="true">
-            <div className={`inline-block ${animClass}`}>
-                <span className={textClass}>
+            <div className={`flex w-max will-change-transform ${animClass}`}>
+                <span className={`${textClass} block shrink-0`}>
                     {row}
                 </span>
-                <span className={textClass}>
+                <span className={`${textClass} block shrink-0`}>
                     {row}
                 </span>
             </div>
