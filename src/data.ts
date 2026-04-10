@@ -340,6 +340,27 @@ export const mentors: Mentor[] = [
         url: 'https://vitap.ac.in/School%20of%20Computer%20Science%20and%20Engineering%20(SCOPE)/faculty/kothandaraman.d',
     },
     {
+        name: 'Dr. Guruprakash Jayabalasamy',
+        role: 'Faculty — VIT-AP',
+        bio: 'Coordinator, RECON 2026.',
+        photo: '/people/Dr_Guruprakash_Jayabalasamy_70730_SCOPE_87c529ffc9.avif',
+        url: 'https://vitap.ac.in/School%20of%20Computer%20Science%20and%20Engineering%20(SCOPE)/faculty/guruprakash.jayabalasamy',
+    },
+    {
+        name: 'Dr. D. Santha Devi',
+        role: 'Faculty — VIT-AP',
+        bio: 'Coordinator, RECON 2026.',
+        photo: '/people/Dr_D_Santha_Devi_70602_IMG_4925_SCOPE_a9aff86f50.avif',
+        url: 'https://vitap.ac.in/School%20of%20Computer%20Science%20and%20Engineering%20(SCOPE)/faculty/santha.devi',
+    },
+    {
+        name: 'Dr. Sudha Ellison Mathe',
+        role: 'Faculty — VIT-AP',
+        bio: 'Coordinator, RECON 2026.',
+        photo: '/people/Dr_Sudha_Ellison_Mathe_70078_IMG_5140_SENSE_e65e618ff3.avif',
+        url: 'https://vitap.ac.in/School%20of%20Computer%20Science%20and%20Engineering%20(SCOPE)/faculty/sudha.ellison',
+    },
+    {
         name: 'Dr. Kumar Debasis',
         role: 'Faculty — VIT-AP',
         bio: 'Coordinator, RECON 2026.',

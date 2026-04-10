@@ -7,7 +7,7 @@
     "devCommand": "npm run dev",
     "headers": [
         {
-            "source": "/(.+\\.(?:png|jpg|jpeg|webp|svg|gif|ico|woff2|woff|ttf|otf))",
+            "source": "/(.+\\.(?:png|jpg|jpeg|webp|avif|svg|gif|ico|woff2|woff|ttf|otf))",
             "headers": [
                 {
                     "key": "Cache-Control",
