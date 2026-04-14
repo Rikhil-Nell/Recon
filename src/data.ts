@@ -393,7 +393,7 @@ export const partners: Partner[] = [
     { name: 'VIT-AP University', description: 'Host institution — VIT-AP University, Amaravati.', tier: 'title', logo: '/logos/vitap.webp', url: 'https://vitap.ac.in', size: 'lg', fix: 'brighten' },
     { name: 'APISec University', description: 'API security education platform.', value: '₹7,00,000', tier: 'title', logo: '/logos/apisec.webp', url: 'https://www.apisecuniversity.com', size: 'lg' },
     // Strategic
-    { name: 'Magsmen', description: 'Strategic partner — Strategy consultants.', tier: 'strategic', logo: '/logos/magsmen.webp', url: 'https://magsmen.com/', size: 'sm' },
+    { name: 'Magsmen', description: 'Strategic partner — Strategy consultants.', tier: 'strategic', logo: '/logos/magsmen.webp?v=20260414', url: 'https://magsmen.com/', size: 'sm' },
     // Technical
     { name: 'AWS', description: 'Technical partner — Amazon Web Services cloud infrastructure.', tier: 'technical', logo: '/logos/aws.webp', url: 'https://aws.amazon.com', size: 'md' },
     { name: 'Digital Fortress', description: 'Protect your digital world with password-less authentication.', tier: 'technical', logo: '/logos/df.webp', url: 'https://digitalfortress.in/', size: 'md', fix: 'glow' },
