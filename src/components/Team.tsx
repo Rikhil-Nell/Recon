@@ -142,11 +142,6 @@ function SpeakerCards() {
     );
 }
 
-const MENTOR_GROUP_ORDER = ['leadership', 'faculty'] as const;
-const MENTOR_GROUP_LABELS: Record<(typeof MENTOR_GROUP_ORDER)[number], string> = {
-    leadership: 'Management / Leadership',
-    faculty: 'Faculty',
-};
 
 function MentorCards() {
     const grouped = [
