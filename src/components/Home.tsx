@@ -18,11 +18,18 @@ const SIZE_CLASS: Record<NonNullable<Partner['size']>, string> = {
 /* ── Sponsor logo strip (Hacktron-style) ──────────────────────── */
 const HOST_INSTITUTION = 'VIT-AP University';
 const COLLABORATOR_NAMES = new Set(['IIT Madras']);
+const LANDING_COMMUNITY_PARTNERS = new Set(['HackTheBox Mumbai', 'BSides Vizag']);
+const LANDING_LOGO_SIZE_OVERRIDES: Record<string, string> = {
+    'HackTheBox Mumbai': 'max-h-14 md:max-h-16',
+    'BSides Vizag': 'max-h-14 md:max-h-16',
+};
 
 const hostInstitution = partners.find((p) => p.name === HOST_INSTITUTION);
 const collaboratorInstitutions = partners.filter((p) => COLLABORATOR_NAMES.has(p.name));
 const supportSponsors = partners.filter(
-    (p) => p.tier !== 'community' && p.name !== HOST_INSTITUTION && !COLLABORATOR_NAMES.has(p.name),
+    (p) => (p.tier !== 'community' || LANDING_COMMUNITY_PARTNERS.has(p.name))
+        && p.name !== HOST_INSTITUTION
+        && !COLLABORATOR_NAMES.has(p.name),
 );
 const LANDING_SPONSOR_LOGOS = [
     ...(hostInstitution ? [hostInstitution.logo] : []),
@@ -32,7 +39,7 @@ const LANDING_SPONSOR_LOGOS = [
 const logoWrapClass = 'group flex items-center justify-center px-2 py-2';
 
 function logoImgClass(partner: Partner) {
-    const size = SIZE_CLASS[partner.size ?? 'md'];
+    const size = LANDING_LOGO_SIZE_OVERRIDES[partner.name] ?? SIZE_CLASS[partner.size ?? 'md'];
     const base = `object-contain transition-all duration-200 opacity-85 group-hover:opacity-100 filter ${size}`;
     if (partner.fix === 'brighten') return `${base} brightness-130 contrast-115`;
     if (partner.fix === 'invert') return `${base} brightness-120 contrast-125`;

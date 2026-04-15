@@ -326,6 +326,13 @@ export const mentors: Mentor[] = [
         url: 'https://vitap.ac.in/School%20of%20Computer%20Science%20and%20Engineering%20(SCOPE)/faculty/nandha.r',
     },
     {
+        name: 'Dr. John Pradeep D',
+        role: 'Associate Professor Senior — School of Electronics Engineering (SENSE)',
+        bio: 'Mentor, RECON 2026.',
+        photo: 'https://vitap-backend.s3.ap-south-1.amazonaws.com/Dr_John_Pradeep_D_70007_IMG_4713_SENSE_9d6a075b3b.avif',
+        url: 'https://vitap.ac.in/School%20of%20Electronics%20Engineering%20(SENSE)/faculty/john.darsy',
+    },
+    {
         name: 'Dr. Varun Kumar K A',
         role: 'Faculty — VIT-AP',
         bio: 'Coordinator, RECON 2026.',
@@ -405,7 +412,7 @@ export const partners: Partner[] = [
     // Silver
     { name: 'Caido', description: 'Silver sponsor — next-gen web security testing proxy.', value: '₹1,02,000', tier: 'silver', logo: '/logos/caido.webp', url: 'https://caido.io', size: 'md', fix: 'invert' },
     { name: 'Hackviser', description: 'Silver sponsor — cybersecurity advisory & training.', tier: 'silver', logo: '/logos/hackviser.webp', url: 'https://hackviser.com', size: 'sm', fix: 'brighten' },
-    { name: 'Hacktronix', description: 'Silver sponsor — hardware hacking tools & education.', tier: 'silver', logo: '/logos/hacktronix.webp', url: 'https://hacktronics.co.in', size: 'lg' },
+    { name: 'Hacktronix', description: 'Silver sponsor — hardware hacking tools & education.', tier: 'silver', logo: '/logos/hacktronix.webp', url: 'https://hacktronix.in/', size: 'lg' },
     { name: 'TheXSSRat', description: 'Silver sponsor — bug bounty mentorship & community.', value: '₹3,27,000', tier: 'silver', logo: '/logos/thexssrat.webp', url: 'https://thexssrat.com', size: 'lg' },
     { name: '.xyz Domains', description: 'Silver sponsor — domain registrar for the next generation.', value: '₹35,000', tier: 'silver', logo: '/logos/xyz.webp', url: 'https://gen.xyz', size: 'sm', fix: 'invert' },
     // Community
@@ -414,7 +421,7 @@ export const partners: Partner[] = [
     { name: 'null', description: 'null, the open security community.', tier: 'community', logo: '/logos/null.webp', url: 'https://null.community', size: 'sm' },
     { name: 'OSC', description: 'Open Source Community.', tier: 'community', logo: '/logos/osc.webp', url: 'https://www.instagram.com/osc.vitap/', size: 'sm' },
     { name: 'OSEN', description: 'Community partner — open security education network.', tier: 'community', logo: '/logos/osen.webp', url: 'https://osen.in', size: 'lg' },
-    { name: 'OSMSEC', description: 'Community partner — open-source security collective.', tier: 'community', logo: '/logos/osmsec.webp', url: 'https://osmsec.com', size: 'sm' },
+    { name: 'OSMSEC', description: 'Silver sponsor — open-source security collective.', tier: 'silver', logo: '/logos/osmsec.webp', url: 'https://osmsec.com', size: 'sm' },
 ];
 
 export const communityPartners = [
