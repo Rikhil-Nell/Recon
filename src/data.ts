@@ -421,7 +421,7 @@ export const partners: Partner[] = [
     { name: 'null', description: 'null, the open security community.', tier: 'community', logo: '/logos/null.webp', url: 'https://null.community', size: 'sm' },
     { name: 'OSC', description: 'Open Source Community.', tier: 'community', logo: '/logos/osc.webp', url: 'https://www.instagram.com/osc.vitap/', size: 'sm' },
     { name: 'OSEN', description: 'Community partner — open security education network.', tier: 'community', logo: '/logos/osen.webp', url: 'https://osen.in', size: 'lg' },
-    { name: 'OSMSEC', description: 'Silver sponsor — open-source security collective.', tier: 'silver', logo: '/logos/osmsec.webp', url: 'https://osmsec.com', size: 'sm' },
+    { name: 'OSMSEC', description: 'Silver sponsor — open-source security collective.', tier: 'silver', logo: '/logos/osmsec.webp', url: 'https://osmsec.xyz', size: 'sm' },
 ];
 
 export const communityPartners = [
