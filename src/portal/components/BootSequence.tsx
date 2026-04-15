@@ -1,0 +1,43 @@
+import { useEffect, useMemo, useState } from 'react';
+
+interface BootSequenceProps {
+    lines: string[];
+    speed?: number;
+    className?: string;
+    onComplete?: () => void;
+}
+
+export default function BootSequence({
+    lines,
+    speed = 40,
+    className = '',
+    onComplete,
+}: BootSequenceProps) {
+    const [charCount, setCharCount] = useState(0);
+
+    const fullText = useMemo(() => lines.join('\n'), [lines]);
+
+    useEffect(() => {
+        const totalChars = fullText.length;
+        const id = window.setInterval(() => {
+            setCharCount((current) => {
+                const next = Math.min(totalChars, current + 1);
+                if (next >= totalChars) {
+                    clearInterval(id);
+                    onComplete?.();
+                }
+                return next;
+            });
+        }, speed);
+
+        return () => clearInterval(id);
+    }, [fullText, onComplete, speed]);
+
+    const visible = fullText.slice(0, charCount);
+
+    return (
+        <pre className={`font-portal-mono text-[10px] text-[color-mix(in_srgb,var(--amber)_42%,black_10%)] text-center tracking-[0.1em] whitespace-pre-wrap leading-5 ${className}`}>
+            {visible || '\u00A0'}
+        </pre>
+    );
+}

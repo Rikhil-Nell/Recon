@@ -395,6 +395,20 @@ export const mentors: Mentor[] = [
         photo: 'https://vitap-backend.s3.ap-south-1.amazonaws.com/Dr_E_Ajith_Jubilson_SCOPE_1956_20273c1217.avif',
         url: 'https://vitap.ac.in/School%20of%20Computer%20Science%20and%20Engineering%20(SCOPE)/faculty/ajith.jubilson',
     },
+    {
+        name: 'Dr. M. Krishnasamy',
+        role: 'Faculty — VIT-AP',
+        bio: 'Coordinator, RECON 2026.',
+        photo: '/people/Dr. M. Krishnasamy.webp',
+        url: 'https://vitap.ac.in/School%20of%20Electronics%20Engineering%20(SENSE)/faculty/krishnasamy',
+    },
+    {
+        name: 'Dr. Kankanala Srinivas',
+        role: 'Faculty — VIT-AP',
+        bio: 'Coordinator, RECON 2026.',
+        photo: '/people/Dr. Kankanala Srinivas.webp',
+        url: 'https://vitap.ac.in/School%20of%20Electronics%20Engineering%20(SENSE)/faculty/srinivas.kankanala',
+    },
 ];
 
 /* ── Partners ─────────────────────────────────────────────────── */

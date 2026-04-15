@@ -21,7 +21,7 @@ const FAQS: { category: string; items: FAQItem[] }[] = [
             },
             {
                 q: 'How do I register?',
-                a: 'Register via our official Luma page at luma.com/v933kdr1. After registration you\'ll receive a confirmation email with further onboarding details.',
+                a: 'Register through the Participant Portal at /login. Enter your email, verify with OTP, and complete your onboarding from the dashboard.',
             },
             {
                 q: 'Is there a registration fee?',

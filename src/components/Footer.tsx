@@ -72,14 +72,12 @@ export default function Footer() {
                         Registrations are live. Secure your spot at South India's largest campus cybersecurity event.
                     </p>
                     <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
-                        <a
-                            href="https://luma.com/v933kdr1"
-                            target="_blank"
-                            rel="noopener noreferrer"
+                        <Link
+                            to="/login"
                             className="font-mono text-xs tracking-[0.2em] uppercase px-8 py-3.5 bg-paper text-void hover:bg-cream transition-colors duration-200"
                         >
                             <ScrambleText text="Register Now" tag="span" speed={12} />
-                        </a>
+                        </Link>
                         <a
                             href="https://discord.gg/xJdRgYndSJ"
                             target="_blank"

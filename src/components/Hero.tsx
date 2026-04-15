@@ -79,14 +79,12 @@ export default function Hero() {
                     transition={{ duration: 0.5, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
                     className="mt-8 flex flex-col sm:flex-row gap-3"
                 >
-                    <a
-                        href="https://luma.com/v933kdr1"
-                        target="_blank"
-                        rel="noopener noreferrer"
+                    <Link
+                        to="/login"
                         className="font-mono text-xs tracking-[0.2em] uppercase px-6 py-3 bg-paper text-void hover:bg-cream transition-colors duration-200 text-center"
                     >
                         <ScrambleText text="Register Now" tag="span" speed={15} />
-                    </a>
+                    </Link>
                     <Link
                         to="/events"
                         className="font-mono text-xs tracking-[0.2em] uppercase px-6 py-3 border border-cream/30 text-cream/70 hover:border-paper/50 hover:text-paper transition-colors duration-200 text-center"
