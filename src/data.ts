@@ -326,6 +326,13 @@ export const mentors: Mentor[] = [
         url: 'https://vitap.ac.in/School%20of%20Computer%20Science%20and%20Engineering%20(SCOPE)/faculty/nandha.r',
     },
     {
+        name: 'Dr. Y. V. Pavan Kumar',
+        role: 'Dean, School of Electronics Engineering (SENSE) — VIT-AP',
+        bio: 'Dean of SENSE at VIT-AP. Mentor, RECON 2026.',
+        photo: 'https://vitap-backend.s3.ap-south-1.amazonaws.com/70049_Dr_Y_V_Pavan_Kumar_SENSE_1184_2954015774.avif',
+        url: 'https://vitap.ac.in/School%20of%20Electronics%20Engineering%20(SENSE)/faculty/pavankumar.yv',
+    },
+    {
         name: 'Dr. John Pradeep D',
         role: 'Associate Professor Senior — School of Electronics Engineering (SENSE)',
         bio: 'Mentor, RECON 2026.',
