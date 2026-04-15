@@ -100,7 +100,7 @@ export default function PortalToasts() {
     const mobile = !useMediaQuery('(min-width: 768px)');
 
     return (
-        <div className="fixed z-[9000] top-4 md:right-4 md:left-auto left-4 right-4 flex flex-col gap-2 max-w-sm md:w-sm pointer-events-none">
+        <div className="fixed z-[9000] top-[calc(env(safe-area-inset-top)+3.75rem)] md:top-[max(0.75rem,env(safe-area-inset-top))] md:right-4 md:left-auto left-3 right-3 sm:left-4 sm:right-4 flex flex-col gap-2 max-w-sm md:w-[22rem] pointer-events-none">
             {toasts.map((toast) => (
                 <div key={toast.id} className="pointer-events-auto">
                     <ToastRow toast={toast} mobile={mobile} />

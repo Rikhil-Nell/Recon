@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import PortalDiagnostics from '../components/PortalDiagnostics';
 import OtpInput from '../components/OtpInput';
 import { PrimaryButton } from '../components/primitives';
@@ -75,15 +75,23 @@ export default function VerifyPage() {
     };
 
     return (
-        <div className="min-h-screen bg-[var(--bg)] portal-grain relative px-6 flex flex-col items-center justify-center">
+        <div className="min-h-[100dvh] bg-[var(--bg)] portal-grain relative px-4 sm:px-6 py-8 sm:py-10 flex flex-col items-center justify-center overflow-y-auto">
+            <header className="fixed top-[max(0.75rem,env(safe-area-inset-top))] inset-x-0 z-[120] px-4 sm:px-6">
+                <div className="max-w-7xl mx-auto flex items-center justify-start">
+                    <Link to="/" className="font-display text-sm tracking-[0.3em] text-paper uppercase" aria-label="Go to RECON home page">
+                        RECON
+                    </Link>
+                </div>
+            </header>
+
             <div
                 ref={sweepRef}
                 className="fixed inset-0 z-[250] pointer-events-none bg-[var(--amber)]"
                 style={{ transform: 'scaleY(0)' }}
             />
 
-            <div className="w-full max-w-sm mt-8" data-portal-card>
-                <div className="portal-card px-8 py-10">
+            <div className="w-full max-w-md mt-6 sm:mt-8" data-portal-card>
+                <div className="portal-card px-5 py-8 sm:px-8 sm:py-10">
                     <div className="font-portal-mono text-[10px] tracking-[0.2em] uppercase text-[color-mix(in_srgb,var(--amber)_70%,black_10%)]">
                         CODE TRANSMITTED
                     </div>

@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import BootSequence from '../components/BootSequence';
 import PortalDiagnostics from '../components/PortalDiagnostics';
 import { PrimaryButton } from '../components/primitives';
@@ -60,11 +60,19 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="min-h-screen bg-[var(--bg)] portal-grain relative px-6 flex flex-col items-center justify-center">
+        <div className="min-h-[100dvh] bg-[var(--bg)] portal-grain relative px-4 sm:px-6 py-8 sm:py-10 flex flex-col items-center justify-center overflow-y-auto">
+            <header className="fixed top-[max(0.75rem,env(safe-area-inset-top))] inset-x-0 z-[120] px-4 sm:px-6">
+                <div className="max-w-7xl mx-auto flex items-center justify-start">
+                    <Link to="/" className="font-display text-sm tracking-[0.3em] text-paper uppercase" aria-label="Go to RECON home page">
+                        RECON
+                    </Link>
+                </div>
+            </header>
+
             <BootSequence lines={BOOT_LINES} speed={40} onComplete={() => setBootDone(true)} />
 
-            <div ref={formRef} className="w-full max-w-sm mt-8 opacity-0">
-                <div className="portal-card px-8 py-10">
+            <div ref={formRef} className="w-full max-w-md mt-6 sm:mt-8 opacity-0">
+                <div className="portal-card px-5 py-8 sm:px-8 sm:py-10">
                     <div className="font-portal-display text-[36px] leading-none text-[var(--fg)] tracking-[0.03em]">
                         RECON <span className="text-[var(--amber)]">2026</span>
                     </div>

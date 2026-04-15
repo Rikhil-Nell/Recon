@@ -33,10 +33,10 @@ export default function AnnouncementsPage() {
     }, [announcements, filter]);
 
     return (
-        <PortalPage className="pt-20 pb-24 lg:pb-8 px-4 lg:px-8 max-w-3xl mx-auto">
+        <PortalPage className="pt-20 pb-24 lg:pb-8 px-4 sm:px-5 lg:px-8 max-w-3xl mx-auto">
             <div data-portal-header>
                 <SectionLabel>-- COMMAND UPDATES --</SectionLabel>
-                <div className="font-portal-display text-[36px] leading-none text-[var(--fg)] mt-2">
+                <div className="font-portal-display text-[clamp(30px,8vw,36px)] leading-none text-[var(--fg)] mt-2">
                     ANNOUNCEMENTS
                 </div>
                 <div className="font-portal-mono text-[10px] tracking-[0.1em] text-[color-mix(in_srgb,var(--dim)_70%,white_8%)] mt-1">
@@ -69,13 +69,13 @@ export default function AnnouncementsPage() {
                     return (
                         <PortalCard
                             key={item.id}
-                            className={`px-5 py-5 ${
+                            className={`px-4 sm:px-5 py-4 sm:py-5 ${
                                 urgent
                                     ? 'border-l-[3px] border-l-[var(--portal-red)] bg-[color-mix(in_srgb,var(--portal-red)_4%,var(--surface))]'
                                     : ''
                             } ${isHighlighted ? 'border-[var(--amber)]' : ''}`}
                         >
-                            <div className="flex justify-between items-start gap-3 mb-3">
+                            <div className="flex flex-wrap justify-between items-start gap-3 mb-3">
                                 <div className="flex gap-2 flex-wrap">
                                     <ZoneTag
                                         className={

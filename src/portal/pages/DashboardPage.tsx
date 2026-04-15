@@ -101,13 +101,13 @@ export default function DashboardPage() {
     };
 
     return (
-        <PortalPage className="pt-20 pb-24 lg:pb-8 px-4 lg:px-8 max-w-5xl mx-auto">
-            <div className="flex items-start justify-between gap-4 mb-8" data-portal-header>
+        <PortalPage className="pt-20 pb-24 lg:pb-8 px-4 sm:px-5 lg:px-8 max-w-5xl mx-auto">
+            <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-4 mb-6 sm:mb-8" data-portal-header>
                 <div>
                     <div className="font-portal-mono text-[10px] tracking-[0.2em] uppercase text-[color-mix(in_srgb,var(--amber)_60%,black_18%)] mb-1">
                         WELCOME BACK, OPERATOR
                     </div>
-                    <div className="font-portal-display text-[clamp(32px,5vw,52px)] leading-none text-[var(--fg)] tracking-[0.03em]">
+                    <div className="font-portal-display text-[clamp(28px,8vw,52px)] leading-none text-[var(--fg)] tracking-[0.03em]">
                         {participant?.name}
                     </div>
                     <div className="font-portal-mono text-[10px] tracking-[0.12em] text-[color-mix(in_srgb,var(--dim)_70%,white_8%)] mt-1">
@@ -126,9 +126,19 @@ export default function DashboardPage() {
                 </PortalCard>
             </div>
 
+            <PortalCard className="lg:hidden px-4 py-3 mb-6" attr>
+                <div className="font-portal-mono text-[9px] tracking-[0.18em] text-[color-mix(in_srgb,var(--amber)_55%,black_18%)] uppercase mb-1">
+                    EVENT ENDS IN
+                </div>
+                <div className="font-portal-display text-[26px] leading-none text-[var(--fg)]">{timer}</div>
+                <div className="font-portal-mono text-[8px] tracking-[0.16em] text-[color-mix(in_srgb,var(--dim)_60%,white_8%)] mt-1 uppercase">
+                    HH:MM:SS
+                </div>
+            </PortalCard>
+
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
                 <PortalCard className="px-4 py-5 relative overflow-hidden" attr>
-                    <div className="font-portal-display text-[40px] leading-none text-[var(--amber)]">{displayPoints}</div>
+                    <div className="font-portal-display text-[32px] sm:text-[40px] leading-none text-[var(--amber)]">{displayPoints}</div>
                     {showDelta !== null && (
                         <div className="absolute right-4 top-3 text-[var(--amber)] font-portal-mono text-[10px] tracking-[0.14em] animate-points-up">
                             {showDelta > 0 ? `+${showDelta}` : showDelta} PTS
@@ -146,7 +156,7 @@ export default function DashboardPage() {
                 </PortalCard>
 
                 <PortalCard className="px-4 py-5" attr>
-                    <div className="font-portal-display text-[40px] leading-none text-[var(--fg)]">
+                    <div className="font-portal-display text-[32px] sm:text-[40px] leading-none text-[var(--fg)]">
                         {zonesVisited} / 11
                     </div>
                     <div className="font-portal-mono text-[9px] tracking-[0.15em] text-[color-mix(in_srgb,var(--dim)_68%,white_7%)] uppercase mt-2">
@@ -155,14 +165,14 @@ export default function DashboardPage() {
                 </PortalCard>
 
                 <PortalCard className="px-4 py-5" attr>
-                    <div className="font-portal-display text-[40px] leading-none text-[var(--fg)]">{registrations}</div>
+                    <div className="font-portal-display text-[32px] sm:text-[40px] leading-none text-[var(--fg)]">{registrations}</div>
                     <div className="font-portal-mono text-[9px] tracking-[0.15em] text-[color-mix(in_srgb,var(--dim)_68%,white_7%)] uppercase mt-2">
                         EVENTS REGISTERED
                     </div>
                 </PortalCard>
 
                 <PortalCard className="px-4 py-5" attr>
-                    <div className="font-portal-display text-[40px] leading-none text-[var(--amber)]">#{rank}</div>
+                    <div className="font-portal-display text-[32px] sm:text-[40px] leading-none text-[var(--amber)]">#{rank}</div>
                     <div className="font-portal-mono text-[9px] tracking-[0.15em] text-[color-mix(in_srgb,var(--dim)_68%,white_7%)] uppercase mt-2">
                         LEADERBOARD RANK
                     </div>
@@ -179,7 +189,7 @@ export default function DashboardPage() {
                             <button
                                 key={pass.zoneId}
                                 type="button"
-                                className="portal-card min-w-[180px] p-4 text-left"
+                                className="portal-card min-w-[170px] sm:min-w-[180px] p-4 text-left"
                                 onClick={() => setOpenPassZoneId(zone.id)}
                             >
                                 <ZoneTag>{zone.shortName}</ZoneTag>
@@ -202,7 +212,7 @@ export default function DashboardPage() {
             </div>
 
             <div className="mb-8" data-portal-card>
-                <div className="flex items-center justify-between gap-3">
+                <div className="flex flex-wrap items-center justify-between gap-3">
                     <SectionLabel>-- LATEST ANNOUNCEMENTS --</SectionLabel>
                     <Link
                         to="/announcements"
@@ -233,7 +243,7 @@ export default function DashboardPage() {
 
             <div data-portal-card>
                 <SectionLabel>-- QUICK ACTIONS --</SectionLabel>
-                <div className="grid grid-cols-2 gap-3 mt-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
                     {[
                         {
                             label: 'ZONES',
@@ -284,7 +294,7 @@ export default function DashboardPage() {
 
                 <button
                     type="button"
-                    className="mt-4 w-full min-h-11 border border-[color-mix(in_srgb,var(--amber)_45%,var(--border))] text-[var(--amber)] font-portal-mono text-[10px] tracking-[0.15em] uppercase hover:bg-[color-mix(in_srgb,var(--amber)_8%,transparent)]"
+                    className="mt-4 w-full min-h-11 border border-[color-mix(in_srgb,var(--amber)_45%,var(--border))] text-[var(--amber)] font-portal-mono text-[9px] sm:text-[10px] tracking-[0.14em] uppercase px-2 hover:bg-[color-mix(in_srgb,var(--amber)_8%,transparent)]"
                     onClick={onSimulateZoneUpdate}
                 >
                     SIMULATE ZONE CHECK-IN UPDATE (+POINTS)

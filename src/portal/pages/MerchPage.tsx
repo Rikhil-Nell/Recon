@@ -59,8 +59,8 @@ export default function MerchPage() {
     };
 
     return (
-        <PortalPage className="pt-20 pb-24 lg:pb-8 px-4 lg:px-8 max-w-5xl mx-auto">
-            <div className="flex justify-between items-start gap-4 mb-8" data-portal-header>
+        <PortalPage className="pt-20 pb-24 lg:pb-8 px-4 sm:px-5 lg:px-8 max-w-5xl mx-auto">
+            <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4 mb-8" data-portal-header>
                 <div>
                     <SectionLabel className="mb-2">-- RECON MERCHANDISE --</SectionLabel>
                     <div className="font-portal-display text-[clamp(32px,5vw,60px)] leading-[0.88] text-[var(--fg)]">
@@ -80,7 +80,7 @@ export default function MerchPage() {
                 </PortalCard>
             </div>
 
-            <PortalCard className="md:hidden px-4 py-3 mb-6 flex justify-between items-center" attr>
+            <PortalCard className="md:hidden px-4 py-3 mb-5 flex justify-between items-center" attr>
                 <div className="font-portal-mono text-[10px] tracking-[0.12em] uppercase text-[color-mix(in_srgb,var(--dim)_68%,white_7%)]">
                     AVAILABLE POINTS
                 </div>
@@ -89,13 +89,13 @@ export default function MerchPage() {
 
             <PortalCard className="px-4 py-4 mb-8 bg-[var(--surface)]" attr>
                 <SectionLabel className="mb-3">-- HOW TO EARN POINTS --</SectionLabel>
-                <div className="flex gap-6 overflow-x-auto pb-1">
+                <div className="flex gap-3 sm:gap-6 overflow-x-auto pb-1">
                     {[
                         { icon: Zap, text: 'Check in to zones -> 50 pts each' },
                         { icon: Trophy, text: 'Compete in CTF or KOTH -> 200 pts' },
                         { icon: Gift, text: 'Zone activities -> variable points' },
                     ].map(({ icon: Icon, text }) => (
-                        <div key={text} className="min-w-max text-center">
+                        <div key={text} className="min-w-[170px] sm:min-w-max text-center">
                             <Icon className="size-4 mx-auto text-[var(--amber)]" />
                             <div className="font-portal-mono text-[9px] tracking-[0.1em] text-[color-mix(in_srgb,var(--dim)_68%,white_7%)] uppercase mt-2">
                                 {text}
@@ -114,7 +114,7 @@ export default function MerchPage() {
 
                     return (
                         <PortalCard key={item.id} className="p-0 overflow-hidden">
-                            <div className="h-52 bg-[var(--surface-2)] relative" style={{ backgroundImage: merchPattern(item.id) }}>
+                            <div className="h-44 sm:h-52 bg-[var(--surface-2)] relative" style={{ backgroundImage: merchPattern(item.id) }}>
                                 <ZoneTag className="absolute top-3 right-3">
                                     {outOfStock
                                         ? 'SOLD OUT'

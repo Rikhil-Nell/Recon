@@ -29,7 +29,7 @@ export default function OtpInput({ value, onChange, disabled, error, success }: 
     };
 
     return (
-        <div className={`flex items-center justify-center gap-2 ${error ? 'otp-shake' : ''}`}>
+        <div className={`w-full max-w-[25rem] mx-auto grid grid-cols-8 items-center gap-1 sm:gap-2 ${error ? 'otp-shake' : ''}`}>
             {chars.map((char, index) => (
                 <input
                     key={index}
@@ -41,7 +41,7 @@ export default function OtpInput({ value, onChange, disabled, error, success }: 
                     maxLength={1}
                     inputMode="numeric"
                     autoComplete={index === 0 ? 'one-time-code' : 'off'}
-                    className={`w-11 h-[52px] border bg-[var(--bg)] text-center font-portal-display text-[28px] text-[var(--fg)] outline-none transition-colors focus:border-[var(--amber)] ${
+                    className={`w-full max-w-11 h-11 sm:h-[52px] justify-self-center border bg-[var(--bg)] text-center font-portal-display text-[22px] sm:text-[28px] leading-none text-[var(--fg)] outline-none transition-colors focus:border-[var(--amber)] ${
                         success
                             ? 'border-[var(--portal-green)]'
                             : error
