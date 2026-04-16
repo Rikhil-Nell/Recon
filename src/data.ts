@@ -55,6 +55,9 @@ export interface Partner {
 }
 
 /* ── Stats ────────────────────────────────────────────────────── */
+export const EVENT_DATE_RANGE_READABLE = '19th to 21st April 2026';
+export const EVENT_DATE_RANGE_LABEL = '19-21 APR 2026';
+
 export const stats = [
     { label: 'Prize Pool', value: 1.5, prefix: '₹', suffix: 'M+', display: '₹1.5M+' },
     { label: 'Hackers', value: 600, suffix: '+', display: '600+' },
@@ -453,6 +456,7 @@ export const communityPartners = [
 /* ── Marquee strings ──────────────────────────────────────────── */
 export const marqueeItems = [
     'RECON 2026',
+    EVENT_DATE_RANGE_LABEL,
     'VIT-AP UNIVERSITY',
     'HUNT. BREAK. DEFEND.',
     '₹1.5M + PRIZE POOL',

@@ -4,6 +4,7 @@ import { Section, Label } from './ui';
 import GlyphGrid from './GlyphGrid';
 import Marquee from './Marquee';
 import ScrambleText from './ScrambleText';
+import { EVENT_DATE_RANGE_LABEL, EVENT_DATE_RANGE_READABLE } from '../data';
 
 function useDiagnostics() {
     const [data, setData] = useState<Record<string, string>>({});
@@ -69,7 +70,7 @@ export default function Footer() {
                         Ready to <span className="text-paper/80">breach the perimeter?</span>
                     </h2>
                     <p className="mt-4 font-body text-sm text-muted max-w-lg mx-auto">
-                        Registrations are live. Secure your spot at South India's largest campus cybersecurity event.
+                        Registrations are live for {EVENT_DATE_RANGE_READABLE}. Secure your spot at South India's largest campus cybersecurity event.
                     </p>
                     <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
                         <Link
@@ -189,7 +190,7 @@ export default function Footer() {
                     className="py-1"
                     speed="fast"
                     separator="||"
-                    items={['RECON PoC', 'HUNT', 'BREAK', 'DEFEND', 'VIT-AP', 'CTF', 'KOTH']}
+                    items={['RECON PoC', EVENT_DATE_RANGE_LABEL, 'HUNT', 'BREAK', 'DEFEND', 'VIT-AP', 'CTF', 'KOTH']}
                 />
             </div>
 
