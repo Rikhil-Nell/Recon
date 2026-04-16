@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { CheckCircle2 } from 'lucide-react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { QRCodeSVG } from 'qrcode.react';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
 import PortalPage from '../components/PortalPage';
 import PortalModal from '../components/PortalModal';
 import QrPassModal from '../components/QrPassModal';
@@ -24,6 +25,8 @@ export default function ZoneDetailPage() {
     const [registerStage, setRegisterStage] = useState<RegisterStage>('confirm');
     const [modalOpen, setModalOpen] = useState(false);
     const [qrFullOpen, setQrFullOpen] = useState(false);
+    const isSmallScreen = useMediaQuery('(max-width: 480px)');
+    const qrSize = isSmallScreen ? 170 : 200;
 
     const qr = zone ? qrCodes.find((item) => item.zoneId === zone.id) : null;
     const related = useMemo(() => {
@@ -43,7 +46,7 @@ export default function ZoneDetailPage() {
     const isChecked = qr?.checkedIn || qr?.isActive === false;
 
     return (
-        <PortalPage className="pt-20 pb-24 px-4 lg:px-8 max-w-3xl mx-auto">
+        <PortalPage className="pt-20 pb-24 px-4 sm:px-5 lg:px-8 max-w-3xl mx-auto">
             <Link
                 to="/zones"
                 className="inline-block mb-8 font-portal-mono text-[10px] tracking-[0.12em] uppercase text-[var(--amber)] hover:underline"
@@ -53,18 +56,18 @@ export default function ZoneDetailPage() {
             </Link>
 
             <PortalCard className="p-0 overflow-hidden mb-6" attr>
-                <div className="relative h-48 bg-[var(--surface-2)] overflow-hidden">
+                <div className="relative h-44 sm:h-48 bg-[var(--surface-2)] overflow-hidden">
                     <ZonePattern zoneId={zone.id} />
                     <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[var(--surface)]" />
                 </div>
-                <div className="px-6 py-6 flex flex-col lg:flex-row gap-6">
+                <div className="px-4 sm:px-6 py-6 flex flex-col lg:flex-row gap-6">
                     <div className="flex-1 min-w-0">
                         <div className="flex flex-wrap gap-2 mb-3">
                             {zone.tags.map((tag) => (
                                 <ZoneTag key={tag}>{tag}</ZoneTag>
                             ))}
                         </div>
-                        <div className="font-portal-display text-[40px] leading-[0.9] text-[var(--fg)] uppercase tracking-[0.03em]">
+                        <div className="font-portal-display text-[32px] sm:text-[40px] leading-[0.9] text-[var(--fg)] uppercase tracking-[0.03em]">
                             {zone.name}
                         </div>
                         <div className="font-portal-body text-[14px] leading-[1.8] text-[color-mix(in_srgb,var(--dim)_74%,white_8%)] mt-3">
@@ -72,7 +75,7 @@ export default function ZoneDetailPage() {
                         </div>
                     </div>
 
-                    <PortalCard className="bg-[var(--bg)] p-4 min-w-[190px]">
+                    <PortalCard className="bg-[var(--bg)] p-4 w-full lg:min-w-[190px]">
                         {[
                             ['FORMAT', zone.format ?? 'MIXED'],
                             ['DURATION', zone.duration ?? 'FLEX'],
@@ -94,12 +97,12 @@ export default function ZoneDetailPage() {
                         ))}
                     </PortalCard>
                 </div>
-                <div className="px-6 pb-6 font-portal-mono text-[9px] tracking-[0.1em] text-[color-mix(in_srgb,var(--dim)_66%,white_6%)] uppercase">
+                <div className="px-4 sm:px-6 pb-6 font-portal-mono text-[9px] tracking-[0.1em] text-[color-mix(in_srgb,var(--dim)_66%,white_6%)] uppercase">
                     ● {zone.registeredCount} OPERATORS REGISTERED
                 </div>
             </PortalCard>
 
-            <PortalCard className="p-6 mb-6 text-center" attr>
+            <PortalCard className="p-5 sm:p-6 mb-6 text-center" attr>
                 <SectionLabel className="mb-3">-- ENTRY PASS --</SectionLabel>
 
                 {!isRegistered && (
@@ -115,7 +118,7 @@ export default function ZoneDetailPage() {
                 {isRegistered && !isChecked && qr && (
                     <>
                         <div className="inline-block border border-[var(--border)] p-4 bg-white mb-4">
-                            <QRCodeSVG value={`${zone.name}:${qr.code}`} size={200} bgColor="#ffffff" fgColor="#111111" />
+                            <QRCodeSVG value={`${zone.name}:${qr.code}`} size={qrSize} bgColor="#ffffff" fgColor="#111111" />
                         </div>
                         <div className="font-portal-mono text-[11px] tracking-[0.1em] text-[var(--fg)] uppercase">
                             {zone.name}

@@ -33,10 +33,10 @@ export default function MapPage() {
     };
 
     return (
-        <PortalPage className="pt-20 pb-24 lg:pb-8 px-4 lg:px-8">
+        <PortalPage className="pt-20 pb-24 lg:pb-8 px-4 sm:px-5 lg:px-8">
             <div className="max-w-6xl mx-auto" data-portal-header>
                 <SectionLabel>-- CAMPUS MAP // VIT-AP CENTRAL BLOCK --</SectionLabel>
-                <div className="font-portal-display text-[36px] leading-none text-[var(--fg)] mt-2">
+                <div className="font-portal-display text-[clamp(30px,8vw,36px)] leading-none text-[var(--fg)] mt-2">
                     ZONE <span className="text-[var(--amber)]">MAP</span>
                 </div>
                 <div className="font-portal-mono text-[10px] tracking-[0.1em] text-[color-mix(in_srgb,var(--dim)_70%,white_8%)] mt-2">
@@ -50,7 +50,7 @@ export default function MapPage() {
                         </span>
                         <button
                             type="button"
-                            className="min-h-11 px-4 border border-[var(--border)] font-portal-mono text-[10px] tracking-[0.12em] uppercase text-[var(--amber)]"
+                            className="w-full sm:w-auto min-h-11 px-4 border border-[var(--border)] font-portal-mono text-[10px] tracking-[0.12em] uppercase text-[var(--amber)]"
                             onClick={requestLocation}
                         >
                             {'ENABLE ->'}
@@ -58,7 +58,7 @@ export default function MapPage() {
                     </div>
                 )}
 
-                <PortalCard className="p-0 overflow-hidden mt-6 mb-6 relative h-[60vh] min-h-[300px] max-h-[500px]" attr>
+                <PortalCard className="p-0 overflow-hidden mt-6 mb-6 relative h-[56svh] sm:h-[60vh] min-h-[260px] sm:min-h-[300px] max-h-[520px]" attr>
                     <iframe
                         src={mapSrc}
                         title="VIT-AP Zone Map"
@@ -71,13 +71,13 @@ export default function MapPage() {
                     <button
                         type="button"
                         onClick={requestLocation}
-                        className="absolute bottom-4 left-4 min-h-11 px-3 py-2 border border-[var(--border)] bg-[color-mix(in_srgb,var(--bg)_90%,transparent)] text-[var(--amber)] font-portal-mono text-[10px] tracking-[0.12em] uppercase inline-flex items-center gap-2"
+                        className="absolute bottom-3 left-3 right-3 sm:right-auto sm:bottom-4 sm:left-4 min-h-11 px-3 py-2 border border-[var(--border)] bg-[color-mix(in_srgb,var(--bg)_90%,transparent)] text-[var(--amber)] font-portal-mono text-[10px] tracking-[0.12em] uppercase inline-flex items-center justify-center sm:justify-start gap-2"
                     >
                         <Navigation2 className="size-3.5" />
                         LOCATE ME
                     </button>
 
-                    <PortalCard className="absolute top-4 left-4 bg-[color-mix(in_srgb,var(--bg)_90%,transparent)] p-3 max-w-[180px]">
+                    <PortalCard className="absolute top-3 left-3 sm:top-4 sm:left-4 bg-[color-mix(in_srgb,var(--bg)_90%,transparent)] p-2 sm:p-3 max-w-[160px] sm:max-w-[180px]">
                         <div className="font-portal-mono text-[8px] tracking-[0.16em] text-[color-mix(in_srgb,var(--amber)_60%,black_10%)] uppercase mb-2">
                             ACTIVE ZONES
                         </div>
@@ -102,27 +102,27 @@ export default function MapPage() {
                 <div className="space-y-2" data-portal-card>
                     {ZONES.map((zone) => (
                         <PortalCard key={zone.id} className="px-4 py-4">
-                            <div className="flex gap-4 items-center">
-                                <span className="size-2.5 shrink-0" style={{ backgroundColor: zone.color }} />
-                                <div className="flex-1 min-w-0">
-                                    <div className="font-portal-mono text-[11px] tracking-[0.08em] text-[var(--fg)] uppercase">
-                                        {zone.name}
-                                    </div>
-                                    <div className="font-portal-mono text-[9px] tracking-[0.09em] text-[color-mix(in_srgb,var(--dim)_68%,white_7%)] uppercase mt-1">
-                                        {zone.location}
+                            <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+                                <div className="flex w-full items-center gap-3 sm:gap-4 min-w-0">
+                                    <span className="size-2.5 shrink-0" style={{ backgroundColor: zone.color }} />
+                                    <div className="flex-1 min-w-0">
+                                        <div className="font-portal-mono text-[11px] tracking-[0.08em] text-[var(--fg)] uppercase">
+                                            {zone.name}
+                                        </div>
+                                        <div className="font-portal-mono text-[9px] tracking-[0.09em] text-[color-mix(in_srgb,var(--dim)_68%,white_7%)] uppercase mt-1">
+                                            {zone.location}
+                                        </div>
                                     </div>
                                 </div>
-                                <div className="hidden sm:block">
-                                    <StatusPill
-                                        tone={zone.status === 'open' ? 'blue' : zone.status === 'soon' ? 'amber' : 'red'}
-                                        label={zone.status.toUpperCase()}
-                                    />
-                                </div>
+                                <StatusPill
+                                    tone={zone.status === 'open' ? 'blue' : zone.status === 'soon' ? 'amber' : 'red'}
+                                    label={zone.status.toUpperCase()}
+                                />
                                 <a
                                     href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(`VIT-AP ${zone.location}`)}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="font-portal-mono text-[9px] tracking-[0.11em] text-[var(--amber)] uppercase hover:underline whitespace-nowrap"
+                                    className="font-portal-mono text-[9px] tracking-[0.11em] text-[var(--amber)] uppercase hover:underline whitespace-nowrap self-start sm:self-auto sm:ml-auto"
                                 >
                                     {'GET DIRECTIONS ->'}
                                 </a>

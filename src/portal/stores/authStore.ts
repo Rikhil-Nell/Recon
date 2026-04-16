@@ -30,7 +30,7 @@ export const useAuthStore = create<AuthState>()(
     persist(
         (set, get) => ({
             ...baseState,
-            setEmail: (email) => set({ email }),
+            setEmail: (email) => set({ email, isVerified: false }),
             completeVerification: () => {
                 const { email, participant } = get();
                 set({

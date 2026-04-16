@@ -25,12 +25,16 @@ export default function PortalModal({ open, title, onClose, children }: PortalMo
 
     return (
         <div
-            className="fixed inset-0 z-[200] bg-black/70 backdrop-blur-sm flex items-center justify-center px-4"
+            className="fixed inset-0 z-[200] bg-black/70 backdrop-blur-sm flex items-end sm:items-center justify-center px-3 sm:px-4 pt-6 pb-[max(0.75rem,env(safe-area-inset-bottom))] sm:pb-6"
             onClick={onClose}
             role="dialog"
             aria-modal="true"
         >
-            <div ref={cardRef} className="portal-card w-full max-w-sm p-6 bg-[var(--surface)]" onClick={(event) => event.stopPropagation()}>
+            <div
+                ref={cardRef}
+                className="portal-card w-full max-w-md p-4 sm:p-6 bg-[var(--surface)] max-h-[calc(100dvh-2rem)] sm:max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain"
+                onClick={(event) => event.stopPropagation()}
+            >
                 <div className="flex items-center justify-between gap-3">
                     <div className="font-portal-mono text-[10px] tracking-[0.18em] uppercase text-[color-mix(in_srgb,var(--amber)_65%,black_20%)]">
                         {title}

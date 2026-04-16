@@ -44,7 +44,7 @@ export default function PortalLayout() {
     }, [addToast, announcements, navigate, setHighlightedAnnouncement]);
 
     return (
-        <div className="min-h-screen bg-[var(--bg)] text-[var(--fg)] portal-grain">
+        <div className="min-h-[100dvh] bg-[var(--bg)] text-[var(--fg)] portal-grain overflow-x-hidden">
             <PortalNavigation />
             <PortalToasts />
             <PortalDiagnostics />
