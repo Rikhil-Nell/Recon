@@ -48,12 +48,12 @@ export default function Navbar() {
                             <ScrambleText text={label} tag="span" speed={12} />
                         </Link>
                     ))}
-                    <Link
-                        to="/login"
+                    <a
+                        href="https://luma.com/v933kdr1"
                         className="font-mono text-[11px] tracking-[0.2em] uppercase px-4 py-1.5 border border-paper/30 text-paper hover:bg-paper/10 transition-colors duration-200"
                     >
                         <ScrambleText text="Register" tag="span" speed={12} />
-                    </Link>
+                    </a>
                 </div>
 
                 {/* Mobile burger */}
@@ -101,12 +101,12 @@ export default function Navbar() {
                             >
                                 Contact
                             </Link>
-                            <Link
-                                to="/login"
+                            <a
+                                href="https://luma.com/v933kdr1"
                                 className="font-mono text-xs tracking-[0.2em] uppercase px-4 py-2 border border-paper/30 text-paper text-center hover:bg-paper/10 transition-colors mt-2"
                             >
                                 Register
-                            </Link>
+                            </a>
 
                             {/* Social links */}
                             <div className="pt-4 border-t border-edge/50">

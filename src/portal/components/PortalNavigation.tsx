@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Bell, Home, Map, ShoppingBag, User2, Zap } from 'lucide-react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import gsap from 'gsap';
 import { useAuthStore } from '../stores/authStore';
 import { useAnnouncementStore } from '../stores/announcementStore';
@@ -25,6 +25,7 @@ const MOBILE_ITEMS = [
 
 export default function PortalNavigation() {
     const navigate = useNavigate();
+    const { pathname } = useLocation();
     const participant = useAuthStore((state) => state.participant);
     const signOut = useAuthStore((state) => state.signOut);
     const pointsPulseTick = useAuthStore((state) => state.pointsPulseTick);
@@ -34,6 +35,7 @@ export default function PortalNavigation() {
     const resetAnnouncements = useAnnouncementStore((state) => state.resetAnnouncements);
     const [menuOpen, setMenuOpen] = useState(false);
     const pointsRef = useRef<HTMLDivElement>(null);
+    const menuRef = useRef<HTMLDivElement>(null);
 
     const hasUrgentUnread = useMemo(
         () => announcements.some((item) => item.priority === 'URGENT' && item.unread),
@@ -55,18 +57,41 @@ export default function PortalNavigation() {
         );
     }, [pointsPulseTick]);
 
+    useEffect(() => {
+        setMenuOpen(false);
+    }, [pathname]);
+
+    useEffect(() => {
+        if (!menuOpen) return;
+
+        const onPointerDown = (event: MouseEvent | TouchEvent) => {
+            const target = event.target as Node | null;
+            if (!menuRef.current || !target || menuRef.current.contains(target)) return;
+            setMenuOpen(false);
+        };
+
+        document.addEventListener('mousedown', onPointerDown);
+        document.addEventListener('touchstart', onPointerDown, { passive: true });
+        return () => {
+            document.removeEventListener('mousedown', onPointerDown);
+            document.removeEventListener('touchstart', onPointerDown);
+        };
+    }, [menuOpen]);
+
     const initial = participant?.name?.[0]?.toUpperCase() ?? 'A';
 
     return (
         <>
-            <header className="fixed top-0 inset-x-0 z-50 h-14 border-b border-[var(--border-dim)] bg-[rgba(8,8,7,0.95)] backdrop-blur-md px-4 lg:px-8">
+            <header className="fixed top-0 inset-x-0 z-50 h-14 sm:h-16 border-b border-[var(--border-dim)] bg-[rgba(8,8,7,0.95)] backdrop-blur-md px-3 sm:px-4 lg:px-8">
                 <div className="h-full max-w-6xl mx-auto flex items-center justify-between gap-3">
                     <button type="button" className="text-left" onClick={() => navigate('/dashboard')}>
-                        <div className="font-portal-display text-[20px] leading-none tracking-[0.04em] text-[var(--fg)]">
+                        <div className="font-portal-display text-[18px] sm:text-[20px] leading-none tracking-[0.04em] text-[var(--fg)]">
                             RECON <span className="text-[var(--amber)]">2026</span>
                         </div>
                         <div className="font-portal-mono text-[8px] tracking-[0.22em] uppercase text-[color-mix(in_srgb,var(--dim)_70%,white_8%)]">
                             PARTICIPANT PORTAL // {EVENT_DATE_RANGE_LABEL}
+                        <div className="hidden sm:block font-portal-mono text-[8px] tracking-[0.22em] uppercase text-[color-mix(in_srgb,var(--dim)_70%,white_8%)]">
+                            PARTICIPANT PORTAL
                         </div>
                     </button>
 
@@ -89,13 +114,13 @@ export default function PortalNavigation() {
                     </nav>
 
                     <div className="flex items-center gap-2">
-                        <div ref={pointsRef} className="flex items-center gap-2 min-h-11 px-2.5">
-                            <span className="size-1.5 rounded-full bg-[var(--amber)]" />
+                        <div ref={pointsRef} className="flex items-center gap-1.5 sm:gap-2 min-h-11 px-1.5 sm:px-2.5">
+                            <span className="size-1.5 rounded-full bg-[var(--amber)] hidden sm:inline-block" />
                             <div className="leading-none">
-                                <div className="font-portal-display text-[18px] text-[var(--amber)]">
+                                <div className="font-portal-display text-[16px] sm:text-[18px] text-[var(--amber)]">
                                     {participant?.points ?? 0}
                                 </div>
-                                <div className="font-portal-mono text-[9px] tracking-[0.2em] text-[color-mix(in_srgb,var(--dim)_75%,white_7%)]">
+                                <div className="font-portal-mono text-[8px] sm:text-[9px] tracking-[0.18em] text-[color-mix(in_srgb,var(--dim)_75%,white_7%)]">
                                     PTS
                                 </div>
                             </div>
@@ -115,18 +140,18 @@ export default function PortalNavigation() {
                             )}
                         </button>
 
-                        <div className="relative">
+                        <div ref={menuRef} className="relative">
                             <button
                                 type="button"
                                 onClick={() => setMenuOpen((value) => !value)}
-                                className="size-8 border border-[var(--border)] bg-[var(--surface)] text-[var(--amber)] font-portal-mono text-[11px] uppercase inline-flex items-center justify-center"
+                                className="min-h-11 min-w-11 border border-[var(--border)] bg-[var(--surface)] text-[var(--amber)] font-portal-mono text-[11px] uppercase inline-flex items-center justify-center"
                                 aria-label="Open participant menu"
                             >
                                 {initial}
                             </button>
 
                             {menuOpen && (
-                                <div className="absolute right-0 mt-2 w-52 portal-card p-3 bg-[var(--surface-2)] z-[120]">
+                                <div className="absolute right-0 mt-2 w-[min(15rem,calc(100vw-2rem))] portal-card p-3 bg-[var(--surface-2)] z-[120]">
                                     <div className="font-portal-mono text-[10px] text-[var(--amber)] tracking-[0.18em] uppercase">
                                         {participant?.name ?? 'Participant'}
                                     </div>

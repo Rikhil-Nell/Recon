@@ -313,21 +313,7 @@ export const mentors: Mentor[] = [
         photo: 'https://vitap-backend.s3.ap-south-1.amazonaws.com/Dr_Hari_Seetha_SCOPE_0741_2b647e6904.avif',
         url: 'https://vitap.ac.in/School%20of%20Computer%20Science%20and%20Engineering%20(SCOPE)/faculty/seetha.hari',
     },
-    // Coordinators
-    {
-        name: 'Dr. Ganesh Reddy Karri',
-        role: 'Faculty — VIT-AP',
-        bio: 'Coordinator, RECON 2026.',
-        photo: 'https://vitap-backend.s3.ap-south-1.amazonaws.com/Dr_Ganesh_Reddy_Karri_70140_IMG_4952_SCOPE_3e82aa165c.avif',
-        url: 'https://vitap.ac.in/School%20of%20Computer%20Science%20and%20Engineering%20(SCOPE)/faculty/ganesh.reddy',
-    },
-    {
-        name: 'Dr. Nandha Kumar R',
-        role: 'Faculty — VIT-AP',
-        bio: 'Coordinator, RECON 2026.',
-        photo: 'https://vitap-backend.s3.ap-south-1.amazonaws.com/Dr_R_Nandha_Kumar_IMG_6597_SCOPE_36b1aaa52e.avif',
-        url: 'https://vitap.ac.in/School%20of%20Computer%20Science%20and%20Engineering%20(SCOPE)/faculty/nandha.r',
-    },
+    // Academic leadership
     {
         name: 'Dr. Y. V. Pavan Kumar',
         role: 'Dean, School of Electronics Engineering (SENSE) — VIT-AP',
@@ -341,6 +327,49 @@ export const mentors: Mentor[] = [
         bio: 'Mentor, RECON 2026.',
         photo: 'https://vitap-backend.s3.ap-south-1.amazonaws.com/Dr_John_Pradeep_D_70007_IMG_4713_SENSE_9d6a075b3b.avif',
         url: 'https://vitap.ac.in/School%20of%20Electronics%20Engineering%20(SENSE)/faculty/john.darsy',
+    },
+    {
+        name: 'Dr. Srinivasa Reddy Konda',
+        role: 'Assistant Director, CDC — VIT-AP',
+        bio: 'Mentor, RECON 2026.',
+        photo: 'https://vitap-backend.s3.ap-south-1.amazonaws.com/70517_Dr_Srinivasa_Reddy_Konda_SCOPE_1251_c51ac3591e.avif',
+        url: 'https://vitap.ac.in/cdc-office',
+    },
+    // Coordinators
+    {
+        name: 'Dr. Ajith Jubilson',
+        role: 'Faculty — VIT-AP',
+        bio: 'Coordinator, RECON 2026.',
+        photo: 'https://vitap-backend.s3.ap-south-1.amazonaws.com/Dr_E_Ajith_Jubilson_SCOPE_1956_20273c1217.avif',
+        url: 'https://vitap.ac.in/School%20of%20Computer%20Science%20and%20Engineering%20(SCOPE)/faculty/ajith.jubilson',
+    },
+    {
+        name: 'Dr. D. Santha Devi',
+        role: 'Faculty — VIT-AP',
+        bio: 'Coordinator, RECON 2026.',
+        photo: '/people/Dr_D_Santha_Devi_70602_IMG_4925_SCOPE_a9aff86f50.avif',
+        url: 'https://vitap.ac.in/School%20of%20Computer%20Science%20and%20Engineering%20(SCOPE)/faculty/santha.devi',
+    },
+    {
+        name: 'Dr. Ganesh Reddy Karri',
+        role: 'Faculty — VIT-AP',
+        bio: 'Coordinator, RECON 2026.',
+        photo: 'https://vitap-backend.s3.ap-south-1.amazonaws.com/Dr_Ganesh_Reddy_Karri_70140_IMG_4952_SCOPE_3e82aa165c.avif',
+        url: 'https://vitap.ac.in/School%20of%20Computer%20Science%20and%20Engineering%20(SCOPE)/faculty/ganesh.reddy',
+    },
+    {
+        name: 'Dr. Guruprakash Jayabalasamy',
+        role: 'Faculty — VIT-AP',
+        bio: 'Coordinator, RECON 2026.',
+        photo: '/people/Dr_Guruprakash_Jayabalasamy_70730_SCOPE_87c529ffc9.avif',
+        url: 'https://vitap.ac.in/School%20of%20Computer%20Science%20and%20Engineering%20(SCOPE)/faculty/guruprakash.jayabalasamy',
+    },
+    {
+        name: 'Dr. Kankanala Srinivas',
+        role: 'Faculty — VIT-AP',
+        bio: 'Coordinator, RECON 2026.',
+        photo: '/people/Dr. Kankanala Srinivas.webp',
+        url: 'https://vitap.ac.in/School%20of%20Electronics%20Engineering%20(SENSE)/faculty/srinivas.kankanala',
     },
     {
         name: 'Dr. Varun Kumar K A',
@@ -357,46 +386,11 @@ export const mentors: Mentor[] = [
         url: 'https://vitap.ac.in/School%20of%20Computer%20Science%20and%20Engineering%20(SCOPE)/faculty/kothandaraman.d',
     },
     {
-        name: 'Dr. Guruprakash Jayabalasamy',
-        role: 'Faculty — VIT-AP',
-        bio: 'Coordinator, RECON 2026.',
-        photo: '/people/Dr_Guruprakash_Jayabalasamy_70730_SCOPE_87c529ffc9.avif',
-        url: 'https://vitap.ac.in/School%20of%20Computer%20Science%20and%20Engineering%20(SCOPE)/faculty/guruprakash.jayabalasamy',
-    },
-    {
-        name: 'Dr. D. Santha Devi',
-        role: 'Faculty — VIT-AP',
-        bio: 'Coordinator, RECON 2026.',
-        photo: '/people/Dr_D_Santha_Devi_70602_IMG_4925_SCOPE_a9aff86f50.avif',
-        url: 'https://vitap.ac.in/School%20of%20Computer%20Science%20and%20Engineering%20(SCOPE)/faculty/santha.devi',
-    },
-    {
-        name: 'Dr. Sudha Ellison Mathe',
-        role: 'Faculty — VIT-AP',
-        bio: 'Coordinator, RECON 2026.',
-        photo: '/people/Dr_Sudha_Ellison_Mathe_70078_IMG_5140_SENSE_e65e618ff3.avif',
-        url: 'https://vitap.ac.in/School%20of%20Computer%20Science%20and%20Engineering%20(SCOPE)/faculty/sudha.ellison',
-    },
-    {
         name: 'Dr. Kumar Debasis',
         role: 'Faculty — VIT-AP',
         bio: 'Coordinator, RECON 2026.',
         photo: 'https://vitap-backend.s3.ap-south-1.amazonaws.com/70151_Dr_Kumar_Debasis_SCOPE_1288_d8423a5417.avif',
         url: 'https://vitap.ac.in/School%20of%20Computer%20Science%20and%20Engineering%20(SCOPE)/faculty/kumar.debasis',
-    },
-    {
-        name: 'Dr. Thangam S',
-        role: 'Faculty — VIT-AP',
-        bio: 'Coordinator, RECON 2026.',
-        photo: 'https://vitap-backend.s3.ap-south-1.amazonaws.com/Dr_THANGAM_SIVANANTHAM_SCOPE_995e08ebc2.avif',
-        url: 'https://vitap.ac.in/School%20of%20Computer%20Science%20and%20Engineering%20(SCOPE)/faculty/thangam.s',
-    },
-    {
-        name: 'Dr. Ajith Jubilson',
-        role: 'Faculty — VIT-AP',
-        bio: 'Coordinator, RECON 2026.',
-        photo: 'https://vitap-backend.s3.ap-south-1.amazonaws.com/Dr_E_Ajith_Jubilson_SCOPE_1956_20273c1217.avif',
-        url: 'https://vitap.ac.in/School%20of%20Computer%20Science%20and%20Engineering%20(SCOPE)/faculty/ajith.jubilson',
     },
     {
         name: 'Dr. M. Krishnasamy',
@@ -406,11 +400,25 @@ export const mentors: Mentor[] = [
         url: 'https://vitap.ac.in/School%20of%20Electronics%20Engineering%20(SENSE)/faculty/krishnasamy',
     },
     {
-        name: 'Dr. Kankanala Srinivas',
+        name: 'Dr. Nandha Kumar R',
         role: 'Faculty — VIT-AP',
         bio: 'Coordinator, RECON 2026.',
-        photo: '/people/Dr. Kankanala Srinivas.webp',
-        url: 'https://vitap.ac.in/School%20of%20Electronics%20Engineering%20(SENSE)/faculty/srinivas.kankanala',
+        photo: 'https://vitap-backend.s3.ap-south-1.amazonaws.com/Dr_R_Nandha_Kumar_IMG_6597_SCOPE_36b1aaa52e.avif',
+        url: 'https://vitap.ac.in/School%20of%20Computer%20Science%20and%20Engineering%20(SCOPE)/faculty/nandha.r',
+    },
+    {
+        name: 'Dr. Sudha Ellison Mathe',
+        role: 'Faculty — VIT-AP',
+        bio: 'Coordinator, RECON 2026.',
+        photo: '/people/Dr_Sudha_Ellison_Mathe_70078_IMG_5140_SENSE_e65e618ff3.avif',
+        url: 'https://vitap.ac.in/School%20of%20Computer%20Science%20and%20Engineering%20(SCOPE)/faculty/sudha.ellison',
+    },
+    {
+        name: 'Dr. Thangam S',
+        role: 'Faculty — VIT-AP',
+        bio: 'Coordinator, RECON 2026.',
+        photo: 'https://vitap-backend.s3.ap-south-1.amazonaws.com/Dr_THANGAM_SIVANANTHAM_SCOPE_995e08ebc2.avif',
+        url: 'https://vitap.ac.in/School%20of%20Computer%20Science%20and%20Engineering%20(SCOPE)/faculty/thangam.s',
     },
 ];
 

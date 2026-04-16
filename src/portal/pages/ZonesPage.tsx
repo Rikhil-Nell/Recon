@@ -85,7 +85,7 @@ export default function ZonesPage() {
 
         if (state === 'B' && qr) {
             return (
-                <div className="flex items-center justify-between gap-3">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between items-start gap-2 sm:gap-3">
                     <StatusPill tone="amber" label="REGISTERED" />
                     <button
                         type="button"
@@ -148,7 +148,7 @@ export default function ZonesPage() {
                         <div className="grid lg:grid-cols-2 gap-4 mb-12">
                             {flagshipZones.map((zone) => (
                                 <PortalCard key={zone.id} className="p-0 overflow-hidden">
-                                    <div className="bg-[color-mix(in_srgb,var(--amber)_10%,transparent)] px-5 py-4 border-b border-[var(--border-dim)] flex justify-between items-start gap-3">
+                                    <div className="bg-[color-mix(in_srgb,var(--amber)_10%,transparent)] px-4 sm:px-5 py-4 border-b border-[var(--border-dim)] flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3">
                                         <div className="flex flex-wrap gap-2">
                                             {zone.tags.map((tag) => (
                                                 <ZoneTag key={tag}>{tag}</ZoneTag>
@@ -160,7 +160,7 @@ export default function ZonesPage() {
                                         />
                                     </div>
 
-                                    <div className="px-5 py-5">
+                                    <div className="px-4 sm:px-5 py-5">
                                         <div className="font-portal-display text-[32px] leading-[0.9] text-[var(--fg)] tracking-[0.03em] uppercase">
                                             {zone.name}
                                         </div>
@@ -189,7 +189,7 @@ export default function ZonesPage() {
                                         </div>
                                     </div>
 
-                                    <div className="px-5 py-4 border-t border-[var(--border-dim)]">
+                                    <div className="px-4 sm:px-5 py-4 border-t border-[var(--border-dim)]">
                                         {renderAction(zone)}
                                     </div>
                                 </PortalCard>
