@@ -5,6 +5,7 @@ import gsap from 'gsap';
 import { useAuthStore } from '../stores/authStore';
 import { useAnnouncementStore } from '../stores/announcementStore';
 import { useZoneStore } from '../stores/zoneStore';
+import { EVENT_DATE_RANGE_LABEL } from '../lib/data';
 
 const NAV_ITEMS = [
     { to: '/dashboard', label: 'DASHBOARD' },
@@ -87,6 +88,8 @@ export default function PortalNavigation() {
                         <div className="font-portal-display text-[18px] sm:text-[20px] leading-none tracking-[0.04em] text-[var(--fg)]">
                             RECON <span className="text-[var(--amber)]">2026</span>
                         </div>
+                        <div className="font-portal-mono text-[8px] tracking-[0.22em] uppercase text-[color-mix(in_srgb,var(--dim)_70%,white_8%)]">
+                            PARTICIPANT PORTAL // {EVENT_DATE_RANGE_LABEL}
                         <div className="hidden sm:block font-portal-mono text-[8px] tracking-[0.22em] uppercase text-[color-mix(in_srgb,var(--dim)_70%,white_8%)]">
                             PARTICIPANT PORTAL
                         </div>

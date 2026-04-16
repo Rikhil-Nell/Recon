@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import PortalDiagnostics from '../components/PortalDiagnostics';
 import OtpInput from '../components/OtpInput';
 import { PrimaryButton } from '../components/primitives';
+import { EVENT_DATE_RANGE_LABEL } from '../lib/data';
 import { maskEmail } from '../lib/utils';
 import { useAuthStore } from '../stores/authStore';
 
@@ -98,6 +99,9 @@ export default function VerifyPage() {
 
                     <div className="mt-2 font-portal-mono text-[10px] tracking-[0.08em] text-[color-mix(in_srgb,var(--dim)_72%,white_8%)] leading-relaxed">
                         Access code sent to: {maskEmail(email || 'operator@domain.com')}
+                    </div>
+                    <div className="mt-2 font-portal-mono text-[9px] tracking-[0.16em] uppercase text-[color-mix(in_srgb,var(--amber)_60%,black_12%)]">
+                        {EVENT_DATE_RANGE_LABEL} // VIT-AP
                     </div>
 
                     <div className="h-px bg-[var(--border-dim)] my-6" />

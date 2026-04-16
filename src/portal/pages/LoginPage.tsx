@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import BootSequence from '../components/BootSequence';
 import PortalDiagnostics from '../components/PortalDiagnostics';
 import { PrimaryButton } from '../components/primitives';
+import { EVENT_DATE_RANGE_LABEL } from '../lib/data';
 import { useAuthStore } from '../stores/authStore';
 
 const BOOT_LINES = [
@@ -78,6 +79,9 @@ export default function LoginPage() {
                     </div>
                     <div className="mt-2 font-portal-mono text-[10px] tracking-[0.2em] uppercase text-[color-mix(in_srgb,var(--dim)_76%,white_6%)]">
                         PARTICIPANT CLEARANCE PORTAL
+                    </div>
+                    <div className="mt-2 font-portal-mono text-[9px] tracking-[0.16em] uppercase text-[color-mix(in_srgb,var(--amber)_62%,black_12%)]">
+                        {EVENT_DATE_RANGE_LABEL} // VIT-AP
                     </div>
 
                     <div className="h-px bg-[var(--border-dim)] my-6" />

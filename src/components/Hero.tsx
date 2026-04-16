@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import GlyphGrid from './GlyphGrid';
 import ScrambleText from './ScrambleText';
+import { EVENT_DATE_RANGE_LABEL } from '../data';
 
 export default function Hero() {
     const sectionRef = useRef<HTMLElement>(null);
@@ -69,7 +70,7 @@ export default function Hero() {
                         <span className="text-paper/80">Defend.</span>
                     </h1>
                     <p className="mt-5 font-body text-sm md:text-base text-cream/70 max-w-lg leading-relaxed">
-                        South India's premier campus cybersecurity event. Three days of CTFs, attack-defence, hardware hacking, and more.
+                        South India's premier campus cybersecurity event at VIT-AP University. Three days of CTFs, attack-defence, hardware hacking, and more.
                     </p>
                 </motion.div>
 
@@ -100,6 +101,10 @@ export default function Hero() {
                     <GlyphGrid type="blocks" cols={8} rows={2} className="opacity-30 hidden sm:block" />
                 </div>
             </motion.div>
+
+            <div className="absolute bottom-6 md:bottom-18 right-4 sm:right-6 z-10 font-mono text-[11px] md:text-xs tracking-[0.22em] uppercase text-paper/70 text-right">
+                {EVENT_DATE_RANGE_LABEL}
+            </div>
         </section>
     );
 }
