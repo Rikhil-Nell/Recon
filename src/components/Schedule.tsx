@@ -1,14 +1,68 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { EVENT_DATE_RANGE_READABLE, schedule } from '../data';
+import { EVENT_DATE_RANGE_READABLE, schedule as fallbackSchedule } from '../data';
 import { Section, Label } from './ui';
 import ScrambleText from './ScrambleText';
 import Seo from './Seo';
+import { scheduleApi } from '../api/backend';
 
-const DAYS = Object.keys(schedule);
+type ScheduleMap = Record<string, { time: string; title: string; description: string; accent?: boolean }[]>;
+
+function getDayLabel(iso: string) {
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return 'Day 1';
+    return `Day ${d.getDate()}`;
+}
+
+function getTimeLabel(iso: string) {
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return '--:--';
+    return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+}
+
+const FALLBACK_DAYS = Object.keys(fallbackSchedule);
 
 export default function Schedule() {
-    const [active, setActive] = useState(DAYS[0]);
+    const [scheduleMap, setScheduleMap] = useState<ScheduleMap>(fallbackSchedule);
+    const [active, setActive] = useState(FALLBACK_DAYS[0]);
+
+    const DAYS = useMemo(() => Object.keys(scheduleMap), [scheduleMap]);
+
+    useEffect(() => {
+        let alive = true;
+        (async () => {
+            try {
+                const sessions = await scheduleApi.listSessions();
+                if (!alive || !Array.isArray(sessions) || sessions.length === 0) return;
+
+                const next: ScheduleMap = {};
+                sessions.forEach((session) => {
+                    const startsAt = String(session.starts_at ?? '');
+                    const day = getDayLabel(startsAt);
+                    if (!next[day]) next[day] = [];
+                    next[day].push({
+                        time: getTimeLabel(startsAt),
+                        title: String(session.title ?? 'Untitled Session'),
+                        description: String(session.description ?? ''),
+                        accent: String(session.session_type ?? '').toLowerCase().includes('competition'),
+                    });
+                });
+
+                Object.values(next).forEach((items) => {
+                    items.sort((a, b) => a.time.localeCompare(b.time));
+                });
+
+                setScheduleMap(next);
+                const firstDay = Object.keys(next).sort()[0];
+                if (firstDay) setActive(firstDay);
+            } catch {
+                // keep fallback schedule on fetch error
+            }
+        })();
+        return () => {
+            alive = false;
+        };
+    }, []);
 
     return (
         <>
@@ -56,7 +110,7 @@ export default function Schedule() {
                         transition={{ duration: 0.3 }}
                         className="space-y-0"
                     >
-                        {schedule[active].map((item, i) => (
+                        {(scheduleMap[active] || []).map((item, i) => (
                             <div
                                 key={i}
                                 className={`flex gap-4 md:gap-6 py-4 border-b border-edge/50 group hover:bg-panel/20 transition-colors px-2 ${item.accent ? 'border-l-2 border-l-paper/50' : ''

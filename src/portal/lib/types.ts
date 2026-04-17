@@ -56,11 +56,11 @@ export interface Announcement {
 
 export interface Participant {
     id: string;
-    name: string;
     email: string;
-    registrationId: string;
-    points: number;
-    checkedInZones: string[];
+    displayName: string;
+    registrationId?: string | null;
+    points?: number | null;
+    checkedInZones?: string[];
 }
 
 export interface ZoneQrCode {

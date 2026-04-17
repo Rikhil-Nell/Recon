@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { team, speakers, mentors, managementLeadership, type TeamMember, type Speaker, type Mentor } from '../data';
 import { Section, Label } from './ui';
 import ScrambleText from './ScrambleText';
 import Seo from './Seo';
+import { scheduleApi } from '../api/backend';
 
 const TABS = ['Speakers', 'Organizers', 'Mentors'] as const;
 type Tab = typeof TABS[number];
@@ -122,10 +123,10 @@ function OrganizerCards() {
     );
 }
 
-function SpeakerCards() {
+function SpeakerCards({ speakerItems }: { speakerItems: Speaker[] }) {
     return (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            {speakers.map((s: Speaker) => (
+            {speakerItems.map((s: Speaker) => (
                 <PersonCard
                     key={s.name}
                     name={s.name}
@@ -181,6 +182,28 @@ function MentorCards() {
 
 export default function Team() {
     const [active, setActive] = useState<Tab>('Speakers');
+    const [speakerItems, setSpeakerItems] = useState<Speaker[]>(speakers);
+
+    useEffect(() => {
+        let alive = true;
+        (async () => {
+            try {
+                const apiSpeakers = await scheduleApi.listSpeakers();
+                if (!alive || !Array.isArray(apiSpeakers) || apiSpeakers.length === 0) return;
+                const mapped: Speaker[] = apiSpeakers.map((s) => ({
+                    name: String(s.name ?? 'Unknown Speaker'),
+                    role: String(s.org ?? 'Guest Speaker'),
+                    bio: String(s.bio ?? ''),
+                }));
+                setSpeakerItems(mapped);
+            } catch {
+                // keep fallback speakers when endpoint is unavailable
+            }
+        })();
+        return () => {
+            alive = false;
+        };
+    }, []);
 
     return (
         <>
@@ -220,7 +243,7 @@ export default function Team() {
                         exit={{ opacity: 0, y: -12 }}
                         transition={{ duration: 0.25 }}
                     >
-                        {active === 'Speakers' && <SpeakerCards />}
+                        {active === 'Speakers' && <SpeakerCards speakerItems={speakerItems} />}
                         {active === 'Organizers' && <OrganizerCards />}
                         {active === 'Mentors' && <MentorCards />}
                     </motion.div>

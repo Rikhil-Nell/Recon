@@ -1,13 +1,17 @@
 import { useEffect, useMemo, useState } from 'react';
-import { ChevronRight, CheckCircle2 } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { QRCodeSVG } from 'qrcode.react';
 import gsap from 'gsap';
 import PortalPage from '../components/PortalPage';
 import QrPassModal from '../components/QrPassModal';
 import { PortalCard, SectionLabel, StatusPill, ZoneTag } from '../components/primitives';
-import { EVENT_END_ISO, ZONES } from '../lib/data';
+import { EVENT_END_ISO } from '../lib/data';
+import type { Zone } from '../lib/types';
 import { formatCountdown } from '../lib/utils';
+import { mapBackendZoneToPortalZone } from '../lib/zonesCatalog';
+import { fetchZonesCatalog } from '../api/zones';
+import { getApiErrorMessage } from '../lib/apiErrorMessage';
 import { useAnnouncementStore } from '../stores/announcementStore';
 import { useAuthStore } from '../stores/authStore';
 import { useToastStore } from '../stores/toastStore';
@@ -18,21 +22,37 @@ const MAX_POINTS = 1000;
 export default function DashboardPage() {
     const navigate = useNavigate();
     const participant = useAuthStore((state) => state.participant);
-    const addPoints = useAuthStore((state) => state.addPoints);
-    const addCheckedInZone = useAuthStore((state) => state.addCheckedInZone);
-    const lastPointsDelta = useAuthStore((state) => state.lastPointsDelta);
-    const clearPointsDelta = useAuthStore((state) => state.clearPointsDelta);
     const registeredZones = useZoneStore((state) => state.registeredZones);
     const qrCodes = useZoneStore((state) => state.qrCodes);
-    const markCheckedIn = useZoneStore((state) => state.markCheckedIn);
     const announcements = useAnnouncementStore((state) => state.announcements);
     const unreadCount = useAnnouncementStore((state) => state.unreadCount);
     const addToast = useToastStore((state) => state.addToast);
 
+    const [zones, setZones] = useState<Zone[]>([]);
     const [timer, setTimer] = useState('00:00:00');
     const [displayPoints, setDisplayPoints] = useState(0);
     const [openPassZoneId, setOpenPassZoneId] = useState<string | null>(null);
-    const [showDelta, setShowDelta] = useState<number | null>(null);
+
+    useEffect(() => {
+        let alive = true;
+        (async () => {
+            try {
+                const catalog = await fetchZonesCatalog();
+                if (!alive) return;
+                setZones(catalog.map(mapBackendZoneToPortalZone));
+            } catch (err) {
+                if (!alive) return;
+                addToast({
+                    type: 'error',
+                    title: 'ZONES UNAVAILABLE',
+                    body: getApiErrorMessage(err, 'Unable to load zone names for passes.'),
+                });
+            }
+        })();
+        return () => {
+            alive = false;
+        };
+    }, [addToast]);
 
     useEffect(() => {
         const tick = () => {
@@ -55,50 +75,18 @@ export default function DashboardPage() {
         });
     }, [participant?.points]);
 
-    useEffect(() => {
-        if (!lastPointsDelta) return;
-        setShowDelta(lastPointsDelta);
-        const id = window.setTimeout(() => {
-            setShowDelta(null);
-            clearPointsDelta();
-        }, 1000);
-        return () => clearTimeout(id);
-    }, [clearPointsDelta, lastPointsDelta]);
-
-    const activePasses = useMemo(
-        () => qrCodes.filter((code) => registeredZones.includes(code.zoneId)),
-        [qrCodes, registeredZones],
-    );
+    const activePasses = useMemo(() => {
+        if (!qrCodes.length) return [];
+        if (!registeredZones.length) return qrCodes;
+        return qrCodes.filter((code) => registeredZones.includes(code.zoneId));
+    }, [qrCodes, registeredZones]);
 
     const openPass = activePasses.find((item) => item.zoneId === openPassZoneId);
-    const openZone = ZONES.find((zone) => zone.id === openPassZoneId);
+    const openZone = zones.find((zone) => zone.id === openPassZoneId);
 
-    const zonesVisited = participant?.checkedInZones.length ?? 0;
+    const zonesVisited = participant?.checkedInZones?.length ?? 0;
     const registrations = registeredZones.length;
-    const rank = 42;
-
-    const onSimulateZoneUpdate = () => {
-        const next = qrCodes.find((code) => code.isActive);
-        if (!next) {
-            addToast({
-                type: 'info',
-                title: 'NO PENDING CHECK-INS',
-                body: 'All active entry passes are already marked as checked in.',
-            });
-            return;
-        }
-        const zone = ZONES.find((item) => item.id === next.zoneId);
-        if (!zone) return;
-
-        markCheckedIn(zone.id);
-        addCheckedInZone(zone.id);
-        addPoints(zone.points);
-        addToast({
-            type: 'success',
-            title: 'CHECK-IN CONFIRMED',
-            body: `${zone.name} updated. +${zone.points} PTS added to your account.`,
-        });
-    };
+    const rankLabel = '--';
 
     return (
         <PortalPage className="pt-20 pb-24 lg:pb-8 px-4 sm:px-5 lg:px-8 max-w-5xl mx-auto">
@@ -108,11 +96,17 @@ export default function DashboardPage() {
                         WELCOME BACK, OPERATOR
                     </div>
                     <div className="font-portal-display text-[clamp(28px,8vw,52px)] leading-none text-[var(--fg)] tracking-[0.03em]">
-                        {participant?.name}
+                        {participant?.displayName ?? 'OPERATOR'}
                     </div>
                     <div className="font-portal-mono text-[10px] tracking-[0.12em] text-[color-mix(in_srgb,var(--dim)_70%,white_8%)] mt-1">
-                        ID: {participant?.registrationId} // STATUS: ACTIVE
+                        ID: {participant?.registrationId ?? '---'} // STATUS: ACTIVE
                     </div>
+                    <Link
+                        to="/settings"
+                        className="inline-block mt-3 font-portal-mono text-[9px] tracking-[0.2em] uppercase text-[color-mix(in_srgb,var(--amber)_85%,black_10%)] hover:text-[var(--amber)] transition-colors"
+                    >
+                        PROFILE & SESSION →
+                    </Link>
                 </div>
 
                 <PortalCard className="hidden lg:block px-4 py-3" attr>
@@ -139,11 +133,6 @@ export default function DashboardPage() {
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
                 <PortalCard className="px-4 py-5 relative overflow-hidden" attr>
                     <div className="font-portal-display text-[32px] sm:text-[40px] leading-none text-[var(--amber)]">{displayPoints}</div>
-                    {showDelta !== null && (
-                        <div className="absolute right-4 top-3 text-[var(--amber)] font-portal-mono text-[10px] tracking-[0.14em] animate-points-up">
-                            {showDelta > 0 ? `+${showDelta}` : showDelta} PTS
-                        </div>
-                    )}
                     <div className="font-portal-mono text-[9px] tracking-[0.15em] text-[color-mix(in_srgb,var(--dim)_68%,white_7%)] uppercase mt-2">
                         TOTAL POINTS
                     </div>
@@ -172,7 +161,7 @@ export default function DashboardPage() {
                 </PortalCard>
 
                 <PortalCard className="px-4 py-5" attr>
-                    <div className="font-portal-display text-[32px] sm:text-[40px] leading-none text-[var(--amber)]">#{rank}</div>
+                    <div className="font-portal-display text-[32px] sm:text-[40px] leading-none text-[var(--amber)]">#{rankLabel}</div>
                     <div className="font-portal-mono text-[9px] tracking-[0.15em] text-[color-mix(in_srgb,var(--dim)_68%,white_7%)] uppercase mt-2">
                         LEADERBOARD RANK
                     </div>
@@ -182,22 +171,33 @@ export default function DashboardPage() {
             <div className="mb-8" data-portal-card>
                 <SectionLabel>-- ACTIVE ENTRY PASSES --</SectionLabel>
                 <div className="mt-3 flex gap-3 overflow-x-auto pb-2">
+                    {activePasses.length === 0 && (
+                        <PortalCard className="px-4 py-4 min-w-[260px]" attr>
+                            <div className="font-portal-mono text-[10px] tracking-[0.14em] uppercase text-[color-mix(in_srgb,var(--dim)_72%,white_8%)]">
+                                NO ACTIVE PASSES
+                            </div>
+                            <div className="font-portal-body text-[13px] leading-relaxed text-[color-mix(in_srgb,var(--dim)_75%,white_8%)] mt-2">
+                                Your entry passes will appear here once zone registration is connected.
+                            </div>
+                        </PortalCard>
+                    )}
                     {activePasses.map((pass) => {
-                        const zone = ZONES.find((item) => item.id === pass.zoneId);
-                        if (!zone) return null;
+                        const zone = zones.find((item) => item.id === pass.zoneId);
+                        const label = zone?.name ?? 'ZONE';
+                        const short = zone?.shortName ?? 'ZONE';
                         return (
                             <button
                                 key={pass.zoneId}
                                 type="button"
                                 className="portal-card min-w-[170px] sm:min-w-[180px] p-4 text-left"
-                                onClick={() => setOpenPassZoneId(zone.id)}
+                                onClick={() => setOpenPassZoneId(pass.zoneId)}
                             >
-                                <ZoneTag>{zone.shortName}</ZoneTag>
+                                <ZoneTag>{short}</ZoneTag>
                                 <div className="font-portal-mono text-[11px] mt-2 text-[var(--fg)] tracking-[0.08em] uppercase">
-                                    {zone.name}
+                                    {label}
                                 </div>
                                 <div className="mt-3 inline-block border border-[var(--border)] bg-white p-2">
-                                    <QRCodeSVG value={`${zone.name}:${pass.code}`} size={100} bgColor="#ffffff" fgColor="#111111" />
+                                    <QRCodeSVG value={`${label}:${pass.code}`} size={100} bgColor="#ffffff" fgColor="#111111" />
                                 </div>
                                 <div className="mt-3">
                                     <StatusPill tone={pass.isActive ? 'green' : 'red'} label={pass.isActive ? 'VALID' : 'USED'} />
@@ -291,20 +291,12 @@ export default function DashboardPage() {
                         </button>
                     ))}
                 </div>
-
-                <button
-                    type="button"
-                    className="mt-4 w-full min-h-11 border border-[color-mix(in_srgb,var(--amber)_45%,var(--border))] text-[var(--amber)] font-portal-mono text-[9px] sm:text-[10px] tracking-[0.14em] uppercase px-2 hover:bg-[color-mix(in_srgb,var(--amber)_8%,transparent)]"
-                    onClick={onSimulateZoneUpdate}
-                >
-                    SIMULATE ZONE CHECK-IN UPDATE (+POINTS)
-                </button>
             </div>
 
-            {openPass && openZone && (
+            {openPass && (
                 <QrPassModal
                     open={Boolean(openPassZoneId)}
-                    zoneName={openZone.name}
+                    zoneName={openZone?.name ?? 'ENTRY PASS'}
                     code={openPass.code}
                     active={openPass.isActive}
                     onClose={() => setOpenPassZoneId(null)}

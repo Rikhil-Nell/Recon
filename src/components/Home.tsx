@@ -1,13 +1,14 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useInView } from 'framer-motion';
 import Hero from './Hero';
 import Marquee from './Marquee';
 import { Label } from './ui';
-import { stats, partners, type Partner } from '../data';
+import { stats, partners as fallbackPartners, type Partner } from '../data';
 import { useCountUp } from '../hooks';
 import ScrambleText from './ScrambleText';
 import Seo from './Seo';
 import { DEFAULT_DESCRIPTION, DEFAULT_IMAGE, SITE_NAME, SITE_URL } from '../seo';
+import { partnersApi } from '../api/backend';
 
 const SIZE_CLASS: Record<NonNullable<Partner['size']>, string> = {
     sm: 'max-h-8',
@@ -24,18 +25,6 @@ const LANDING_LOGO_SIZE_OVERRIDES: Record<string, string> = {
     'BSides Vizag': 'max-h-14 md:max-h-16',
 };
 
-const hostInstitution = partners.find((p) => p.name === HOST_INSTITUTION);
-const collaboratorInstitutions = partners.filter((p) => COLLABORATOR_NAMES.has(p.name));
-const supportSponsors = partners.filter(
-    (p) => (p.tier !== 'community' || LANDING_COMMUNITY_PARTNERS.has(p.name))
-        && p.name !== HOST_INSTITUTION
-        && !COLLABORATOR_NAMES.has(p.name),
-);
-const LANDING_SPONSOR_LOGOS = [
-    ...(hostInstitution ? [hostInstitution.logo] : []),
-    ...collaboratorInstitutions.map((p) => p.logo),
-    ...supportSponsors.map((p) => p.logo),
-];
 const logoWrapClass = 'group flex items-center justify-center px-2 py-2';
 
 function logoImgClass(partner: Partner) {
@@ -46,7 +35,15 @@ function logoImgClass(partner: Partner) {
     if (partner.fix === 'glow') return `${base} brightness-120 contrast-120 drop-shadow-[0_0_6px_rgba(245,244,249,0.35)] drop-shadow-[0_0_2px_rgba(245,244,249,0.7)]`;
     return `${base} brightness-110 contrast-110`;
 }
-function SponsorStrip() {
+function SponsorStrip({ partnersData }: { partnersData: Partner[] }) {
+    const hostInstitution = partnersData.find((p) => p.name === HOST_INSTITUTION);
+    const collaboratorInstitutions = partnersData.filter((p) => COLLABORATOR_NAMES.has(p.name));
+    const supportSponsors = partnersData.filter(
+        (p) => (p.tier !== 'community' || LANDING_COMMUNITY_PARTNERS.has(p.name))
+            && p.name !== HOST_INSTITUTION
+            && !COLLABORATOR_NAMES.has(p.name),
+    );
+
     return (
         <section className="relative z-10 border-y border-edge px-6 py-14">
             <div className="max-w-6xl mx-auto">
@@ -217,14 +214,59 @@ function AboutSection() {
 
 /* ── Home page ────────────────────────────────────────────────── */
 export default function Home() {
+    const [partnersData, setPartnersData] = useState<Partner[]>(fallbackPartners);
+
     useEffect(() => {
+        let alive = true;
+        (async () => {
+            try {
+                const apiPartners = await partnersApi.list();
+                if (!alive || !Array.isArray(apiPartners) || apiPartners.length === 0) return;
+                const mapped = apiPartners.map((p) => {
+                    const tier = String(p.sponsorship_type ?? '').toLowerCase();
+                    const normalizedTier: Partner['tier'] =
+                        tier === 'title' || tier === 'co-title' || tier === 'strategic' || tier === 'technical' || tier === 'gold' || tier === 'silver' || tier === 'community'
+                            ? tier
+                            : 'community';
+                    return {
+                        name: String(p.company_name ?? 'Partner'),
+                        description: String(p.offering_writeup ?? ''),
+                        tier: normalizedTier,
+                        logo: '/logos/recon_transparent.svg',
+                        url: String(p.company_website ?? '#'),
+                        size: 'md' as const,
+                    };
+                });
+                setPartnersData(mapped);
+            } catch {
+                // Keep static data if endpoint is auth-protected.
+            }
+        })();
+        return () => {
+            alive = false;
+        };
+    }, []);
+
+    useEffect(() => {
+        const hostInstitution = partnersData.find((p) => p.name === HOST_INSTITUTION);
+        const collaboratorInstitutions = partnersData.filter((p) => COLLABORATOR_NAMES.has(p.name));
+        const supportSponsors = partnersData.filter(
+            (p) => (p.tier !== 'community' || LANDING_COMMUNITY_PARTNERS.has(p.name))
+                && p.name !== HOST_INSTITUTION
+                && !COLLABORATOR_NAMES.has(p.name),
+        );
+        const landingLogos = [
+            ...(hostInstitution ? [hostInstitution.logo] : []),
+            ...collaboratorInstitutions.map((p) => p.logo),
+            ...supportSponsors.map((p) => p.logo),
+        ];
         // Warm logo assets early so sponsor strip appears without delayed image pop-in.
-        LANDING_SPONSOR_LOGOS.forEach((src) => {
+        landingLogos.forEach((src) => {
             const img = new Image();
             img.decoding = 'async';
             img.src = src;
         });
-    }, []);
+    }, [partnersData]);
 
     const baseUrl = SITE_URL.endsWith('/') ? SITE_URL.slice(0, -1) : SITE_URL;
     const eventJsonLd = {
@@ -281,7 +323,7 @@ export default function Home() {
                 />
             </div>
 
-            <SponsorStrip />
+            <SponsorStrip partnersData={partnersData} />
             <AboutSection />
         </>
     );
