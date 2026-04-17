@@ -1,69 +1,77 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { MOCK_QR_CODES, MOCK_REGISTERED_ZONES } from '../lib/data';
-import { generatePassCode } from '../lib/utils';
 import type { ZoneQrCode } from '../lib/types';
+import { zonesApi } from '../../api/backend';
+import { ApiError } from '../api/client';
 
 interface ZoneState {
     registeredZones: string[];
     qrCodes: ZoneQrCode[];
-    registerZone: (zoneId: string, shortName: string) => ZoneQrCode;
-    markCheckedIn: (zoneId: string) => void;
+    hydrated: boolean;
+    hydrateZones: () => Promise<void>;
+    registerZone: (zoneId: string) => Promise<ZoneQrCode>;
+    unregisterZone: (zoneId: string) => Promise<void>;
     resetZones: () => void;
 }
 
 const baseState = {
-    registeredZones: MOCK_REGISTERED_ZONES,
-    qrCodes: MOCK_QR_CODES,
+    registeredZones: [] as string[],
+    qrCodes: [] as ZoneQrCode[],
+    hydrated: false,
 };
+
+interface BackendPass {
+    zoneId: string;
+    code: string;
+    isActive: boolean;
+    checkedInAt?: string | null;
+}
+
+function normalizePasses(raw: unknown): ZoneQrCode[] {
+    const passes = (raw as { passes?: BackendPass[] } | null)?.passes ?? [];
+    if (!Array.isArray(passes)) return [];
+    return passes.map((pass) => {
+        const checkedInAt = pass.checkedInAt ?? undefined;
+        return {
+            zoneId: String(pass.zoneId),
+            code: String(pass.code),
+            isActive: Boolean(pass.isActive),
+            checkedIn: !pass.isActive || Boolean(checkedInAt),
+            checkedInAt: checkedInAt ?? undefined,
+        };
+    });
+}
 
 export const useZoneStore = create<ZoneState>()(
     persist(
         (set, get) => ({
             ...baseState,
-            registerZone: (zoneId, shortName) => {
-                const current = get();
-                const existing = current.qrCodes.find((q) => q.zoneId === zoneId);
-                if (existing) return existing;
-
-                const created: ZoneQrCode = {
-                    zoneId,
-                    code: generatePassCode(shortName),
-                    isActive: true,
-                };
-
+            hydrateZones: async () => {
+                const [registrationsRes, passesRes] = await Promise.all([
+                    zonesApi.myRegistrations(),
+                    zonesApi.myPasses(),
+                ]);
+                const idsRaw = (registrationsRes as { zoneIds?: string[] } | null)?.zoneIds ?? [];
+                const registeredZones = Array.isArray(idsRaw) ? idsRaw.map((id) => String(id)) : [];
+                const qrCodes = normalizePasses(passesRes);
                 set({
-                    registeredZones: current.registeredZones.includes(zoneId)
-                        ? current.registeredZones
-                        : [...current.registeredZones, zoneId],
-                    qrCodes: [...current.qrCodes, created],
+                    registeredZones,
+                    qrCodes,
+                    hydrated: true,
                 });
-
-                return created;
             },
-            markCheckedIn: (zoneId) => {
-                const now = new Intl.DateTimeFormat('en-IN', {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    hour12: false,
-                    timeZone: 'Asia/Kolkata',
-                }).format(new Date());
-
-                set({
-                    qrCodes: get().qrCodes.map((code) =>
-                        code.zoneId === zoneId
-                            ? {
-                                  ...code,
-                                  isActive: false,
-                                  checkedIn: true,
-                                  checkedInAt: `${now} IST`,
-                              }
-                            : code,
-                    ),
-                });
+            registerZone: async (zoneId) => {
+                await zonesApi.register(zoneId);
+                await get().hydrateZones();
+                const pass = get().qrCodes.find((q) => q.zoneId === zoneId);
+                if (!pass) {
+                    throw new ApiError('Registration succeeded but no pass returned.', 500, null);
+                }
+                return pass;
+            },
+            unregisterZone: async (zoneId) => {
+                await zonesApi.unregister(zoneId);
+                await get().hydrateZones();
             },
             resetZones: () => set({ ...baseState }),
         }),

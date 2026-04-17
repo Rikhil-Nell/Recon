@@ -14,12 +14,24 @@ import PortalLayout from './portal/components/PortalLayout';
 import { RedirectIfVerified, RequireVerified } from './portal/components/RouteGuards';
 import LoginPage from './portal/pages/LoginPage';
 import VerifyPage from './portal/pages/VerifyPage';
+import AuthCallbackPage from './portal/pages/AuthCallbackPage';
 import DashboardPage from './portal/pages/DashboardPage';
 import ZonesPage from './portal/pages/ZonesPage';
 import ZoneDetailPage from './portal/pages/ZoneDetailPage';
 import MapPage from './portal/pages/MapPage';
 import MerchPage from './portal/pages/MerchPage';
 import AnnouncementsPage from './portal/pages/AnnouncementsPage';
+import ProfileSetupPage from './portal/pages/ProfileSetupPage';
+import SettingsPage from './portal/pages/SettingsPage';
+import { RequireAdmin } from './portal/components/RequireAdmin';
+import AdminHomePage from './portal/pages/admin/AdminHomePage';
+import AdminUsersPage from './portal/pages/admin/AdminUsersPage';
+import AdminIncidentsPage from './portal/pages/admin/AdminIncidentsPage';
+import AdminParticipantsPage from './portal/pages/admin/AdminParticipantsPage';
+import AdminSchedulePage from './portal/pages/admin/AdminSchedulePage';
+import AdminPartnersPage from './portal/pages/admin/AdminPartnersPage';
+import AdminStoragePage from './portal/pages/admin/AdminStoragePage';
+import AdminApiCoveragePage from './portal/pages/admin/AdminApiCoveragePage';
 
 function ScrollToTop() {
     const { pathname } = useLocation();
@@ -36,11 +48,15 @@ function ConditionalPreloader() {
     const isPortalPath =
         pathname.startsWith('/login')
         || pathname.startsWith('/verify')
+        || pathname.startsWith('/auth/callback')
         || pathname.startsWith('/dashboard')
         || pathname.startsWith('/zones')
         || pathname.startsWith('/map')
         || pathname.startsWith('/merch')
-        || pathname.startsWith('/announcements');
+        || pathname.startsWith('/announcements')
+        || pathname.startsWith('/settings')
+        || pathname.startsWith('/admin')
+        || pathname.startsWith('/profile');
 
     if (isPortalPath) return null;
     return <Preloader />;
@@ -55,16 +71,29 @@ export default function App() {
                 <Route element={<RedirectIfVerified />}>
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/verify" element={<VerifyPage />} />
+                    <Route path="/auth/callback" element={<AuthCallbackPage />} />
                 </Route>
 
                 <Route element={<RequireVerified />}>
                     <Route element={<PortalLayout />}>
+                        <Route path="/profile/setup" element={<ProfileSetupPage />} />
                         <Route path="/dashboard" element={<DashboardPage />} />
                         <Route path="/zones" element={<ZonesPage />} />
                         <Route path="/zones/:id" element={<ZoneDetailPage />} />
                         <Route path="/map" element={<MapPage />} />
                         <Route path="/merch" element={<MerchPage />} />
                         <Route path="/announcements" element={<AnnouncementsPage />} />
+                        <Route path="/settings" element={<SettingsPage />} />
+                        <Route element={<RequireAdmin />}>
+                            <Route path="/admin" element={<AdminHomePage />} />
+                            <Route path="/admin/users" element={<AdminUsersPage />} />
+                            <Route path="/admin/incidents" element={<AdminIncidentsPage />} />
+                            <Route path="/admin/participants" element={<AdminParticipantsPage />} />
+                            <Route path="/admin/schedule" element={<AdminSchedulePage />} />
+                            <Route path="/admin/partners" element={<AdminPartnersPage />} />
+                            <Route path="/admin/storage" element={<AdminStoragePage />} />
+                            <Route path="/admin/api-coverage" element={<AdminApiCoveragePage />} />
+                        </Route>
                     </Route>
                 </Route>
 

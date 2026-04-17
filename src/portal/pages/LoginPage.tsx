@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import BootSequence from '../components/BootSequence';
 import PortalDiagnostics from '../components/PortalDiagnostics';
 import { PrimaryButton } from '../components/primitives';
-import { useAuthStore } from '../stores/authStore';
+import { getBackendAuthLoginUrl } from '../api/client';
 
 const BOOT_LINES = [
     'RECON 2026 // SECURE ACCESS TERMINAL',
@@ -14,9 +14,7 @@ const BOOT_LINES = [
 
 export default function LoginPage() {
     const navigate = useNavigate();
-    const setEmail = useAuthStore((state) => state.setEmail);
-    const seedEmail = useAuthStore((state) => state.email);
-    const [email, setLocalEmail] = useState(seedEmail || '');
+    const [email, setLocalEmail] = useState('');
     const [loading, setLoading] = useState(false);
     const [bootDone, setBootDone] = useState(false);
     const formRef = useRef<HTMLDivElement>(null);
@@ -52,11 +50,9 @@ export default function LoginPage() {
 
     const onSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-        if (!email.trim() || loading) return;
+        if (loading) return;
         setLoading(true);
-        setEmail(email.trim());
-        await new Promise((resolve) => setTimeout(resolve, 900));
-        navigate('/verify');
+        window.location.href = getBackendAuthLoginUrl();
     };
 
     return (
@@ -90,7 +86,6 @@ export default function LoginPage() {
                         <input
                             ref={inputRef}
                             type="email"
-                            required
                             value={email}
                             onChange={(event) => setLocalEmail(event.target.value)}
                             placeholder="operator@domain.com"
@@ -105,13 +100,13 @@ export default function LoginPage() {
                                         <span className="typing-dots" aria-hidden="true" />
                                     </span>
                                 ) : (
-                                    'REQUEST ACCESS CODE ->'
+                                    'SIGN IN WITH GOOGLE ->'
                                 )}
                             </PrimaryButton>
                         </div>
 
                         <p className="mt-4 text-center font-portal-mono text-[9px] tracking-[0.08em] text-[color-mix(in_srgb,var(--dim)_58%,black_20%)] leading-relaxed">
-                            An 8-digit access code will be sent to your registered email address.
+                            Sign-in is handled via Google. You will be redirected back automatically.
                         </p>
                     </form>
                 </div>

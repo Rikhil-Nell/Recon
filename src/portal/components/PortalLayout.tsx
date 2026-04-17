@@ -1,17 +1,23 @@
 import { useEffect } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import PortalNavigation from './PortalNavigation';
 import PortalToasts from './PortalToasts';
 import PortalDiagnostics from './PortalDiagnostics';
 import { useAnnouncementStore } from '../stores/announcementStore';
+import { useAuthStore } from '../stores/authStore';
 import { useToastStore } from '../stores/toastStore';
+import { useZoneStore } from '../stores/zoneStore';
 
 export default function PortalLayout() {
-    const navigate = useNavigate();
+    const sessionStatus = useAuthStore((state) => state.sessionStatus);
     const announcements = useAnnouncementStore((state) => state.announcements);
+    const hydrated = useAnnouncementStore((state) => state.hydrated);
+    const fetchAnnouncements = useAnnouncementStore((state) => state.fetchAnnouncements);
     const setHighlightedAnnouncement = useAnnouncementStore(
         (state) => state.setHighlightedAnnouncement,
     );
+    const hydrateZones = useZoneStore((state) => state.hydrateZones);
+    const zonesHydrated = useZoneStore((state) => state.hydrated);
     const addToast = useToastStore((state) => state.addToast);
 
     useEffect(() => {
@@ -20,6 +26,18 @@ export default function PortalLayout() {
             delete document.body.dataset.portal;
         };
     }, []);
+
+    useEffect(() => {
+        if (sessionStatus !== 'authenticated') return;
+        if (hydrated) return;
+        void fetchAnnouncements();
+    }, [fetchAnnouncements, hydrated, sessionStatus]);
+
+    useEffect(() => {
+        if (sessionStatus !== 'authenticated') return;
+        if (zonesHydrated) return;
+        void hydrateZones();
+    }, [hydrateZones, sessionStatus, zonesHydrated]);
 
     useEffect(() => {
         const hasFired = sessionStorage.getItem('recon-portal-ann-toast-fired');
@@ -41,7 +59,7 @@ export default function PortalLayout() {
         }, 30000);
 
         return () => clearTimeout(id);
-    }, [addToast, announcements, navigate, setHighlightedAnnouncement]);
+    }, [addToast, announcements, setHighlightedAnnouncement]);
 
     return (
         <div className="min-h-[100dvh] bg-[var(--bg)] text-[var(--fg)] portal-grain overflow-x-hidden">

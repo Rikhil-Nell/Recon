@@ -1,12 +1,53 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { SEED_ANNOUNCEMENTS } from '../lib/data';
 import type { Announcement } from '../lib/types';
+import { fetchAnnouncements } from '../api/announcements';
+import type { BackendAnnouncement } from '../api/announcements';
+
+function toPriority(priority: BackendAnnouncement['priority']): Announcement['priority'] {
+    if (priority === 'urgent') return 'URGENT';
+    if (priority === 'update') return 'UPDATE';
+    if (priority === 'info') return 'INFO';
+    return 'GENERAL';
+}
+
+function relativeLabel(iso: string) {
+    const published = new Date(iso).getTime();
+    const diffMs = published - Date.now();
+    const diffMin = Math.round(diffMs / 60000);
+    const absMin = Math.abs(diffMin);
+
+    const rtf = new Intl.RelativeTimeFormat('en', { numeric: 'auto' });
+    if (absMin < 60) return rtf.format(diffMin, 'minute');
+
+    const diffHr = Math.round(diffMin / 60);
+    if (Math.abs(diffHr) < 24) return rtf.format(diffHr, 'hour');
+
+    const diffDay = Math.round(diffHr / 24);
+    return rtf.format(diffDay, 'day');
+}
+
+function mapAnnouncement(item: BackendAnnouncement): Announcement {
+    return {
+        id: item.id,
+        title: item.title.toUpperCase(),
+        body: item.body,
+        priority: toPriority(item.priority),
+        // Backend does not include per-zone categories in current schema.
+        category: 'GENERAL',
+        postedBy: 'RECON COMMAND',
+        timeLabel: relativeLabel(item.published_at),
+        createdAt: item.published_at,
+        unread: true,
+    };
+}
 
 interface AnnouncementState {
     announcements: Announcement[];
     unreadCount: number;
     highlightedAnnouncementId: string | null;
+    hydrated: boolean;
+    fetchAnnouncements: () => Promise<void>;
     addAnnouncement: (announcement: Announcement) => void;
     markAllRead: () => void;
     markRead: (id: string) => void;
@@ -14,8 +55,8 @@ interface AnnouncementState {
     resetAnnouncements: () => void;
 }
 
-const initialAnnouncements = SEED_ANNOUNCEMENTS;
-const initialUnreadCount = initialAnnouncements.filter((a) => a.unread).length;
+const initialAnnouncements: Announcement[] = [];
+const initialUnreadCount = 0;
 
 export const useAnnouncementStore = create<AnnouncementState>()(
     persist(
@@ -23,6 +64,16 @@ export const useAnnouncementStore = create<AnnouncementState>()(
             announcements: initialAnnouncements,
             unreadCount: initialUnreadCount,
             highlightedAnnouncementId: null,
+            hydrated: false,
+            fetchAnnouncements: async () => {
+                const items = await fetchAnnouncements();
+                const mapped = items.map(mapAnnouncement);
+                set({
+                    announcements: mapped,
+                    unreadCount: mapped.filter((a) => a.unread).length,
+                    hydrated: true,
+                });
+            },
             addAnnouncement: (announcement) => {
                 const exists = get().announcements.some((a) => a.id === announcement.id);
                 if (exists) return;
@@ -51,6 +102,7 @@ export const useAnnouncementStore = create<AnnouncementState>()(
                     announcements: initialAnnouncements,
                     unreadCount: initialUnreadCount,
                     highlightedAnnouncementId: null,
+                    hydrated: false,
                 }),
         }),
         {

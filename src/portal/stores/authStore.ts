@@ -1,94 +1,144 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { MOCK_PARTICIPANT } from '../lib/data';
 import type { Participant } from '../lib/types';
+import type { BackendParticipant } from '../api/participants';
+import type { BackendUserProfile } from '../api/auth';
+import { fetchMyParticipantProfile } from '../api/participants';
+import { fetchMe, logout as apiLogout } from '../api/auth';
+import { ApiError } from '../api/client';
+import { pointsApi, zonesApi } from '../../api/backend';
 
 interface AuthState {
-    email: string;
-    isVerified: boolean;
+    sessionStatus: 'unknown' | 'authenticated' | 'unauthenticated';
+    profileStatus: 'unknown' | 'present' | 'missing';
+    user: BackendUserProfile | null;
+    participantProfile: BackendParticipant | null;
     participant: Participant | null;
-    pointsPulseTick: number;
-    lastPointsDelta: number;
-    setEmail: (email: string) => void;
-    completeVerification: () => void;
-    signOut: () => void;
-    redeemPoints: (points: number) => void;
-    addPoints: (points: number) => void;
-    addCheckedInZone: (zoneId: string) => void;
-    clearPointsDelta: () => void;
+    bootstrapSession: () => Promise<void>;
+    clearSession: () => void;
+    signOut: () => Promise<void>;
 }
 
 const baseState = {
-    email: '',
-    isVerified: false,
-    participant: MOCK_PARTICIPANT,
-    pointsPulseTick: 0,
-    lastPointsDelta: 0,
+    sessionStatus: 'unknown' as const,
+    profileStatus: 'unknown' as const,
+    user: null,
+    participantProfile: null,
+    participant: null as Participant | null,
 };
+
+const BOOTSTRAP_TIMEOUT_MS = 25_000;
+
+function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
+    return new Promise((resolve, reject) => {
+        const t = window.setTimeout(() => reject(new Error('Auth bootstrap timed out')), ms);
+        promise.then(
+            (v) => {
+                clearTimeout(t);
+                resolve(v);
+            },
+            (e) => {
+                clearTimeout(t);
+                reject(e);
+            },
+        );
+    });
+}
 
 export const useAuthStore = create<AuthState>()(
     persist(
-        (set, get) => ({
+        (set) => ({
             ...baseState,
-            setEmail: (email) => set({ email, isVerified: false }),
-            completeVerification: () => {
-                const { email, participant } = get();
-                set({
-                    isVerified: true,
-                    participant: participant
-                        ? { ...participant, email: email || participant.email }
-                        : { ...MOCK_PARTICIPANT, email: email || MOCK_PARTICIPANT.email },
-                });
+            bootstrapSession: async () => {
+                try {
+                    await withTimeout(
+                        (async () => {
+                            const user = await fetchMe();
+                            let profile: BackendParticipant | null = null;
+                            let profileStatus: AuthState['profileStatus'] = 'unknown';
+                            try {
+                                profile = await fetchMyParticipantProfile();
+                                profileStatus = 'present';
+                            } catch (err) {
+                                if (err instanceof ApiError && err.status === 404) {
+                                    profileStatus = 'missing';
+                                } else {
+                                    throw err;
+                                }
+                            }
+                            const pointsResp =
+                                profileStatus === 'present'
+                                    ? await pointsApi.me().catch(() => null)
+                                    : null;
+                            const regsResp =
+                                profileStatus === 'present'
+                                    ? await zonesApi.myRegistrations().catch(() => null)
+                                    : null;
+
+                            const zoneIdsRaw =
+                                (regsResp as { zoneIds?: string[] } | null)?.zoneIds ?? [];
+                            const checkedInZones = Array.isArray(zoneIdsRaw)
+                                ? zoneIdsRaw.map((id) => String(id))
+                                : [];
+                            const points = Number(
+                                (pointsResp as { balance?: number } | null)?.balance ?? 0,
+                            );
+
+                            set({
+                                sessionStatus: 'authenticated',
+                                profileStatus,
+                                user,
+                                participantProfile: profile,
+                                participant: profile
+                                    ? {
+                                          id: profile.id,
+                                          email: user.email,
+                                          displayName: profile.display_name,
+                                          registrationId: profile.id,
+                                          points: Number.isFinite(points) ? points : 0,
+                                          checkedInZones,
+                                      }
+                                    : null,
+                            });
+                        })(),
+                        BOOTSTRAP_TIMEOUT_MS,
+                    );
+                } catch {
+                    set({
+                        sessionStatus: 'unauthenticated',
+                        profileStatus: 'unknown',
+                        user: null,
+                        participantProfile: null,
+                        participant: null,
+                    });
+                }
             },
-            signOut: () => {
-                set({
-                    ...baseState,
-                    participant: { ...MOCK_PARTICIPANT },
-                });
+            clearSession: () => set({ ...baseState, sessionStatus: 'unauthenticated' }),
+            signOut: async () => {
+                try {
+                    await apiLogout();
+                } finally {
+                    set({
+                        ...baseState,
+                        sessionStatus: 'unauthenticated',
+                    });
+                }
             },
-            redeemPoints: (points) => {
-                const participant = get().participant;
-                if (!participant) return;
-                set({
-                    participant: {
-                        ...participant,
-                        points: Math.max(0, participant.points - points),
-                    },
-                    pointsPulseTick: get().pointsPulseTick + 1,
-                    lastPointsDelta: -Math.abs(points),
-                });
-            },
-            addPoints: (points) => {
-                const participant = get().participant;
-                if (!participant) return;
-                set({
-                    participant: {
-                        ...participant,
-                        points: participant.points + points,
-                    },
-                    pointsPulseTick: get().pointsPulseTick + 1,
-                    lastPointsDelta: Math.abs(points),
-                });
-            },
-            addCheckedInZone: (zoneId) => {
-                const participant = get().participant;
-                if (!participant || participant.checkedInZones.includes(zoneId)) return;
-                set({
-                    participant: {
-                        ...participant,
-                        checkedInZones: [...participant.checkedInZones, zoneId],
-                    },
-                });
-            },
-            clearPointsDelta: () => set({ lastPointsDelta: 0 }),
         }),
         {
             name: 'recon-portal-auth',
             partialize: (state) => ({
-                email: state.email,
-                isVerified: state.isVerified,
+                user: state.user,
+                participantProfile: state.participantProfile,
                 participant: state.participant,
             }),
+            onRehydrateStorage: () => (state, error) => {
+                if (error || !state?.user) return;
+                useAuthStore.setState({
+                    sessionStatus: 'authenticated',
+                    profileStatus: state.participantProfile ? 'present' : 'missing',
+                });
+            },
         },
     ),
 );
