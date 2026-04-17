@@ -50,59 +50,9 @@ export const useAuthStore = create<AuthState>()(
         (set) => ({
             ...baseState,
             bootstrapSession: async () => {
+                let user: BackendUserProfile;
                 try {
-                    await withTimeout(
-                        (async () => {
-                            const user = await fetchMe();
-                            let profile: BackendParticipant | null = null;
-                            let profileStatus: AuthState['profileStatus'] = 'unknown';
-                            try {
-                                profile = await fetchMyParticipantProfile();
-                                profileStatus = 'present';
-                            } catch (err) {
-                                if (err instanceof ApiError && err.status === 404) {
-                                    profileStatus = 'missing';
-                                } else {
-                                    throw err;
-                                }
-                            }
-                            const pointsResp =
-                                profileStatus === 'present'
-                                    ? await pointsApi.me().catch(() => null)
-                                    : null;
-                            const regsResp =
-                                profileStatus === 'present'
-                                    ? await zonesApi.myRegistrations().catch(() => null)
-                                    : null;
-
-                            const zoneIdsRaw =
-                                (regsResp as { zoneIds?: string[] } | null)?.zoneIds ?? [];
-                            const checkedInZones = Array.isArray(zoneIdsRaw)
-                                ? zoneIdsRaw.map((id) => String(id))
-                                : [];
-                            const points = Number(
-                                (pointsResp as { balance?: number } | null)?.balance ?? 0,
-                            );
-
-                            set({
-                                sessionStatus: 'authenticated',
-                                profileStatus,
-                                user,
-                                participantProfile: profile,
-                                participant: profile
-                                    ? {
-                                          id: profile.id,
-                                          email: user.email,
-                                          displayName: profile.display_name,
-                                          registrationId: profile.id,
-                                          points: Number.isFinite(points) ? points : 0,
-                                          checkedInZones,
-                                      }
-                                    : null,
-                            });
-                        })(),
-                        BOOTSTRAP_TIMEOUT_MS,
-                    );
+                    user = await withTimeout(fetchMe(), BOOTSTRAP_TIMEOUT_MS);
                 } catch {
                     set({
                         sessionStatus: 'unauthenticated',
@@ -111,7 +61,54 @@ export const useAuthStore = create<AuthState>()(
                         participantProfile: null,
                         participant: null,
                     });
+                    return;
                 }
+
+                let profile: BackendParticipant | null = null;
+                let profileStatus: AuthState['profileStatus'] = 'missing';
+                try {
+                    profile = await fetchMyParticipantProfile();
+                    profileStatus = 'present';
+                } catch (err) {
+                    if (err instanceof ApiError && err.status === 404) {
+                        profileStatus = 'missing';
+                    } else {
+                        // Session from /me is valid; do not treat participant/network errors as "no session".
+                        profileStatus = 'missing';
+                    }
+                }
+
+                const pointsResp =
+                    profileStatus === 'present'
+                        ? await pointsApi.me().catch(() => null)
+                        : null;
+                const regsResp =
+                    profileStatus === 'present'
+                        ? await zonesApi.myRegistrations().catch(() => null)
+                        : null;
+
+                const zoneIdsRaw = (regsResp as { zoneIds?: string[] } | null)?.zoneIds ?? [];
+                const checkedInZones = Array.isArray(zoneIdsRaw)
+                    ? zoneIdsRaw.map((id) => String(id))
+                    : [];
+                const points = Number((pointsResp as { balance?: number } | null)?.balance ?? 0);
+
+                set({
+                    sessionStatus: 'authenticated',
+                    profileStatus,
+                    user,
+                    participantProfile: profile,
+                    participant: profile
+                        ? {
+                              id: profile.id,
+                              email: user.email,
+                              displayName: profile.display_name,
+                              registrationId: profile.id,
+                              points: Number.isFinite(points) ? points : 0,
+                              checkedInZones,
+                          }
+                        : null,
+                });
             },
             clearSession: () => set({ ...baseState, sessionStatus: 'unauthenticated' }),
             signOut: async () => {
