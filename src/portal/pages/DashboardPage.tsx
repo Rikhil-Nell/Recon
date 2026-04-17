@@ -1,15 +1,20 @@
 import { useEffect, useMemo, useState } from 'react';
-import { ChevronRight, CheckCircle2 } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { QRCodeSVG } from 'qrcode.react';
 import gsap from 'gsap';
 import PortalPage from '../components/PortalPage';
 import QrPassModal from '../components/QrPassModal';
 import { PortalCard, SectionLabel, StatusPill, ZoneTag } from '../components/primitives';
-import { EVENT_END_ISO, ZONES } from '../lib/data';
+import { EVENT_END_ISO } from '../lib/data';
+import type { Zone } from '../lib/types';
 import { formatCountdown } from '../lib/utils';
+import { mapBackendZoneToPortalZone } from '../lib/zonesCatalog';
+import { fetchZonesCatalog } from '../api/zones';
+import { getApiErrorMessage } from '../lib/apiErrorMessage';
 import { useAnnouncementStore } from '../stores/announcementStore';
 import { useAuthStore } from '../stores/authStore';
+import { useToastStore } from '../stores/toastStore';
 import { useZoneStore } from '../stores/zoneStore';
 
 const MAX_POINTS = 1000;
@@ -21,10 +26,33 @@ export default function DashboardPage() {
     const qrCodes = useZoneStore((state) => state.qrCodes);
     const announcements = useAnnouncementStore((state) => state.announcements);
     const unreadCount = useAnnouncementStore((state) => state.unreadCount);
+    const addToast = useToastStore((state) => state.addToast);
 
+    const [zones, setZones] = useState<Zone[]>([]);
     const [timer, setTimer] = useState('00:00:00');
     const [displayPoints, setDisplayPoints] = useState(0);
     const [openPassZoneId, setOpenPassZoneId] = useState<string | null>(null);
+
+    useEffect(() => {
+        let alive = true;
+        (async () => {
+            try {
+                const catalog = await fetchZonesCatalog();
+                if (!alive) return;
+                setZones(catalog.map(mapBackendZoneToPortalZone));
+            } catch (err) {
+                if (!alive) return;
+                addToast({
+                    type: 'error',
+                    title: 'ZONES UNAVAILABLE',
+                    body: getApiErrorMessage(err, 'Unable to load zone names for passes.'),
+                });
+            }
+        })();
+        return () => {
+            alive = false;
+        };
+    }, [addToast]);
 
     useEffect(() => {
         const tick = () => {
@@ -47,13 +75,14 @@ export default function DashboardPage() {
         });
     }, [participant?.points]);
 
-    const activePasses = useMemo(
-        () => qrCodes.filter((code) => registeredZones.includes(code.zoneId)),
-        [qrCodes, registeredZones],
-    );
+    const activePasses = useMemo(() => {
+        if (!qrCodes.length) return [];
+        if (!registeredZones.length) return qrCodes;
+        return qrCodes.filter((code) => registeredZones.includes(code.zoneId));
+    }, [qrCodes, registeredZones]);
 
     const openPass = activePasses.find((item) => item.zoneId === openPassZoneId);
-    const openZone = ZONES.find((zone) => zone.id === openPassZoneId);
+    const openZone = zones.find((zone) => zone.id === openPassZoneId);
 
     const zonesVisited = participant?.checkedInZones?.length ?? 0;
     const registrations = registeredZones.length;
@@ -153,21 +182,22 @@ export default function DashboardPage() {
                         </PortalCard>
                     )}
                     {activePasses.map((pass) => {
-                        const zone = ZONES.find((item) => item.id === pass.zoneId);
-                        if (!zone) return null;
+                        const zone = zones.find((item) => item.id === pass.zoneId);
+                        const label = zone?.name ?? 'ZONE';
+                        const short = zone?.shortName ?? 'ZONE';
                         return (
                             <button
                                 key={pass.zoneId}
                                 type="button"
                                 className="portal-card min-w-[170px] sm:min-w-[180px] p-4 text-left"
-                                onClick={() => setOpenPassZoneId(zone.id)}
+                                onClick={() => setOpenPassZoneId(pass.zoneId)}
                             >
-                                <ZoneTag>{zone.shortName}</ZoneTag>
+                                <ZoneTag>{short}</ZoneTag>
                                 <div className="font-portal-mono text-[11px] mt-2 text-[var(--fg)] tracking-[0.08em] uppercase">
-                                    {zone.name}
+                                    {label}
                                 </div>
                                 <div className="mt-3 inline-block border border-[var(--border)] bg-white p-2">
-                                    <QRCodeSVG value={`${zone.name}:${pass.code}`} size={100} bgColor="#ffffff" fgColor="#111111" />
+                                    <QRCodeSVG value={`${label}:${pass.code}`} size={100} bgColor="#ffffff" fgColor="#111111" />
                                 </div>
                                 <div className="mt-3">
                                     <StatusPill tone={pass.isActive ? 'green' : 'red'} label={pass.isActive ? 'VALID' : 'USED'} />
@@ -263,10 +293,10 @@ export default function DashboardPage() {
                 </div>
             </div>
 
-            {openPass && openZone && (
+            {openPass && (
                 <QrPassModal
                     open={Boolean(openPassZoneId)}
-                    zoneName={openZone.name}
+                    zoneName={openZone?.name ?? 'ENTRY PASS'}
                     code={openPass.code}
                     active={openPass.isActive}
                     onClose={() => setOpenPassZoneId(null)}
