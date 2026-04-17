@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import Layout from './components/Layout';
 import Home from './components/Home';
 import Events from './components/Events';
@@ -32,6 +32,7 @@ import AdminSchedulePage from './portal/pages/admin/AdminSchedulePage';
 import AdminPartnersPage from './portal/pages/admin/AdminPartnersPage';
 import AdminStoragePage from './portal/pages/admin/AdminStoragePage';
 import AdminApiCoveragePage from './portal/pages/admin/AdminApiCoveragePage';
+import { useAuthStore } from './portal/stores/authStore';
 
 function ScrollToTop() {
     const { pathname } = useLocation();
@@ -63,6 +64,15 @@ function ConditionalPreloader() {
 }
 
 export default function App() {
+    const bootstrapSession = useAuthStore((state) => state.bootstrapSession);
+    const bootstrappedRef = useRef(false);
+
+    useEffect(() => {
+        if (bootstrappedRef.current) return;
+        bootstrappedRef.current = true;
+        void bootstrapSession();
+    }, [bootstrapSession]);
+
     return (
         <BrowserRouter>
             <ConditionalPreloader />

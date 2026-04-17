@@ -1,15 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../stores/authStore';
-
-function useAuthHydrated() {
-    const [hydrated, setHydrated] = useState(() => useAuthStore.persist.hasHydrated());
-    useEffect(() => {
-        const unsub = useAuthStore.persist.onFinishHydration(() => setHydrated(true));
-        return unsub;
-    }, []);
-    return hydrated;
-}
 
 function AuthCheckShell() {
     return (
@@ -28,7 +19,6 @@ export function RequireVerified() {
     const sessionStatus = useAuthStore((state) => state.sessionStatus);
     const bootstrapSession = useAuthStore((state) => state.bootstrapSession);
     const location = useLocation();
-    const hasHydrated = useAuthHydrated();
     const bootstrappedRef = useRef(false);
 
     useEffect(() => {
@@ -36,10 +26,6 @@ export function RequireVerified() {
         bootstrappedRef.current = true;
         void bootstrapSession();
     }, [bootstrapSession]);
-
-    if (!hasHydrated) {
-        return <AuthCheckShell />;
-    }
 
     if (sessionStatus === 'unknown') {
         return <AuthCheckShell />;
