@@ -135,7 +135,7 @@ export const useAuthStore = create<AuthState>()(
             onRehydrateStorage: () => (state, error) => {
                 if (error || !state?.user) return;
                 useAuthStore.setState({
-                    sessionStatus: 'authenticated',
+                    sessionStatus: 'unknown',
                     profileStatus: state.participantProfile ? 'present' : 'missing',
                 });
             },

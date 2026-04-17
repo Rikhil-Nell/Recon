@@ -30,14 +30,28 @@ export default function PortalLayout() {
     useEffect(() => {
         if (sessionStatus !== 'authenticated') return;
         if (hydrated) return;
-        void fetchAnnouncements();
-    }, [fetchAnnouncements, hydrated, sessionStatus]);
+        void fetchAnnouncements().catch((err) => {
+            addToast({
+                type: 'error',
+                title: 'FAILED TO LOAD ANNOUNCEMENTS',
+                body: err instanceof Error ? err.message : 'Please refresh and try again.',
+                durationMs: 5000,
+            });
+        });
+    }, [addToast, fetchAnnouncements, hydrated, sessionStatus]);
 
     useEffect(() => {
         if (sessionStatus !== 'authenticated') return;
         if (zonesHydrated) return;
-        void hydrateZones();
-    }, [hydrateZones, sessionStatus, zonesHydrated]);
+        void hydrateZones().catch((err) => {
+            addToast({
+                type: 'error',
+                title: 'FAILED TO LOAD ZONES',
+                body: err instanceof Error ? err.message : 'Please refresh and try again.',
+                durationMs: 5000,
+            });
+        });
+    }, [addToast, hydrateZones, sessionStatus, zonesHydrated]);
 
     useEffect(() => {
         const hasFired = sessionStorage.getItem('recon-portal-ann-toast-fired');

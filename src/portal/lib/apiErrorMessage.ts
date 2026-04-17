@@ -1,15 +1,33 @@
-import { ApiError } from '../api/client';
+type ErrorWithBody = {
+    body?: unknown;
+    message?: unknown;
+};
+
+function isObjectLike(value: unknown): value is Record<string, unknown> {
+    return typeof value === 'object' && value !== null;
+}
+
+function getErrorBody(err: unknown): unknown {
+    if (!isObjectLike(err) || !('body' in err)) return undefined;
+    return (err as ErrorWithBody).body;
+}
+
+function getErrorMessage(err: unknown): string | undefined {
+    if (!isObjectLike(err) || !('message' in err)) return undefined;
+    const message = (err as ErrorWithBody).message;
+    return typeof message === 'string' ? message : undefined;
+}
 
 export function getApiErrorMessage(err: unknown, fallback: string): string {
-    if (err instanceof ApiError) {
-        const b = err.body;
-        if (typeof b === 'object' && b && 'detail' in b) {
-            const d = (b as { detail: unknown }).detail;
-            if (typeof d === 'string') return d;
-            return JSON.stringify(d);
-        }
-        return err.message || fallback;
+    const body = getErrorBody(err);
+    if (isObjectLike(body) && 'detail' in body) {
+        const detail = (body as { detail: unknown }).detail;
+        if (typeof detail === 'string') return detail;
+        return JSON.stringify(detail);
     }
-    if (err instanceof Error) return err.message;
+
+    const message = getErrorMessage(err);
+    if (message) return message;
+    if (err instanceof Error && err.message) return err.message;
     return fallback;
 }

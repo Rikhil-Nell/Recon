@@ -4,7 +4,6 @@ import PortalPage from '../components/PortalPage';
 import { GhostButton, PortalCard, PrimaryButton, SectionLabel } from '../components/primitives';
 import { authApi } from '../../api/backend';
 import { updateMyParticipantProfile, updateMyTalentVisibility } from '../api/participants';
-import { ApiError } from '../api/client';
 import { useAuthStore } from '../stores/authStore';
 import { useToastStore } from '../stores/toastStore';
 import { getApiErrorMessage } from '../lib/apiErrorMessage';
@@ -133,7 +132,8 @@ export default function SettingsPage() {
             await bootstrapSession();
             addToast({ type: 'success', title: 'SESSION REFRESHED', body: 'Cookie session refreshed with the server.' });
         } catch (err) {
-            const msg = err instanceof ApiError && err.status === 401 ? 'Not authenticated.' : getApiErrorMessage(err, 'Refresh failed.');
+            const status = typeof err === 'object' && err && 'status' in err ? (err as { status?: unknown }).status : undefined;
+            const msg = status === 401 ? 'Not authenticated.' : getApiErrorMessage(err, 'Refresh failed.');
             addToast({ type: 'error', title: 'REFRESH FAILED', body: msg });
         } finally {
             setRefreshing(false);

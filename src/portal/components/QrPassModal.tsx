@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef } from 'react';
+import { useEffect, useLayoutEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { X } from 'lucide-react';
 import { QRCodeSVG } from 'qrcode.react';
@@ -27,10 +27,24 @@ export default function QrPassModal({ open, zoneName, code, active, onClose }: Q
         );
     }, [open]);
 
+    useEffect(() => {
+        if (!open) return;
+        const onKeyDown = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') onClose();
+        };
+        document.addEventListener('keydown', onKeyDown);
+        return () => document.removeEventListener('keydown', onKeyDown);
+    }, [open, onClose]);
+
     if (!open) return null;
 
     return (
-        <div className="fixed inset-0 z-[300] bg-[var(--bg)] flex flex-col items-center justify-center px-4 py-[max(1rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))] overflow-y-auto">
+        <div
+            className="fixed inset-0 z-[300] bg-[var(--bg)] flex flex-col items-center justify-center px-4 py-[max(1rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))] overflow-y-auto"
+            onClick={onClose}
+            role="dialog"
+            aria-modal="true"
+        >
             <button
                 type="button"
                 onClick={onClose}
@@ -40,7 +54,11 @@ export default function QrPassModal({ open, zoneName, code, active, onClose }: Q
                 <X className="size-5" />
             </button>
 
-            <div ref={contentRef} className="text-center max-w-sm w-full mt-8 sm:mt-0">
+            <div
+                ref={contentRef}
+                className="text-center max-w-sm w-full mt-8 sm:mt-0"
+                onClick={(event) => event.stopPropagation()}
+            >
                 <div className="font-portal-mono text-[10px] tracking-[0.2em] uppercase text-[color-mix(in_srgb,var(--amber)_62%,black_15%)] mb-4">
                     ENTRY PASS // {zoneName.toUpperCase()}
                 </div>

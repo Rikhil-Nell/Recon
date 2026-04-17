@@ -35,12 +35,11 @@ export default function MerchPage() {
     const [loading, setLoading] = useState(true);
 
     const selected = selectedId ? items.find((item) => item.id === selectedId) ?? null : null;
-    const points = participant?.points ?? null;
+    const points = participant?.points ?? 0;
 
-    const canAfford = (_cost: number) => (typeof points === 'number' ? points >= _cost : true);
+    const canAfford = (cost: number) => points >= cost;
 
     const balancePreview = useMemo(() => {
-        if (typeof points !== 'number') return null;
         if (!selected) return points;
         return Math.max(0, points - selected.point_cost);
     }, [points, selected]);
@@ -226,11 +225,9 @@ export default function MerchPage() {
                                 <div className="font-portal-mono text-[11px] tracking-[0.12em] uppercase text-[var(--amber)] mt-2">
                                     COST: {selected.point_cost} POINTS
                                 </div>
-                                {typeof points === 'number' && typeof balancePreview === 'number' && (
-                                    <div className="font-portal-mono text-[10px] tracking-[0.1em] text-[color-mix(in_srgb,var(--dim)_72%,white_8%)] mt-4 leading-relaxed uppercase">
-                                        {`${points} -> ${balancePreview} PTS`}
-                                    </div>
-                                )}
+                                <div className="font-portal-mono text-[10px] tracking-[0.1em] text-[color-mix(in_srgb,var(--dim)_72%,white_8%)] mt-4 leading-relaxed uppercase">
+                                    {`${points} -> ${balancePreview} PTS`}
+                                </div>
                                 <div className="font-portal-mono text-[10px] tracking-[0.1em] text-[color-mix(in_srgb,var(--dim)_70%,white_7%)] mt-3 leading-relaxed">
                                     Visit the merch booth to collect your item. Show your redemption code to the volunteer.
                                 </div>

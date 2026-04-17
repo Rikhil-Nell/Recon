@@ -12,6 +12,14 @@ function toPortalType(raw: string): ZoneType {
     return raw === 'flagship' ? 'flagship' : 'side';
 }
 
+function toPortalCategory(raw: string | null | undefined, fallback: Zone['category']): Zone['category'] {
+    const upper = String(raw ?? '').toUpperCase();
+    if (upper === 'FLAGSHIP' || upper === 'COMPETITIVE' || upper === 'WEB' || upper === 'HARDWARE' || upper === 'FORENSICS') {
+        return upper as Zone['category'];
+    }
+    return fallback;
+}
+
 export function mapBackendZoneToPortalZone(item: BackendZoneCatalogItem): Zone {
     const template =
         ZONES.find((zone) => zone.shortName === item.shortName)
@@ -23,7 +31,7 @@ export function mapBackendZoneToPortalZone(item: BackendZoneCatalogItem): Zone {
         name: item.name,
         shortName: item.shortName,
         tags: item.tags ?? template?.tags ?? [],
-        category: (item.category as Zone['category']) ?? template?.category ?? 'FLAGSHIP',
+        category: toPortalCategory(item.category, template?.category ?? 'FLAGSHIP'),
         description: template?.description ?? `${item.name} zone`,
         teamSize: template?.teamSize ?? 'SOLO',
         prizes: template?.prizes,
