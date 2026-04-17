@@ -1,5 +1,6 @@
 import type { Announcement, MerchItem, Participant, Zone, ZoneQrCode } from './types';
 
+export const EVENT_DATE_RANGE_LABEL = '19-21 APR 2026';
 export const EVENT_END_ISO = '2026-04-21T17:00:00+05:30';
 
 export const ZONES: Zone[] = [

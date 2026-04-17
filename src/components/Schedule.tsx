@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { schedule as fallbackSchedule } from '../data';
+import { EVENT_DATE_RANGE_READABLE, schedule as fallbackSchedule } from '../data';
 import { Section, Label } from './ui';
 import ScrambleText from './ScrambleText';
 import Seo from './Seo';
@@ -80,6 +80,9 @@ export default function Schedule() {
                     <h2 className="font-display text-2xl md:text-3xl text-paper tracking-tight mb-8">
                         <ScrambleText text="3-Day " tag="span" speed={15} /><span className="text-paper/80">Operations Timeline</span>
                     </h2>
+                    <p className="-mt-5 mb-8 font-mono text-[10px] tracking-[0.22em] uppercase text-cream/60">
+                        {EVENT_DATE_RANGE_READABLE}
+                    </p>
 
                 {/* Day tabs */}
                 <div className="inline-flex gap-1 mb-8 border border-edge">

@@ -5,6 +5,7 @@ import { useAuthStore } from '../stores/authStore';
 import { isPrivilegedUser } from '../lib/admin';
 import { useAnnouncementStore } from '../stores/announcementStore';
 import { useZoneStore } from '../stores/zoneStore';
+import { EVENT_DATE_RANGE_LABEL } from '../lib/data';
 
 const NAV_ITEMS_BASE = [
     { to: '/dashboard', label: 'DASHBOARD' },
@@ -76,7 +77,7 @@ export default function PortalNavigation() {
                             RECON <span className="text-[var(--amber)]">2026</span>
                         </div>
                         <div className="hidden sm:block font-portal-mono text-[8px] tracking-[0.22em] uppercase text-[color-mix(in_srgb,var(--dim)_70%,white_8%)]">
-                            PARTICIPANT PORTAL
+                            PARTICIPANT PORTAL // {EVENT_DATE_RANGE_LABEL}
                         </div>
                     </button>
 

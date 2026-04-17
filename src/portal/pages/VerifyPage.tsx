@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import PortalDiagnostics from '../components/PortalDiagnostics';
 import { PrimaryButton } from '../components/primitives';
+import { EVENT_DATE_RANGE_LABEL } from '../lib/data';
 
 export default function VerifyPage() {
     const navigate = useNavigate();
@@ -33,6 +34,9 @@ export default function VerifyPage() {
                         USE
                         <br />
                         <span className="text-[var(--amber)]">GOOGLE SIGN-IN</span>
+                    </div>
+                    <div className="mt-2 font-portal-mono text-[9px] tracking-[0.16em] uppercase text-[color-mix(in_srgb,var(--amber)_60%,black_12%)]">
+                        {EVENT_DATE_RANGE_LABEL} // VIT-AP
                     </div>
 
                     <div className="h-px bg-[var(--border-dim)] my-6" />
