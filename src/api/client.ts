@@ -1,3 +1,5 @@
+import { getApiBaseUrl } from '../lib/apiBaseUrl';
+
 export class ApiError extends Error {
     status: number;
     body: unknown;
@@ -16,13 +18,7 @@ function joinUrl(base: string, path: string) {
     return `${b}/${p}`;
 }
 
-export function getApiBaseUrl() {
-    const envUrl = (import.meta.env.VITE_API_BASE_URL as string | undefined)?.trim();
-    if (envUrl) return envUrl;
-    // Production builds must not fall back to localhost (Vite embeds env at build time).
-    if (import.meta.env.PROD) return '';
-    return 'http://localhost:8000';
-}
+export { getApiBaseUrl };
 
 export async function apiFetch<T>(
     path: string,

@@ -1,3 +1,5 @@
+import { getApiBaseUrl } from '../../lib/apiBaseUrl';
+
 export class ApiError extends Error {
     status: number;
     body: unknown;
@@ -14,13 +16,6 @@ function joinUrl(base: string, path: string) {
     const b = base.replace(/\/+$/, '');
     const p = path.replace(/^\/+/, '');
     return `${b}/${p}`;
-}
-
-function getApiBaseUrl() {
-    const envUrl = (import.meta.env.VITE_API_BASE_URL as string | undefined)?.trim();
-    if (envUrl) return envUrl;
-    if (import.meta.env.PROD) return '';
-    return 'http://localhost:8000';
 }
 
 export async function apiFetch<T>(
