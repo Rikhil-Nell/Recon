@@ -29,6 +29,10 @@ export default function AuthCallbackPage() {
         }
         if (profileStatus === 'present') {
             navigate('/dashboard', { replace: true });
+            return;
+        }
+        if (profileStatus === 'unknown') {
+            navigate('/dashboard', { replace: true });
         }
     }, [navigate, profileStatus, sessionStatus]);
 
