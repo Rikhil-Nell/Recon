@@ -54,6 +54,12 @@ export default function Navbar() {
                     >
                         <ScrambleText text="Register" tag="span" speed={12} />
                     </a>
+                    <Link
+                        to="/login"
+                        className="font-mono text-[11px] tracking-[0.2em] uppercase px-4 py-1.5 border border-paper/30 text-paper hover:bg-paper/10 transition-colors duration-200"
+                    >
+                        <ScrambleText text="Login" tag="span" speed={12} />
+                    </Link>
                 </div>
 
                 {/* Mobile burger */}
@@ -107,6 +113,12 @@ export default function Navbar() {
                             >
                                 Register
                             </a>
+                            <Link
+                                to="/login"
+                                className="font-mono text-xs tracking-[0.2em] uppercase px-4 py-2 border border-paper/30 text-paper text-center hover:bg-paper/10 transition-colors"
+                            >
+                                Login
+                            </Link>
 
                             {/* Social links */}
                             <div className="pt-4 border-t border-edge/50">

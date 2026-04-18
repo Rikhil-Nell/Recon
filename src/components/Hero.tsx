@@ -87,6 +87,12 @@ export default function Hero() {
                         <ScrambleText text="Register Now" tag="span" speed={15} />
                     </a>
                     <Link
+                        to="/login"
+                        className="font-mono text-xs tracking-[0.2em] uppercase px-6 py-3 border border-cream/30 text-cream/70 hover:border-paper/50 hover:text-paper transition-colors duration-200 text-center"
+                    >
+                        <ScrambleText text="Login" tag="span" speed={15} />
+                    </Link>
+                    <Link
                         to="/events"
                         className="font-mono text-xs tracking-[0.2em] uppercase px-6 py-3 border border-cream/30 text-cream/70 hover:border-paper/50 hover:text-paper transition-colors duration-200 text-center"
                     >
