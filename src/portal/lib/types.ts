@@ -38,6 +38,7 @@ export interface MerchItem {
     pointsCost: number;
     stock: number;
     description: string;
+    image?: string;
 }
 
 export type AnnouncementPriority = 'URGENT' | 'UPDATE' | 'INFO' | 'GENERAL';
