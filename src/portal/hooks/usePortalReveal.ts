@@ -10,10 +10,11 @@ export function usePortalReveal() {
         const isMobile = window.matchMedia('(max-width: 1023px)').matches;
         if (prefersReduced) return;
 
+        const root = rootRef.current;
         const ctx = gsap.context(() => {
             if (!isMobile) {
                 gsap.fromTo(
-                    rootRef.current,
+                    root,
                     { opacity: 0, y: 8 },
                     {
                         opacity: 1,
@@ -24,29 +25,35 @@ export function usePortalReveal() {
                 );
             }
 
-            gsap.fromTo(
-                '[data-portal-header]',
-                { y: 16, opacity: 0 },
-                {
-                    y: 0,
-                    opacity: 1,
-                    duration: 0.5,
-                    ease: 'power3.out',
-                },
-            );
+            const header = root.querySelector('[data-portal-header]');
+            if (header) {
+                gsap.fromTo(
+                    header,
+                    { y: 16, opacity: 0 },
+                    {
+                        y: 0,
+                        opacity: 1,
+                        duration: 0.5,
+                        ease: 'power3.out',
+                    },
+                );
+            }
 
-            gsap.fromTo(
-                '[data-portal-card]',
-                { y: 20, opacity: 0 },
-                {
-                    y: 0,
-                    opacity: 1,
-                    duration: 0.5,
-                    ease: 'power3.out',
-                    stagger: 0.06,
-                    delay: 0.08,
-                },
-            );
+            const cards = root.querySelectorAll('[data-portal-card]');
+            if (cards.length > 0) {
+                gsap.fromTo(
+                    cards,
+                    { y: 20, opacity: 0 },
+                    {
+                        y: 0,
+                        opacity: 1,
+                        duration: 0.5,
+                        ease: 'power3.out',
+                        stagger: 0.06,
+                        delay: 0.08,
+                    },
+                );
+            }
         }, rootRef);
 
         return () => ctx.revert();

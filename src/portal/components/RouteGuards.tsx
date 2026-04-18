@@ -38,6 +38,40 @@ export function RequireVerified() {
     return <Outlet />;
 }
 
+function ProfileCheckShell() {
+    return (
+        <div className="min-h-[100dvh] bg-[var(--bg)] text-[var(--fg)] portal-grain flex items-center justify-center px-6">
+            <div className="portal-card px-6 py-6 text-center max-w-sm">
+                <div className="font-portal-mono text-[10px] tracking-[0.2em] uppercase text-[color-mix(in_srgb,var(--amber)_60%,black_18%)]">
+                    LOADING PROFILE
+                </div>
+                <div className="mt-3 font-portal-display text-[26px] leading-none">PROFILE CHECK</div>
+            </div>
+        </div>
+    );
+}
+
+/** Treasure hunt and other routes that need a participant profile. */
+export function RequireParticipantProfile() {
+    const profileStatus = useAuthStore((state) => state.profileStatus);
+    const sessionStatus = useAuthStore((state) => state.sessionStatus);
+    const location = useLocation();
+
+    if (sessionStatus !== 'authenticated') {
+        return <Navigate to="/login" replace state={{ from: location.pathname }} />;
+    }
+
+    if (profileStatus === 'unknown') {
+        return <ProfileCheckShell />;
+    }
+
+    if (profileStatus === 'missing') {
+        return <Navigate to="/profile/setup" replace state={{ from: location.pathname + location.search }} />;
+    }
+
+    return <Outlet />;
+}
+
 export function RedirectIfVerified() {
     const sessionStatus = useAuthStore((state) => state.sessionStatus);
     const location = useLocation();

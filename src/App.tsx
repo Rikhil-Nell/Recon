@@ -11,7 +11,7 @@ import FAQ from './components/FAQ';
 import Contact from './components/Contact';
 import Preloader from './components/Preloader';
 import PortalLayout from './portal/components/PortalLayout';
-import { RedirectIfVerified, RequireVerified } from './portal/components/RouteGuards';
+import { RedirectIfVerified, RequireParticipantProfile, RequireVerified } from './portal/components/RouteGuards';
 import LoginPage from './portal/pages/LoginPage';
 import VerifyPage from './portal/pages/VerifyPage';
 import AuthCallbackPage from './portal/pages/AuthCallbackPage';
@@ -33,6 +33,13 @@ import AdminPartnersPage from './portal/pages/admin/AdminPartnersPage';
 import AdminStoragePage from './portal/pages/admin/AdminStoragePage';
 import AdminApiCoveragePage from './portal/pages/admin/AdminApiCoveragePage';
 import { useAuthStore } from './portal/stores/authStore';
+import HuntHomePage from './portal/pages/hunt/HuntHomePage';
+import HuntTeamPage from './portal/pages/hunt/HuntTeamPage';
+import HuntScanPage from './portal/pages/hunt/HuntScanPage';
+import HuntProblemPage from './portal/pages/hunt/HuntProblemPage';
+import HuntProgressPage from './portal/pages/hunt/HuntProgressPage';
+import HuntLeaderboardPage from './portal/pages/hunt/HuntLeaderboardPage';
+import HuntDisplayPage from './portal/pages/hunt/HuntDisplayPage';
 
 function ScrollToTop() {
     const { pathname } = useLocation();
@@ -57,7 +64,8 @@ function ConditionalPreloader() {
         || pathname.startsWith('/announcements')
         || pathname.startsWith('/settings')
         || pathname.startsWith('/admin')
-        || pathname.startsWith('/profile');
+        || pathname.startsWith('/profile')
+        || pathname.startsWith('/hunt');
 
     if (isPortalPath) return null;
     return <Preloader />;
@@ -94,6 +102,15 @@ export default function App() {
                         <Route path="/merch" element={<MerchPage />} />
                         <Route path="/announcements" element={<AnnouncementsPage />} />
                         <Route path="/settings" element={<SettingsPage />} />
+                        <Route element={<RequireParticipantProfile />}>
+                            <Route path="/hunt" element={<HuntHomePage />} />
+                            <Route path="/hunt/team" element={<HuntTeamPage />} />
+                            <Route path="/hunt/scan" element={<HuntScanPage />} />
+                            <Route path="/hunt/problem/:problemId" element={<HuntProblemPage />} />
+                            <Route path="/hunt/progress" element={<HuntProgressPage />} />
+                            <Route path="/hunt/leaderboard" element={<HuntLeaderboardPage />} />
+                            <Route path="/hunt/display" element={<HuntDisplayPage />} />
+                        </Route>
                         <Route element={<RequireAdmin />}>
                             <Route path="/admin" element={<AdminHomePage />} />
                             <Route path="/admin/users" element={<AdminUsersPage />} />

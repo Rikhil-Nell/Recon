@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Bell, Home, Map, ShoppingBag, User2, Zap } from 'lucide-react';
+import { Bell, Crosshair, Home, Map, ShoppingBag, User2, Zap } from 'lucide-react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../stores/authStore';
 import { isPrivilegedUser } from '../lib/admin';
@@ -9,6 +9,7 @@ import { EVENT_DATE_RANGE_LABEL } from '../lib/data';
 
 const NAV_ITEMS_BASE = [
     { to: '/dashboard', label: 'DASHBOARD' },
+    { to: '/hunt', label: 'HUNT' },
     { to: '/zones', label: 'ZONES' },
     { to: '/map', label: 'MAP' },
     { to: '/merch', label: 'MERCH' },
@@ -19,6 +20,7 @@ const NAV_ADMIN = { to: '/admin', label: 'OPS' } as const;
 
 const MOBILE_ITEMS = [
     { to: '/dashboard', label: 'HOME', icon: Home },
+    { to: '/hunt', label: 'HUNT', icon: Crosshair },
     { to: '/zones', label: 'ZONES', icon: Zap },
     { to: '/map', label: 'MAP', icon: Map },
     { to: '/merch', label: 'MERCH', icon: ShoppingBag },
@@ -68,6 +70,12 @@ export default function PortalNavigation() {
 
     const navItems = isPrivilegedUser(user) ? [...NAV_ITEMS_BASE, NAV_ADMIN] : [...NAV_ITEMS_BASE];
 
+    const isNavActive = (to: string) => {
+        if (to === '/dashboard') return pathname === '/dashboard';
+        if (to === '/hunt') return pathname.startsWith('/hunt');
+        return pathname === to || pathname.startsWith(`${to}/`);
+    };
+
     return (
         <>
             <header className="fixed top-0 inset-x-0 z-50 h-14 sm:h-16 border-b border-[var(--border-dim)] bg-[rgba(8,8,7,0.95)] backdrop-blur-md px-3 sm:px-4 lg:px-8">
@@ -86,9 +94,9 @@ export default function PortalNavigation() {
                             <NavLink
                                 key={item.to}
                                 to={item.to}
-                                className={({ isActive }) =>
+                                className={() =>
                                     `font-portal-mono text-[9px] xl:text-[10px] tracking-[0.12em] xl:tracking-[0.15em] pb-1 border-b transition-colors ${
-                                        isActive
+                                        isNavActive(item.to)
                                             ? 'text-[var(--amber)] border-[var(--amber)]'
                                             : 'text-[color-mix(in_srgb,var(--dim)_72%,white_6%)] border-transparent hover:text-[var(--fg)]'
                                     }`
@@ -188,7 +196,7 @@ export default function PortalNavigation() {
             </header>
 
             <nav
-                className="fixed lg:hidden bottom-0 inset-x-0 z-50 border-t border-[var(--border-dim)] bg-[var(--bg)] grid grid-cols-5"
+                className="fixed lg:hidden bottom-0 inset-x-0 z-50 border-t border-[var(--border-dim)] bg-[var(--bg)] grid grid-cols-6"
                 style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
             >
                 {MOBILE_ITEMS.map((item) => {
@@ -197,9 +205,9 @@ export default function PortalNavigation() {
                         <NavLink
                             key={item.to}
                             to={item.to}
-                            className={({ isActive }) =>
+                            className={() =>
                                 `min-h-[60px] flex flex-col items-center justify-center gap-0.5 ${
-                                    isActive
+                                    isNavActive(item.to)
                                         ? 'text-[var(--amber)]'
                                         : 'text-[color-mix(in_srgb,var(--dim)_64%,white_6%)]'
                                 }`
