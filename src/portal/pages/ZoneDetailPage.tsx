@@ -8,6 +8,7 @@ import PortalModal from '../components/PortalModal';
 import QrPassModal from '../components/QrPassModal';
 import ZonePattern from '../components/ZonePattern';
 import { GhostButton, PortalCard, PrimaryButton, SectionLabel, StatusPill, ZoneTag } from '../components/primitives';
+import { ZONES } from '../lib/data';
 import type { Zone } from '../lib/types';
 import { useToastStore } from '../stores/toastStore';
 import { useZoneStore } from '../stores/zoneStore';
@@ -45,14 +46,21 @@ export default function ZoneDetailPage() {
                 ]);
                 if (!alive) return;
                 setZone(mapBackendZoneToPortalZone(detailRaw));
-                setCatalog(catalogRaw.map(mapBackendZoneToPortalZone));
+                if (catalogRaw.length > 0) {
+                    setCatalog(catalogRaw.map(mapBackendZoneToPortalZone));
+                } else {
+                    setCatalog(ZONES);
+                }
             } catch (err) {
                 if (!alive) return;
                 addToast({
                     type: 'error',
                     title: 'ZONE LOAD FAILED',
-                    body: getApiErrorMessage(err, 'Unable to load zone details.'),
+                    body: getApiErrorMessage(err, 'Unable to load live zone details. Showing default zone data.'),
                 });
+                const fallbackZone = ZONES.find((item) => item.id === zoneId) ?? null;
+                setZone(fallbackZone);
+                setCatalog(ZONES);
             } finally {
                 if (alive) setLoading(false);
             }
@@ -85,6 +93,7 @@ export default function ZoneDetailPage() {
 
     const isRegistered = registeredZones.includes(zone.id);
     const isChecked = qr?.checkedIn || qr?.isActive === false;
+    const zoneTags = Array.isArray(zone.tags) ? zone.tags : [];
 
     return (
         <PortalPage className="pt-20 pb-24 px-4 sm:px-5 lg:px-8 max-w-3xl mx-auto">
@@ -104,7 +113,7 @@ export default function ZoneDetailPage() {
                 <div className="px-4 sm:px-6 py-6 flex flex-col lg:flex-row gap-6">
                     <div className="flex-1 min-w-0">
                         <div className="flex flex-wrap gap-2 mb-3">
-                            {zone.tags.map((tag) => (
+                            {zoneTags.map((tag) => (
                                 <ZoneTag key={tag}>{tag}</ZoneTag>
                             ))}
                         </div>
@@ -116,7 +125,7 @@ export default function ZoneDetailPage() {
                         </div>
                     </div>
 
-                    <PortalCard className="bg-[var(--bg)] p-4 w-full lg:min-w-[190px]">
+                    <PortalCard className="bg-[var(--bg)] p-4 w-full lg:w-[220px] lg:flex-none">
                         {[
                             ['FORMAT', zone.format ?? 'MIXED'],
                             ['DURATION', zone.duration ?? 'FLEX'],

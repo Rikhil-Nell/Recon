@@ -5,7 +5,7 @@ import PortalModal from '../components/PortalModal';
 import QrPassModal from '../components/QrPassModal';
 import ZonePattern from '../components/ZonePattern';
 import { GhostButton, PortalCard, PrimaryButton, SectionLabel, StatusPill, ZoneTag } from '../components/primitives';
-import { ZONE_FILTERS } from '../lib/data';
+import { ZONES, ZONE_FILTERS } from '../lib/data';
 import type { Zone } from '../lib/types';
 import { useAuthStore } from '../stores/authStore';
 import { useToastStore } from '../stores/toastStore';
@@ -28,11 +28,15 @@ function zoneState(zone: Zone, registered: boolean, checkedInFlag: boolean) {
 }
 
 export default function ZonesPage() {
-    const checkedInZones = useAuthStore((state) => state.participant?.checkedInZones ?? []);
-    const registeredZones = useZoneStore((state) => state.registeredZones);
-    const qrCodes = useZoneStore((state) => state.qrCodes);
+    const checkedInZonesRaw = useAuthStore((state) => state.participant?.checkedInZones ?? []);
+    const registeredZonesRaw = useZoneStore((state) => state.registeredZones);
+    const qrCodesRaw = useZoneStore((state) => state.qrCodes);
     const registerZone = useZoneStore((state) => state.registerZone);
     const addToast = useToastStore((state) => state.addToast);
+
+    const checkedInZones = Array.isArray(checkedInZonesRaw) ? checkedInZonesRaw : [];
+    const registeredZones = Array.isArray(registeredZonesRaw) ? registeredZonesRaw : [];
+    const qrCodes = Array.isArray(qrCodesRaw) ? qrCodesRaw : [];
 
     const [filter, setFilter] = useState<(typeof ZONE_FILTERS)[number]>('ALL');
     const [modalZone, setModalZone] = useState<Zone | null>(null);
@@ -46,14 +50,19 @@ export default function ZonesPage() {
             try {
                 const catalog = await fetchZonesCatalog();
                 if (!alive) return;
-                setZones(catalog.map(mapBackendZoneToPortalZone));
+                if (catalog.length > 0) {
+                    setZones(catalog.map(mapBackendZoneToPortalZone));
+                } else {
+                    setZones(ZONES);
+                }
             } catch (err) {
                 if (!alive) return;
                 addToast({
                     type: 'error',
                     title: 'ZONES UNAVAILABLE',
-                    body: getApiErrorMessage(err, 'Unable to load zones.'),
+                    body: getApiErrorMessage(err, 'Unable to load live zones. Showing default zones.'),
                 });
+                setZones(ZONES);
             } finally {
                 if (alive) setZonesLoading(false);
             }
@@ -63,11 +72,19 @@ export default function ZonesPage() {
         };
     }, [addToast]);
 
+    const zonesSafe = useMemo(
+        () => zones.map((zone) => ({
+            ...zone,
+            tags: Array.isArray(zone.tags) ? zone.tags : [],
+        })),
+        [zones],
+    );
+
     const filtered = useMemo(() => {
-        if (filter === 'ALL') return zones;
-        if (filter === 'FLAGSHIP') return zones.filter((zone) => zone.type === 'flagship');
-        return zones.filter((zone) => zone.category === filter);
-    }, [filter, zones]);
+        if (filter === 'ALL') return zonesSafe;
+        if (filter === 'FLAGSHIP') return zonesSafe.filter((zone) => zone.type === 'flagship');
+        return zonesSafe.filter((zone) => zone.category === filter);
+    }, [filter, zonesSafe]);
 
     const flagshipZones = filtered.filter((zone) => zone.type === 'flagship');
     const sideZones = filtered.filter((zone) => zone.type === 'side');
@@ -176,6 +193,14 @@ export default function ZonesPage() {
                     <PortalCard className="p-4 mb-6">
                         <div className="font-portal-mono text-[11px] tracking-[0.14em] uppercase text-[var(--dim)]">
                             Loading zones...
+                        </div>
+                    </PortalCard>
+                )}
+
+                {!zonesLoading && filtered.length === 0 && (
+                    <PortalCard className="p-4 mb-6" attr>
+                        <div className="font-portal-mono text-[10px] tracking-[0.14em] uppercase text-[var(--dim)]">
+                            NO ZONES AVAILABLE FOR THIS FILTER.
                         </div>
                     </PortalCard>
                 )}
