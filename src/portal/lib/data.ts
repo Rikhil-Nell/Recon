@@ -197,7 +197,7 @@ export const MERCH_ITEMS: MerchItem[] = [
         stock: 48,
         description:
             'Dark ops tactical tee with RECON 2026 wordmark on front and event callsign print on back.',
-        image: '/merch/merch01.png',
+        image: '/merch/merch01.webp',
     },
     {
         id: 'tshirt-stealth',
@@ -207,7 +207,7 @@ export const MERCH_ITEMS: MerchItem[] = [
         stock: 32,
         description:
             'Minimal stealth colorway with subtle front emblem for operators who move quietly.',
-        image: '/merch/merch02.png',
+        image: '/merch/merch02.webp',
     },
     {
         id: 'cap',
@@ -217,7 +217,7 @@ export const MERCH_ITEMS: MerchItem[] = [
         stock: 60,
         description:
             'Structured snapback with embroidered RECON 2026 badge for long on-campus ops.',
-        image: '/merch/ReCon_Caps3DRender.png',
+        image: '/merch/ReCon_Caps3DRender.webp',
     },
     {
         id: 'stickers',
@@ -227,7 +227,7 @@ export const MERCH_ITEMS: MerchItem[] = [
         stock: 200,
         description:
             'Six-piece holographic sticker pack with RECON logo, zone badges, and tactical marks.',
-        image: '/merch/Stickers3DRender.png',
+        image: '/merch/Stickers3DRender.webp',
     },
 ];
 
