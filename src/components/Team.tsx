@@ -20,9 +20,10 @@ interface PersonCardProps {
     code?: string; // organizer badge code
     url?: string;
     spotlight?: boolean;
+    priority?: boolean;
 }
 
-function PersonCard({ name, handle, role, bio, badges, photo, code, url, spotlight = false }: PersonCardProps) {
+function PersonCard({ name, handle, role, bio, badges, photo, code, url, spotlight = false, priority = false }: PersonCardProps) {
     const cardClass = spotlight
         ? 'group border border-paper/30 bg-panel/35 hover:border-paper/55 transition-colors duration-300 overflow-hidden h-full flex flex-col shadow-[0_0_0_1px_rgba(245,244,249,0.05),0_12px_30px_rgba(0,0,0,0.35)]'
         : 'group border border-edge bg-panel/20 hover:border-paper/25 transition-colors duration-300 overflow-hidden h-full flex flex-col';
@@ -32,6 +33,9 @@ function PersonCard({ name, handle, role, bio, badges, photo, code, url, spotlig
     const bioClass = spotlight
         ? 'font-body text-[11px] text-cream/70 leading-relaxed line-clamp-4'
         : 'mt-2 font-body text-[11px] text-cream/50 leading-relaxed line-clamp-3';
+    const imageClass = spotlight
+        ? 'absolute inset-0 w-full h-full object-cover object-top filter grayscale sepia-50 dark:opacity-75 group-hover:opacity-100 group-hover:sepia-0 group-hover:grayscale-0 transition-all duration-300'
+        : 'absolute inset-0 w-full h-full object-cover object-top filter grayscale sepia-50 dark:opacity-75 group-hover:opacity-100 group-hover:sepia-0 group-hover:grayscale-0 transition-all duration-300';
 
     const inner = (
         <div className={cardClass}>
@@ -46,9 +50,9 @@ function PersonCard({ name, handle, role, bio, badges, photo, code, url, spotlig
                     <img
                         src={photo}
                         alt={name}
-                        className="absolute inset-0 w-full h-full object-cover object-top filter grayscale sepia-50 dark:opacity-75 group-hover:opacity-100 group-hover:sepia-0 group-hover:grayscale-0 transition-all duration-300"
-                        loading="lazy"
-                        decoding="async"
+                        className={imageClass}
+                        loading={priority ? 'eager' : 'lazy'}
+                        decoding={priority ? 'sync' : 'async'}
                     />
                 ) : (
                     /* Placeholder — monogram grid */
@@ -110,13 +114,14 @@ function PersonCard({ name, handle, role, bio, badges, photo, code, url, spotlig
 function OrganizerCards() {
     return (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {team.map((m: TeamMember) => (
+            {team.map((m: TeamMember, index) => (
                 <PersonCard
                     key={m.code}
                     name={m.name}
                     role={m.role}
                     photo={m.photo}
                     code={m.code}
+                    priority={index < 8}
                 />
             ))}
         </div>
@@ -126,7 +131,7 @@ function OrganizerCards() {
 function SpeakerCards({ speakerItems }: { speakerItems: Speaker[] }) {
     return (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            {speakerItems.map((s: Speaker) => (
+            {speakerItems.map((s: Speaker, index) => (
                 <PersonCard
                     key={s.name}
                     name={s.name}
@@ -137,6 +142,7 @@ function SpeakerCards({ speakerItems }: { speakerItems: Speaker[] }) {
                     photo={s.photo}
                     url={s.url}
                     spotlight
+                    priority={index < 3}
                 />
             ))}
         </div>
@@ -203,6 +209,24 @@ export default function Team() {
         return () => {
             alive = false;
         };
+    }, []);
+
+    useEffect(() => {
+        // Warm image cache for the first organizer viewport to reduce tab-switch delay.
+        const organizerPreviewPhotos = team
+            .slice(0, 12)
+            .map((member) => member.photo)
+            .filter((photo): photo is string => Boolean(photo));
+
+        const timeoutId = window.setTimeout(() => {
+            organizerPreviewPhotos.forEach((src, index) => {
+                const img = new Image();
+                img.decoding = index < 8 ? 'sync' : 'async';
+                img.src = src;
+            });
+        }, 250);
+
+        return () => window.clearTimeout(timeoutId);
     }, []);
 
     return (
