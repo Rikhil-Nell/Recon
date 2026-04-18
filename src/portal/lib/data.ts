@@ -278,7 +278,7 @@ export const SEED_ANNOUNCEMENTS: Announcement[] = [
 
 export const MOCK_PARTICIPANT: Participant = {
     id: 'OP-2026-0042',
-    name: 'Alex Operator',
+    displayName: 'Alex Operator',
     email: 'alex@example.com',
     registrationId: 'R2026-042',
     points: 275,
