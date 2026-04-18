@@ -1,11 +1,11 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import BootSequence from '../components/BootSequence';
 import PortalDiagnostics from '../components/PortalDiagnostics';
 import { PrimaryButton } from '../components/primitives';
+import { getBackendAuthLoginUrl } from '../api/client';
 import { EVENT_DATE_RANGE_LABEL } from '../lib/data';
-import { useAuthStore } from '../stores/authStore';
 
 const BOOT_LINES = [
     'RECON 2026 // SECURE ACCESS TERMINAL',
@@ -14,14 +14,9 @@ const BOOT_LINES = [
 ];
 
 export default function LoginPage() {
-    const navigate = useNavigate();
-    const setEmail = useAuthStore((state) => state.setEmail);
-    const seedEmail = useAuthStore((state) => state.email);
-    const [email, setLocalEmail] = useState(seedEmail || '');
     const [loading, setLoading] = useState(false);
     const [bootDone, setBootDone] = useState(false);
     const formRef = useRef<HTMLDivElement>(null);
-    const inputRef = useRef<HTMLInputElement>(null);
     const buttonRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -32,7 +27,7 @@ export default function LoginPage() {
     }, []);
 
     useLayoutEffect(() => {
-        if (!bootDone || !formRef.current || !inputRef.current || !buttonRef.current) return;
+        if (!bootDone || !formRef.current || !buttonRef.current) return;
 
         gsap.fromTo(
             formRef.current,
@@ -40,24 +35,17 @@ export default function LoginPage() {
             { y: 0, opacity: 1, duration: 0.45, ease: 'power3.out' },
         );
         gsap.fromTo(
-            inputRef.current,
-            { opacity: 0 },
-            { opacity: 1, duration: 0.35, delay: 0.05 },
-        );
-        gsap.fromTo(
             buttonRef.current,
             { opacity: 0 },
-            { opacity: 1, duration: 0.35, delay: 0.3 },
+            { opacity: 1, duration: 0.35, delay: 0.1 },
         );
     }, [bootDone]);
 
     const onSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-        if (!email.trim() || loading) return;
+        if (loading) return;
         setLoading(true);
-        setEmail(email.trim());
-        await new Promise((resolve) => setTimeout(resolve, 900));
-        navigate('/verify');
+        window.location.href = getBackendAuthLoginUrl();
     };
 
     return (
@@ -87,21 +75,7 @@ export default function LoginPage() {
                     <div className="h-px bg-[var(--border-dim)] my-6" />
 
                     <form onSubmit={onSubmit}>
-                        <label className="block font-portal-mono text-[10px] tracking-[0.2em] uppercase text-[color-mix(in_srgb,var(--amber)_62%,black_12%)] mb-2">
-                            REGISTERED EMAIL
-                        </label>
-
-                        <input
-                            ref={inputRef}
-                            type="email"
-                            required
-                            value={email}
-                            onChange={(event) => setLocalEmail(event.target.value)}
-                            placeholder="operator@domain.com"
-                            className="w-full min-h-11 bg-[var(--bg)] border border-[var(--border-dim)] px-4 py-3 font-portal-mono text-[16px] text-[var(--fg)] placeholder:text-[color-mix(in_srgb,var(--dim)_55%,black_20%)] outline-none focus:border-[var(--amber)] opacity-0"
-                        />
-
-                        <div ref={buttonRef} className="opacity-0 mt-4">
+                        <div ref={buttonRef} className="opacity-0">
                             <PrimaryButton type="submit" disabled={loading}>
                                 {loading ? (
                                     <span className="inline-flex items-center gap-1">
@@ -109,13 +83,13 @@ export default function LoginPage() {
                                         <span className="typing-dots" aria-hidden="true" />
                                     </span>
                                 ) : (
-                                    'REQUEST ACCESS CODE ->'
+                                    'SIGN IN WITH GOOGLE ->'
                                 )}
                             </PrimaryButton>
                         </div>
 
                         <p className="mt-4 text-center font-portal-mono text-[9px] tracking-[0.08em] text-[color-mix(in_srgb,var(--dim)_58%,black_20%)] leading-relaxed">
-                            An 8-digit access code will be sent to your registered email address.
+                            Sign-in is handled via Google. You will be redirected back automatically.
                         </p>
                     </form>
                 </div>

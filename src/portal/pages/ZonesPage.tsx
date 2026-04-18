@@ -1,17 +1,18 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { CheckCircle2 } from 'lucide-react';
 import PortalPage from '../components/PortalPage';
 import PortalModal from '../components/PortalModal';
 import QrPassModal from '../components/QrPassModal';
 import ZonePattern from '../components/ZonePattern';
 import { GhostButton, PortalCard, PrimaryButton, SectionLabel, StatusPill, ZoneTag } from '../components/primitives';
-import { ZONES, ZONE_FILTERS } from '../lib/data';
+import { ZONE_FILTERS } from '../lib/data';
 import type { Zone } from '../lib/types';
 import { useAuthStore } from '../stores/authStore';
 import { useToastStore } from '../stores/toastStore';
 import { useZoneStore } from '../stores/zoneStore';
-
-type RegisterStage = 'confirm' | 'loading' | 'success';
+import { getApiErrorMessage } from '../lib/apiErrorMessage';
+import { fetchZonesCatalog } from '../api/zones';
+import { mapBackendZoneToPortalZone } from '../lib/zonesCatalog';
 
 function isCheckedIn(zoneId: string, checkedInZones: string[], qrActive: boolean | undefined, checkedIn: boolean | undefined) {
     if (checkedInZones.includes(zoneId)) return true;
@@ -35,32 +36,62 @@ export default function ZonesPage() {
 
     const [filter, setFilter] = useState<(typeof ZONE_FILTERS)[number]>('ALL');
     const [modalZone, setModalZone] = useState<Zone | null>(null);
-    const [registerStage, setRegisterStage] = useState<RegisterStage>('confirm');
     const [qrZoneId, setQrZoneId] = useState<string | null>(null);
+    const [zones, setZones] = useState<Zone[]>([]);
+    const [zonesLoading, setZonesLoading] = useState(true);
+
+    useEffect(() => {
+        let alive = true;
+        (async () => {
+            try {
+                const catalog = await fetchZonesCatalog();
+                if (!alive) return;
+                setZones(catalog.map(mapBackendZoneToPortalZone));
+            } catch (err) {
+                if (!alive) return;
+                addToast({
+                    type: 'error',
+                    title: 'ZONES UNAVAILABLE',
+                    body: getApiErrorMessage(err, 'Unable to load zones.'),
+                });
+            } finally {
+                if (alive) setZonesLoading(false);
+            }
+        })();
+        return () => {
+            alive = false;
+        };
+    }, [addToast]);
 
     const filtered = useMemo(() => {
-        if (filter === 'ALL') return ZONES;
-        if (filter === 'FLAGSHIP') return ZONES.filter((zone) => zone.type === 'flagship');
-        return ZONES.filter((zone) => zone.category === filter);
-    }, [filter]);
+        if (filter === 'ALL') return zones;
+        if (filter === 'FLAGSHIP') return zones.filter((zone) => zone.type === 'flagship');
+        return zones.filter((zone) => zone.category === filter);
+    }, [filter, zones]);
 
     const flagshipZones = filtered.filter((zone) => zone.type === 'flagship');
     const sideZones = filtered.filter((zone) => zone.type === 'side');
 
-    const qrZone = qrZoneId ? ZONES.find((zone) => zone.id === qrZoneId) : null;
+    const qrZone = qrZoneId ? zones.find((zone) => zone.id === qrZoneId) : null;
     const qrPayload = qrCodes.find((code) => code.zoneId === qrZoneId);
 
     const onConfirmRegistration = async () => {
         if (!modalZone) return;
-        setRegisterStage('loading');
-        await new Promise((resolve) => setTimeout(resolve, 1500));
-        registerZone(modalZone.id, modalZone.shortName);
-        addToast({
-            type: 'success',
-            title: 'ENTRY PASS CREATED',
-            body: `Entry pass created for ${modalZone.name}.`,
-        });
-        setRegisterStage('success');
+        try {
+            await registerZone(modalZone.id);
+            addToast({
+                type: 'success',
+                title: 'ZONE REGISTERED',
+                body: `${modalZone.name} pass generated.`,
+            });
+        } catch (err) {
+            addToast({
+                type: 'error',
+                title: 'REGISTRATION FAILED',
+                body: getApiErrorMessage(err, 'Unable to register for this zone.'),
+            });
+        }
+        setModalZone(null);
     };
 
     const renderAction = (zone: Zone) => {
@@ -75,7 +106,6 @@ export default function ZonesPage() {
                     className={zone.type === 'side' ? 'py-2.5' : ''}
                     onClick={() => {
                         setModalZone(zone);
-                        setRegisterStage('confirm');
                     }}
                 >
                     {'REGISTER FOR THIS ZONE ->'}
@@ -142,6 +172,13 @@ export default function ZonesPage() {
             </div>
 
             <div className="px-4 lg:px-8 max-w-6xl mx-auto" data-portal-card>
+                {zonesLoading && (
+                    <PortalCard className="p-4 mb-6">
+                        <div className="font-portal-mono text-[11px] tracking-[0.14em] uppercase text-[var(--dim)]">
+                            Loading zones...
+                        </div>
+                    </PortalCard>
+                )}
                 {flagshipZones.length > 0 && (
                     <>
                         <SectionLabel className="mb-4">-- FLAGSHIP COMPETITIONS --</SectionLabel>
@@ -237,57 +274,26 @@ export default function ZonesPage() {
             <PortalModal open={Boolean(modalZone)} title="CONFIRM REGISTRATION" onClose={() => setModalZone(null)}>
                 {modalZone && (
                     <div>
-                        {registerStage !== 'success' && (
-                            <>
-                                <div className="flex flex-wrap gap-2 mb-3">
-                                    {modalZone.tags.map((tag) => (
-                                        <ZoneTag key={tag}>{tag}</ZoneTag>
-                                    ))}
-                                </div>
-                                <div className="font-portal-display text-[24px] leading-none text-[var(--fg)] tracking-[0.03em] uppercase">
-                                    {modalZone.name}
-                                </div>
-                                <div className="font-portal-body text-[13px] text-[color-mix(in_srgb,var(--dim)_74%,white_8%)] leading-relaxed mt-2">
-                                    {modalZone.description}
-                                </div>
-                                <div className="h-px bg-[var(--border-dim)] my-4" />
-                                <div className="font-portal-mono text-[10px] tracking-[0.1em] text-[color-mix(in_srgb,var(--dim)_74%,white_8%)] leading-relaxed">
-                                    A QR code entry pass will be generated for this zone. Present it at the zone
-                                    entrance for check-in. Each pass is single-use.
-                                </div>
-                            </>
-                        )}
+                        <div className="flex flex-wrap gap-2 mb-3">
+                            {modalZone.tags.map((tag) => (
+                                <ZoneTag key={tag}>{tag}</ZoneTag>
+                            ))}
+                        </div>
+                        <div className="font-portal-display text-[24px] leading-none text-[var(--fg)] tracking-[0.03em] uppercase">
+                            {modalZone.name}
+                        </div>
+                        <div className="font-portal-body text-[13px] text-[color-mix(in_srgb,var(--dim)_74%,white_8%)] leading-relaxed mt-2">
+                            {modalZone.description}
+                        </div>
+                        <div className="h-px bg-[var(--border-dim)] my-4" />
+                        <div className="font-portal-mono text-[10px] tracking-[0.1em] text-[color-mix(in_srgb,var(--dim)_74%,white_8%)] leading-relaxed">
+                            This will register you for the selected zone and issue your backend-generated entry pass.
+                        </div>
 
-                        {registerStage === 'success' && (
-                            <div className="text-center py-2">
-                                <CheckCircle2 className="size-8 text-[var(--portal-green)] mx-auto" />
-                                <div className="font-portal-mono text-[12px] tracking-[0.12em] uppercase text-[var(--portal-green)] mt-3">
-                                    REGISTRATION CONFIRMED
-                                </div>
-                                <div className="font-portal-body text-[13px] text-[color-mix(in_srgb,var(--dim)_75%,white_8%)] mt-2">
-                                    Your entry pass is ready.
-                                </div>
-                                <button
-                                    type="button"
-                                    className="mt-4 min-h-11 px-4 border border-[var(--amber)] text-[var(--amber)] font-portal-mono text-[10px] tracking-[0.13em] uppercase hover:bg-[color-mix(in_srgb,var(--amber)_10%,transparent)]"
-                                    onClick={() => {
-                                        setModalZone(null);
-                                        setQrZoneId(modalZone.id);
-                                    }}
-                                >
-                                    {'VIEW QR PASS ->'}
-                                </button>
-                            </div>
-                        )}
-
-                        {registerStage !== 'success' && (
-                            <div className="mt-5 grid gap-2">
-                                <PrimaryButton disabled={registerStage === 'loading'} onClick={onConfirmRegistration}>
-                                    {registerStage === 'loading' ? 'GENERATING PASS...' : 'CONFIRM REGISTRATION'}
-                                </PrimaryButton>
-                                <GhostButton onClick={() => setModalZone(null)}>CANCEL</GhostButton>
-                            </div>
-                        )}
+                        <div className="mt-5 grid gap-2">
+                            <PrimaryButton onClick={onConfirmRegistration}>{'ACKNOWLEDGE ->'}</PrimaryButton>
+                            <GhostButton onClick={() => setModalZone(null)}>CLOSE</GhostButton>
+                        </div>
                     </div>
                 )}
             </PortalModal>

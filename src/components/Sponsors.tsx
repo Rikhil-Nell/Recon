@@ -1,7 +1,9 @@
-import { partners, type Partner } from '../data';
+import { useEffect, useMemo, useState } from 'react';
+import { partners as fallbackPartners, type Partner } from '../data';
 import { Section, Label } from './ui';
 import GlyphGrid from './GlyphGrid';
 import Seo from './Seo';
+import { partnersApi } from '../api/backend';
 
 const HOST_INSTITUTION = 'VIT-AP University';
 const COLLABORATOR_NAMES = new Set(['IIT Madras']);
@@ -44,11 +46,44 @@ function logoImgClass(partner: Partner) {
 }
 
 export default function Sponsors() {
-    const hostInstitution = partners.find((p) => p.name === HOST_INSTITUTION);
-    const collaborators = partners.filter((p) => COLLABORATOR_NAMES.has(p.name));
-    const sponsorPool = partners.filter(
+    const [partnerItems, setPartnerItems] = useState<Partner[]>(fallbackPartners);
+
+    useEffect(() => {
+        let alive = true;
+        (async () => {
+            try {
+                const apiPartners = await partnersApi.list();
+                if (!alive || !Array.isArray(apiPartners) || apiPartners.length === 0) return;
+                const mapped = apiPartners.map((p) => {
+                    const tier = String(p.sponsorship_type ?? '').toLowerCase();
+                    const normalizedTier: Partner['tier'] =
+                        tier === 'title' || tier === 'co-title' || tier === 'strategic' || tier === 'technical' || tier === 'gold' || tier === 'silver' || tier === 'community'
+                            ? tier
+                            : 'community';
+                    return {
+                        name: String(p.company_name ?? 'Partner'),
+                        description: String(p.offering_writeup ?? ''),
+                        tier: normalizedTier,
+                        logo: '/logos/recon_transparent.svg',
+                        url: String(p.company_website ?? '#'),
+                        size: 'md' as const,
+                    };
+                });
+                setPartnerItems(mapped);
+            } catch {
+                // keep fallback partner data when endpoint is role-restricted
+            }
+        })();
+        return () => {
+            alive = false;
+        };
+    }, []);
+
+    const hostInstitution = useMemo(() => partnerItems.find((p) => p.name === HOST_INSTITUTION), [partnerItems]);
+    const collaborators = useMemo(() => partnerItems.filter((p) => COLLABORATOR_NAMES.has(p.name)), [partnerItems]);
+    const sponsorPool = useMemo(() => partnerItems.filter(
         (p) => p.name !== HOST_INSTITUTION && !COLLABORATOR_NAMES.has(p.name),
-    );
+    ), [partnerItems]);
 
     const grouped = TIER_ORDER.map((tier) => ({
         tier,

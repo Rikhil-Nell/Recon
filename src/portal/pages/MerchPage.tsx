@@ -1,12 +1,13 @@
 import { Gift, Trophy, Zap } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import PortalPage from '../components/PortalPage';
 import PortalModal from '../components/PortalModal';
 import { GhostButton, PortalCard, PrimaryButton, SectionLabel, ZoneTag } from '../components/primitives';
-import { MERCH_ITEMS } from '../lib/data';
-import { generateRedeemCode } from '../lib/utils';
 import { useAuthStore } from '../stores/authStore';
 import { useToastStore } from '../stores/toastStore';
+import { fetchShopItems, redeemShopItem } from '../api/shop';
+import type { BackendRedemption, BackendShopItem } from '../api/shop';
+import { ApiError } from '../api/client';
 
 type RedeemStage = 'confirm' | 'loading' | 'success';
 
@@ -25,37 +26,71 @@ function merchPattern(itemId: string) {
 
 export default function MerchPage() {
     const participant = useAuthStore((state) => state.participant);
-    const redeemPoints = useAuthStore((state) => state.redeemPoints);
     const addToast = useToastStore((state) => state.addToast);
 
     const [selectedId, setSelectedId] = useState<string | null>(null);
     const [redeemStage, setRedeemStage] = useState<RedeemStage>('confirm');
-    const [redeemCode, setRedeemCode] = useState('');
+    const [redeemResult, setRedeemResult] = useState<BackendRedemption | null>(null);
+    const [items, setItems] = useState<BackendShopItem[]>([]);
+    const [loading, setLoading] = useState(true);
 
-    const selected = selectedId ? MERCH_ITEMS.find((item) => item.id === selectedId) ?? null : null;
+    const selected = selectedId ? items.find((item) => item.id === selectedId) ?? null : null;
     const points = participant?.points ?? 0;
 
     const canAfford = (cost: number) => points >= cost;
 
     const balancePreview = useMemo(() => {
         if (!selected) return points;
-        return Math.max(0, points - selected.pointsCost);
+        return Math.max(0, points - selected.point_cost);
     }, [points, selected]);
+
+    useEffect(() => {
+        let alive = true;
+        (async () => {
+            try {
+                const res = await fetchShopItems();
+                if (!alive) return;
+                setItems(res.filter((item) => item.is_active));
+            } catch {
+                addToast({
+                    type: 'error',
+                    title: 'MERCH UNAVAILABLE',
+                    body: 'Unable to load merch catalog.',
+                });
+            } finally {
+                if (alive) setLoading(false);
+            }
+        })();
+        return () => {
+            alive = false;
+        };
+    }, [addToast]);
 
     const onConfirmRedeem = async () => {
         if (!selected) return;
         setRedeemStage('loading');
-        await new Promise((resolve) => setTimeout(resolve, 1500));
-        redeemPoints(selected.pointsCost);
-        const code = generateRedeemCode();
-        setRedeemCode(code);
-        setRedeemStage('success');
-
-        addToast({
-            type: 'success',
-            title: 'REDEMPTION CONFIRMED',
-            body: `Redemption confirmed - ${selected.name}.`,
-        });
+        try {
+            const redeemed = await redeemShopItem(selected.id);
+            setRedeemResult(redeemed);
+            setRedeemStage('success');
+            addToast({
+                type: 'success',
+                title: 'REDEMPTION CONFIRMED',
+                body: `Redemption confirmed - ${selected.name}.`,
+            });
+        } catch (err) {
+            const body =
+                err instanceof ApiError && typeof err.body === 'object' && err.body && 'detail' in err.body
+                    ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                      String((err.body as any).detail)
+                    : 'Unable to redeem item.';
+            addToast({
+                type: 'error',
+                title: 'REDEMPTION FAILED',
+                body,
+            });
+            setRedeemStage('confirm');
+        }
     };
 
     return (
@@ -84,7 +119,7 @@ export default function MerchPage() {
                 <div className="font-portal-mono text-[10px] tracking-[0.12em] uppercase text-[color-mix(in_srgb,var(--dim)_68%,white_7%)]">
                     AVAILABLE POINTS
                 </div>
-                <div className="font-portal-display text-[28px] leading-none text-[var(--amber)]">{points} PTS</div>
+                <div className="font-portal-display text-[28px] leading-none text-[var(--amber)]">{points ?? 0} PTS</div>
             </PortalCard>
 
             <PortalCard className="px-4 py-4 mb-8 bg-[var(--surface)]" attr>
@@ -106,11 +141,18 @@ export default function MerchPage() {
             </PortalCard>
 
             <div className="grid md:grid-cols-2 gap-4" data-portal-card>
-                {MERCH_ITEMS.map((item) => {
-                    const affordable = canAfford(item.pointsCost);
-                    const outOfStock = item.stock <= 0;
-                    const missing = Math.max(0, item.pointsCost - points);
-                    const progress = Math.min(100, Math.round((points / item.pointsCost) * 100));
+                {loading && (
+                    <PortalCard className="px-4 py-4 md:col-span-2" attr>
+                        <div className="font-portal-mono text-[10px] tracking-[0.16em] uppercase text-[color-mix(in_srgb,var(--dim)_70%,white_8%)]">
+                            LOADING CATALOG...
+                        </div>
+                    </PortalCard>
+                )}
+
+                {!loading && items.map((item) => {
+                    const affordable = canAfford(item.point_cost);
+                    const remaining = item.remaining_stock ?? item.stock ?? 0;
+                    const outOfStock = remaining <= 0;
 
                     return (
                         <PortalCard key={item.id} className="p-0 overflow-hidden">
@@ -129,14 +171,14 @@ export default function MerchPage() {
 
                             <div className="px-4 py-4">
                                 <div className="font-portal-mono text-[9px] tracking-[0.14em] uppercase text-[color-mix(in_srgb,var(--amber)_58%,black_20%)]">
-                                    {item.type}
+                                    MERCH
                                 </div>
                                 <div className="font-portal-mono text-[14px] tracking-[0.08em] uppercase text-[var(--fg)] mt-1">
                                     {item.name}
                                 </div>
                                 <div className="mt-2 flex items-end gap-2">
                                     <div className="font-portal-display text-[28px] leading-none text-[var(--amber)]">
-                                        {item.pointsCost}
+                                        {item.point_cost}
                                     </div>
                                     <div className="font-portal-mono text-[9px] tracking-[0.12em] uppercase text-[color-mix(in_srgb,var(--dim)_66%,white_7%)] pb-1">
                                         POINTS
@@ -145,26 +187,22 @@ export default function MerchPage() {
                             </div>
 
                             <div className="px-4 pb-4">
-                                {affordable && !outOfStock ? (
+                                {!outOfStock ? (
                                     <button
                                         type="button"
                                         className="w-full min-h-11 border border-[var(--amber)] text-[var(--amber)] font-portal-mono text-[11px] tracking-[0.12em] uppercase py-3 hover:bg-[color-mix(in_srgb,var(--amber)_10%,transparent)]"
                                         onClick={() => {
                                             setSelectedId(item.id);
                                             setRedeemStage('confirm');
+                                            setRedeemResult(null);
                                         }}
                                     >
                                         {'REDEEM ->'}
                                     </button>
                                 ) : (
-                                    <>
-                                        <div className="font-portal-mono text-[10px] tracking-[0.1em] uppercase text-[color-mix(in_srgb,var(--dim)_64%,white_7%)]">
-                                            {outOfStock ? 'CURRENTLY SOLD OUT' : `NEED ${missing} MORE POINTS`}
-                                        </div>
-                                        <div className="h-[2px] bg-[var(--border)] mt-2 overflow-hidden">
-                                            <div className="h-[2px] bg-[var(--amber)]" style={{ width: `${progress}%` }} />
-                                        </div>
-                                    </>
+                                    <div className="font-portal-mono text-[10px] tracking-[0.1em] uppercase text-[color-mix(in_srgb,var(--dim)_64%,white_7%)]">
+                                        CURRENTLY SOLD OUT
+                                    </div>
                                 )}
                             </div>
                         </PortalCard>
@@ -185,7 +223,7 @@ export default function MerchPage() {
                                     {selected.name}
                                 </div>
                                 <div className="font-portal-mono text-[11px] tracking-[0.12em] uppercase text-[var(--amber)] mt-2">
-                                    COST: {selected.pointsCost} POINTS
+                                    COST: {selected.point_cost} POINTS
                                 </div>
                                 <div className="font-portal-mono text-[10px] tracking-[0.1em] text-[color-mix(in_srgb,var(--dim)_72%,white_8%)] mt-4 leading-relaxed uppercase">
                                     {`${points} -> ${balancePreview} PTS`}
@@ -210,25 +248,33 @@ export default function MerchPage() {
                                 <div className="font-portal-mono text-[12px] tracking-[0.12em] uppercase text-[var(--portal-green)]">
                                     REDEMPTION CONFIRMED
                                 </div>
-                                <div className="font-portal-display text-[36px] text-[var(--amber)] leading-none mt-3 tracking-[0.08em]">
-                                    {redeemCode}
-                                </div>
+                                {redeemResult && (
+                                    <div className="font-portal-mono text-[10px] tracking-[0.12em] uppercase text-[color-mix(in_srgb,var(--dim)_68%,white_7%)] mt-3">
+                                        REDEMPTION ID
+                                    </div>
+                                )}
+                                {redeemResult && (
+                                    <div className="font-portal-display text-[22px] text-[var(--amber)] leading-none mt-2 tracking-[0.06em] break-all">
+                                        {redeemResult.id}
+                                    </div>
+                                )}
                                 <div className="font-portal-mono text-[9px] tracking-[0.1em] text-[color-mix(in_srgb,var(--dim)_68%,white_7%)] mt-3 uppercase">
-                                    Show this code at the RECON merch booth.
+                                    Show this redemption id at the RECON merch booth.
                                 </div>
                                 <button
                                     type="button"
                                     className="mt-4 min-h-11 px-4 border border-[var(--border)] font-portal-mono text-[10px] tracking-[0.12em] uppercase text-[var(--amber)]"
                                     onClick={async () => {
-                                        await navigator.clipboard.writeText(redeemCode);
+                                        if (!redeemResult) return;
+                                        await navigator.clipboard.writeText(redeemResult.id);
                                         addToast({
                                             type: 'info',
                                             title: 'CODE COPIED',
-                                            body: `Redemption code ${redeemCode} copied to clipboard.`,
+                                            body: `Redemption id copied to clipboard.`,
                                         });
                                     }}
                                 >
-                                    COPY CODE
+                                    COPY ID
                                 </button>
                             </div>
                         )}

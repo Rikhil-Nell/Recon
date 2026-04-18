@@ -1,22 +1,26 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Bell, Home, Map, ShoppingBag, User2, Zap } from 'lucide-react';
+import { Bell, Crosshair, Home, Map, ShoppingBag, User2, Zap } from 'lucide-react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import gsap from 'gsap';
 import { useAuthStore } from '../stores/authStore';
+import { isPrivilegedUser } from '../lib/admin';
 import { useAnnouncementStore } from '../stores/announcementStore';
 import { useZoneStore } from '../stores/zoneStore';
 import { EVENT_DATE_RANGE_LABEL } from '../lib/data';
 
-const NAV_ITEMS = [
+const NAV_ITEMS_BASE = [
     { to: '/dashboard', label: 'DASHBOARD' },
+    { to: '/hunt', label: 'HUNT' },
     { to: '/zones', label: 'ZONES' },
     { to: '/map', label: 'MAP' },
     { to: '/merch', label: 'MERCH' },
     { to: '/announcements', label: 'UPDATES' },
 ] as const;
 
+const NAV_ADMIN = { to: '/admin', label: 'OPS' } as const;
+
 const MOBILE_ITEMS = [
     { to: '/dashboard', label: 'HOME', icon: Home },
+    { to: '/hunt', label: 'HUNT', icon: Crosshair },
     { to: '/zones', label: 'ZONES', icon: Zap },
     { to: '/map', label: 'MAP', icon: Map },
     { to: '/merch', label: 'MERCH', icon: ShoppingBag },
@@ -27,35 +31,19 @@ export default function PortalNavigation() {
     const navigate = useNavigate();
     const { pathname } = useLocation();
     const participant = useAuthStore((state) => state.participant);
+    const user = useAuthStore((state) => state.user);
     const signOut = useAuthStore((state) => state.signOut);
-    const pointsPulseTick = useAuthStore((state) => state.pointsPulseTick);
     const unreadCount = useAnnouncementStore((state) => state.unreadCount);
     const announcements = useAnnouncementStore((state) => state.announcements);
     const resetZones = useZoneStore((state) => state.resetZones);
     const resetAnnouncements = useAnnouncementStore((state) => state.resetAnnouncements);
     const [menuOpen, setMenuOpen] = useState(false);
-    const pointsRef = useRef<HTMLDivElement>(null);
     const menuRef = useRef<HTMLDivElement>(null);
 
     const hasUrgentUnread = useMemo(
         () => announcements.some((item) => item.priority === 'URGENT' && item.unread),
         [announcements],
     );
-
-    useEffect(() => {
-        if (!pointsRef.current) return;
-        gsap.fromTo(
-            pointsRef.current,
-            { scale: 1 },
-            {
-                scale: 1.08,
-                duration: 0.2,
-                yoyo: true,
-                repeat: 1,
-                ease: 'power2.out',
-            },
-        );
-    }, [pointsPulseTick]);
 
     useEffect(() => {
         setMenuOpen(false);
@@ -78,7 +66,15 @@ export default function PortalNavigation() {
         };
     }, [menuOpen]);
 
-    const initial = participant?.name?.[0]?.toUpperCase() ?? 'A';
+    const initial = participant?.displayName?.[0]?.toUpperCase() ?? 'A';
+
+    const navItems = isPrivilegedUser(user) ? [...NAV_ITEMS_BASE, NAV_ADMIN] : [...NAV_ITEMS_BASE];
+
+    const isNavActive = (to: string) => {
+        if (to === '/dashboard') return pathname === '/dashboard';
+        if (to === '/hunt') return pathname.startsWith('/hunt');
+        return pathname === to || pathname.startsWith(`${to}/`);
+    };
 
     return (
         <>
@@ -93,14 +89,14 @@ export default function PortalNavigation() {
                         </div>
                     </button>
 
-                    <nav className="hidden lg:flex items-center gap-5">
-                        {NAV_ITEMS.map((item) => (
+                    <nav className="hidden lg:flex items-center gap-4 xl:gap-5 flex-wrap justify-end">
+                        {navItems.map((item) => (
                             <NavLink
                                 key={item.to}
                                 to={item.to}
-                                className={({ isActive }) =>
-                                    `font-portal-mono text-[10px] tracking-[0.15em] pb-1 border-b transition-colors ${
-                                        isActive
+                                className={() =>
+                                    `font-portal-mono text-[9px] xl:text-[10px] tracking-[0.12em] xl:tracking-[0.15em] pb-1 border-b transition-colors ${
+                                        isNavActive(item.to)
                                             ? 'text-[var(--amber)] border-[var(--amber)]'
                                             : 'text-[color-mix(in_srgb,var(--dim)_72%,white_6%)] border-transparent hover:text-[var(--fg)]'
                                     }`
@@ -112,7 +108,7 @@ export default function PortalNavigation() {
                     </nav>
 
                     <div className="flex items-center gap-2">
-                        <div ref={pointsRef} className="flex items-center gap-1.5 sm:gap-2 min-h-11 px-1.5 sm:px-2.5">
+                        <div className="flex items-center gap-1.5 sm:gap-2 min-h-11 px-1.5 sm:px-2.5">
                             <span className="size-1.5 rounded-full bg-[var(--amber)] hidden sm:inline-block" />
                             <div className="leading-none">
                                 <div className="font-portal-display text-[16px] sm:text-[18px] text-[var(--amber)]">
@@ -151,17 +147,39 @@ export default function PortalNavigation() {
                             {menuOpen && (
                                 <div className="absolute right-0 mt-2 w-[min(15rem,calc(100vw-2rem))] portal-card p-3 bg-[var(--surface-2)] z-[120]">
                                     <div className="font-portal-mono text-[10px] text-[var(--amber)] tracking-[0.18em] uppercase">
-                                        {participant?.name ?? 'Participant'}
+                                        {participant?.displayName ?? 'Participant'}
                                     </div>
                                     <div className="font-portal-mono text-[9px] text-[color-mix(in_srgb,var(--dim)_78%,white_6%)] mt-1">
-                                        {participant?.registrationId}
+                                        {participant?.registrationId ?? '—'}
                                     </div>
                                     <button
                                         type="button"
-                                        className="mt-3 w-full min-h-11 border border-[var(--border-dim)] hover:border-[var(--amber)] font-portal-mono text-[10px] tracking-[0.12em] uppercase text-[var(--fg)] inline-flex items-center justify-center gap-2"
+                                        className="mt-3 w-full min-h-10 border border-[var(--border-dim)] hover:border-[var(--amber)] font-portal-mono text-[10px] tracking-[0.12em] uppercase text-[var(--fg)]"
                                         onClick={() => {
                                             setMenuOpen(false);
-                                            signOut();
+                                            navigate('/settings');
+                                        }}
+                                    >
+                                        SETTINGS
+                                    </button>
+                                    {isPrivilegedUser(user) && (
+                                        <button
+                                            type="button"
+                                            className="mt-2 w-full min-h-10 border border-[var(--border-dim)] hover:border-[var(--amber)] font-portal-mono text-[10px] tracking-[0.12em] uppercase text-[var(--fg)]"
+                                            onClick={() => {
+                                                setMenuOpen(false);
+                                                navigate('/admin');
+                                            }}
+                                        >
+                                            OPERATIONS
+                                        </button>
+                                    )}
+                                    <button
+                                        type="button"
+                                        className="mt-3 w-full min-h-11 border border-[var(--border-dim)] hover:border-[var(--amber)] font-portal-mono text-[10px] tracking-[0.12em] uppercase text-[var(--fg)] inline-flex items-center justify-center gap-2"
+                                        onClick={async () => {
+                                            setMenuOpen(false);
+                                            await signOut();
                                             resetZones();
                                             resetAnnouncements();
                                             navigate('/login');
@@ -178,7 +196,7 @@ export default function PortalNavigation() {
             </header>
 
             <nav
-                className="fixed lg:hidden bottom-0 inset-x-0 z-50 border-t border-[var(--border-dim)] bg-[var(--bg)] grid grid-cols-5"
+                className="fixed lg:hidden bottom-0 inset-x-0 z-50 border-t border-[var(--border-dim)] bg-[var(--bg)] grid grid-cols-6"
                 style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
             >
                 {MOBILE_ITEMS.map((item) => {
@@ -187,9 +205,9 @@ export default function PortalNavigation() {
                         <NavLink
                             key={item.to}
                             to={item.to}
-                            className={({ isActive }) =>
+                            className={() =>
                                 `min-h-[60px] flex flex-col items-center justify-center gap-0.5 ${
-                                    isActive
+                                    isNavActive(item.to)
                                         ? 'text-[var(--amber)]'
                                         : 'text-[color-mix(in_srgb,var(--dim)_64%,white_6%)]'
                                 }`

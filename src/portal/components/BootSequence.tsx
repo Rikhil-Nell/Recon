@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 interface BootSequenceProps {
     lines: string[];
@@ -14,24 +14,30 @@ export default function BootSequence({
     onComplete,
 }: BootSequenceProps) {
     const [charCount, setCharCount] = useState(0);
+    const completedRef = useRef(false);
 
     const fullText = useMemo(() => lines.join('\n'), [lines]);
+    const totalChars = fullText.length;
 
     useEffect(() => {
-        const totalChars = fullText.length;
+        completedRef.current = false;
+        setCharCount(0);
         const id = window.setInterval(() => {
             setCharCount((current) => {
                 const next = Math.min(totalChars, current + 1);
-                if (next >= totalChars) {
-                    clearInterval(id);
-                    onComplete?.();
-                }
                 return next;
             });
         }, speed);
 
         return () => clearInterval(id);
-    }, [fullText, onComplete, speed]);
+    }, [fullText, speed, totalChars]);
+
+    useEffect(() => {
+        if (completedRef.current) return;
+        if (charCount < totalChars) return;
+        completedRef.current = true;
+        onComplete?.();
+    }, [charCount, onComplete, totalChars]);
 
     const visible = fullText.slice(0, charCount);
 

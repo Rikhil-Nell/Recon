@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { CheckCircle2 } from 'lucide-react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { QRCodeSVG } from 'qrcode.react';
@@ -8,11 +8,12 @@ import PortalModal from '../components/PortalModal';
 import QrPassModal from '../components/QrPassModal';
 import ZonePattern from '../components/ZonePattern';
 import { GhostButton, PortalCard, PrimaryButton, SectionLabel, StatusPill, ZoneTag } from '../components/primitives';
-import { ZONES } from '../lib/data';
+import type { Zone } from '../lib/types';
 import { useToastStore } from '../stores/toastStore';
 import { useZoneStore } from '../stores/zoneStore';
-
-type RegisterStage = 'confirm' | 'loading' | 'success';
+import { getApiErrorMessage } from '../lib/apiErrorMessage';
+import { fetchZoneById, fetchZonesCatalog } from '../api/zones';
+import { mapBackendZoneToPortalZone } from '../lib/zonesCatalog';
 
 export default function ZoneDetailPage() {
     const params = useParams();
@@ -21,19 +22,59 @@ export default function ZoneDetailPage() {
     const registeredZones = useZoneStore((state) => state.registeredZones);
     const qrCodes = useZoneStore((state) => state.qrCodes);
     const registerZone = useZoneStore((state) => state.registerZone);
-    const zone = ZONES.find((item) => item.id === params.id);
-    const [registerStage, setRegisterStage] = useState<RegisterStage>('confirm');
+    const [zone, setZone] = useState<Zone | null>(null);
+    const [catalog, setCatalog] = useState<Zone[]>([]);
+    const [loading, setLoading] = useState(true);
     const [modalOpen, setModalOpen] = useState(false);
     const [qrFullOpen, setQrFullOpen] = useState(false);
     const isSmallScreen = useMediaQuery('(max-width: 480px)');
     const qrSize = isSmallScreen ? 170 : 200;
 
+    useEffect(() => {
+        let alive = true;
+        const zoneId = params.id;
+        if (!zoneId) {
+            setLoading(false);
+            return;
+        }
+        (async () => {
+            try {
+                const [detailRaw, catalogRaw] = await Promise.all([
+                    fetchZoneById(zoneId),
+                    fetchZonesCatalog(),
+                ]);
+                if (!alive) return;
+                setZone(mapBackendZoneToPortalZone(detailRaw));
+                setCatalog(catalogRaw.map(mapBackendZoneToPortalZone));
+            } catch (err) {
+                if (!alive) return;
+                addToast({
+                    type: 'error',
+                    title: 'ZONE LOAD FAILED',
+                    body: getApiErrorMessage(err, 'Unable to load zone details.'),
+                });
+            } finally {
+                if (alive) setLoading(false);
+            }
+        })();
+        return () => {
+            alive = false;
+        };
+    }, [addToast, params.id]);
+
     const qr = zone ? qrCodes.find((item) => item.zoneId === zone.id) : null;
     const related = useMemo(() => {
         if (!zone) return [];
-        return ZONES.filter((item) => item.id !== zone.id && item.category === zone.category).slice(0, 3);
-    }, [zone]);
+        return catalog.filter((item) => item.id !== zone.id && item.category === zone.category).slice(0, 3);
+    }, [catalog, zone]);
 
+    if (loading) {
+        return (
+            <div className="pt-24 px-6 text-center font-portal-mono text-[12px] text-[var(--fg)]">
+                Loading zone...
+            </div>
+        );
+    }
     if (!zone) {
         return (
             <div className="pt-24 px-6 text-center font-portal-mono text-[12px] text-[var(--fg)]">
@@ -180,55 +221,37 @@ export default function ZoneDetailPage() {
             </div>
 
             <PortalModal open={modalOpen} title="CONFIRM REGISTRATION" onClose={() => setModalOpen(false)}>
-                {registerStage !== 'success' && (
-                    <>
-                        <div className="font-portal-display text-[24px] leading-none text-[var(--fg)] uppercase">
-                            {zone.name}
-                        </div>
-                        <div className="font-portal-body text-[13px] text-[color-mix(in_srgb,var(--dim)_74%,white_8%)] leading-relaxed mt-2">
-                            A QR code entry pass will be generated for this zone. Present it at the zone entrance
-                            for check-in.
-                        </div>
-                        <div className="grid gap-2 mt-5">
-                            <PrimaryButton
-                                disabled={registerStage === 'loading'}
-                                onClick={async () => {
-                                    setRegisterStage('loading');
-                                    await new Promise((resolve) => setTimeout(resolve, 1500));
-                                    registerZone(zone.id, zone.shortName);
-                                    addToast({
-                                        type: 'success',
-                                        title: 'ENTRY PASS CREATED',
-                                        body: `Entry pass created for ${zone.name}.`,
-                                    });
-                                    setRegisterStage('success');
-                                }}
-                            >
-                                {registerStage === 'loading' ? 'GENERATING PASS...' : 'CONFIRM REGISTRATION'}
-                            </PrimaryButton>
-                            <GhostButton onClick={() => setModalOpen(false)}>CANCEL</GhostButton>
-                        </div>
-                    </>
-                )}
-
-                {registerStage === 'success' && (
-                    <div className="text-center py-2">
-                        <CheckCircle2 className="size-8 text-[var(--portal-green)] mx-auto" />
-                        <div className="font-portal-mono text-[12px] tracking-[0.12em] uppercase text-[var(--portal-green)] mt-3">
-                            REGISTRATION CONFIRMED
-                        </div>
-                        <button
-                            type="button"
-                            className="mt-4 min-h-11 px-4 border border-[var(--amber)] text-[var(--amber)] font-portal-mono text-[10px] tracking-[0.13em] uppercase hover:bg-[color-mix(in_srgb,var(--amber)_10%,transparent)]"
-                            onClick={() => {
+                <div className="font-portal-display text-[24px] leading-none text-[var(--fg)] uppercase">
+                    {zone.name}
+                </div>
+                <div className="font-portal-body text-[13px] text-[color-mix(in_srgb,var(--dim)_74%,white_8%)] leading-relaxed mt-2">
+                    Register now to issue a backend-generated single-use pass for this zone.
+                </div>
+                <div className="grid gap-2 mt-5">
+                    <PrimaryButton
+                        onClick={async () => {
+                            try {
+                                await registerZone(zone.id);
+                                addToast({
+                                    type: 'success',
+                                    title: 'ZONE REGISTERED',
+                                    body: `${zone.name} pass generated.`,
+                                });
+                            } catch (err) {
+                                addToast({
+                                    type: 'error',
+                                    title: 'REGISTRATION FAILED',
+                                    body: getApiErrorMessage(err, 'Unable to register for this zone.'),
+                                });
+                            } finally {
                                 setModalOpen(false);
-                                setQrFullOpen(true);
-                            }}
-                        >
-                            {'VIEW QR PASS ->'}
-                        </button>
-                    </div>
-                )}
+                            }
+                        }}
+                    >
+                        {'ACKNOWLEDGE ->'}
+                    </PrimaryButton>
+                    <GhostButton onClick={() => setModalOpen(false)}>CLOSE</GhostButton>
+                </div>
             </PortalModal>
 
             {qr && (
