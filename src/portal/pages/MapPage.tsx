@@ -5,7 +5,9 @@ import { PortalCard, SectionLabel, StatusPill } from '../components/primitives';
 import { ZONES } from '../lib/data';
 
 const MAP_EMBED =
-    'https://www.google.com/maps?q=16.4590,80.4985&hl=en&z=16&output=embed';
+    'https://www.google.com/maps?q=16.4948622,80.4990628&hl=en&z=17&output=embed';
+
+const MAP_ZONE_ORDER = ['arena', 'appsec', 'art', 'nfc', 'gaming', 'expo', 'forensics'] as const;
 
 export default function MapPage() {
     const [locationState, setLocationState] = useState<'idle' | 'granted' | 'denied'>('idle');
@@ -15,6 +17,11 @@ export default function MapPage() {
         if (!userLocation) return MAP_EMBED;
         return `https://www.google.com/maps?q=${userLocation.lat},${userLocation.lng}&hl=en&z=17&output=embed`;
     }, [userLocation]);
+
+    const mapZones = useMemo(() => {
+        const zoneById = new Map(ZONES.map((zone) => [zone.id, zone]));
+        return MAP_ZONE_ORDER.map((id) => zoneById.get(id)).filter((zone): zone is NonNullable<typeof zone> => Boolean(zone));
+    }, []);
 
     const requestLocation = () => {
         if (!navigator.geolocation) {
@@ -82,15 +89,10 @@ export default function MapPage() {
                             ACTIVE ZONES
                         </div>
                         <div className="space-y-1.5">
-                            {[
-                                ['CTF', 'var(--amber)'],
-                                ['KOTH', 'var(--portal-blue)'],
-                                ['HARDWARE', 'var(--portal-green)'],
-                                ['APPSEC', 'var(--portal-blue)'],
-                            ].map(([label, color]) => (
-                                <div key={label} className="font-portal-mono text-[9px] text-[color-mix(in_srgb,var(--fg)_65%,black_12%)] tracking-[0.1em] uppercase flex items-center gap-2">
-                                    <span className="size-2" style={{ background: color }} />
-                                    {label}
+                            {mapZones.map((zone) => (
+                                <div key={zone.id} className="font-portal-mono text-[9px] text-[color-mix(in_srgb,var(--fg)_65%,black_12%)] tracking-[0.1em] uppercase flex items-center gap-2">
+                                    <span className="size-2" style={{ background: zone.color }} />
+                                    {zone.shortName}
                                 </div>
                             ))}
                         </div>
@@ -100,32 +102,31 @@ export default function MapPage() {
                 <SectionLabel className="mb-4 mt-6">-- ZONE LOCATIONS --</SectionLabel>
 
                 <div className="space-y-2" data-portal-card>
-                    {ZONES.map((zone) => (
+                    {mapZones.map((zone) => (
                         <PortalCard key={zone.id} className="px-4 py-4">
-                            <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+                            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
                                 <div className="flex w-full items-center gap-3 sm:gap-4 min-w-0">
                                     <span className="size-2.5 shrink-0" style={{ backgroundColor: zone.color }} />
                                     <div className="flex-1 min-w-0">
                                         <div className="font-portal-mono text-[11px] tracking-[0.08em] text-[var(--fg)] uppercase">
                                             {zone.name}
                                         </div>
-                                        <div className="font-portal-mono text-[9px] tracking-[0.09em] text-[color-mix(in_srgb,var(--dim)_68%,white_7%)] uppercase mt-1">
+                                    </div>
+                                </div>
+                                <div className="flex w-full items-center justify-between gap-3 sm:w-auto sm:ml-auto sm:justify-end">
+                                    <StatusPill
+                                        tone={zone.status === 'open' ? 'blue' : zone.status === 'soon' ? 'amber' : 'red'}
+                                        label={zone.status.toUpperCase()}
+                                    />
+                                    <div className="min-w-0 text-right sm:max-w-[220px]">
+                                        <div className="font-portal-mono text-[8px] tracking-[0.14em] text-[color-mix(in_srgb,var(--dim)_62%,white_8%)] uppercase">
+                                            Venue
+                                        </div>
+                                        <div className="font-portal-mono text-[9px] tracking-[0.08em] text-[var(--amber)] uppercase break-words">
                                             {zone.location}
                                         </div>
                                     </div>
                                 </div>
-                                <StatusPill
-                                    tone={zone.status === 'open' ? 'blue' : zone.status === 'soon' ? 'amber' : 'red'}
-                                    label={zone.status.toUpperCase()}
-                                />
-                                <a
-                                    href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(`VIT-AP ${zone.location}`)}`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="font-portal-mono text-[9px] tracking-[0.11em] text-[var(--amber)] uppercase hover:underline whitespace-nowrap self-start sm:self-auto sm:ml-auto"
-                                >
-                                    {'GET DIRECTIONS ->'}
-                                </a>
                             </div>
                         </PortalCard>
                     ))}
