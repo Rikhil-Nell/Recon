@@ -100,13 +100,13 @@ export const sideEvents: SiteEvent[] = [
         meta: [],
     },
     {
-        title: 'AppSec Zone',
+        title: 'App Sec Zone',
         description: 'Guided web & mobile app pentesting labs. OWASP Top 10, API abuse, auth bypass — learn by breaking real apps.',
         tags: ['WEB', 'MOBILE'],
         meta: [],
     },
     {
-        title: 'Media Forensics & Deepfake Lab',
+        title: 'Media Forensics',
         description: 'Detect manipulated images, analyse metadata, uncover deepfakes. Digital forensics meets AI deception.',
         tags: ['FORENSICS', 'AI'],
         meta: [],
@@ -118,7 +118,7 @@ export const sideEvents: SiteEvent[] = [
         meta: [],
     },
     {
-        title: 'Cyber Expo Zone',
+        title: 'Cyber Expo',
         description: 'Industry booths, live demos, recruiter meet-ups. See cutting-edge security tools in action.',
         tags: ['EXPO', 'NETWORKING'],
         meta: [],
