@@ -164,9 +164,19 @@ export default function MerchPage() {
                                           ? 'AVAILABLE'
                                           : 'NEED MORE PTS'}
                                 </ZoneTag>
-                                <div className="absolute bottom-3 left-3 font-portal-mono text-[8px] tracking-[0.12em] uppercase text-[color-mix(in_srgb,var(--fg)_56%,black_10%)] bg-[rgba(8,8,7,0.8)] px-2 py-1">
-                                    IMAGE COMING SOON
-                                </div>
+                                {item.image ? (
+                                    <img
+                                        src={item.image}
+                                        alt={item.name}
+                                        className="absolute inset-0 w-full h-full object-contain p-3 sm:p-4"
+                                        loading="lazy"
+                                        decoding="async"
+                                    />
+                                ) : (
+                                    <div className="absolute bottom-3 left-3 font-portal-mono text-[8px] tracking-[0.12em] uppercase text-[color-mix(in_srgb,var(--fg)_56%,black_10%)] bg-[rgba(8,8,7,0.8)] px-2 py-1">
+                                        IMAGE COMING SOON
+                                    </div>
+                                )}
                             </div>
 
                             <div className="px-4 py-4">
