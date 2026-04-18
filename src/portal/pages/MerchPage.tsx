@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import PortalPage from '../components/PortalPage';
 import PortalModal from '../components/PortalModal';
 import { GhostButton, PortalCard, PrimaryButton, SectionLabel, ZoneTag } from '../components/primitives';
+import { MERCH_ITEMS } from '../lib/data';
 import { useAuthStore } from '../stores/authStore';
 import { useToastStore } from '../stores/toastStore';
 import { fetchShopItems, redeemShopItem } from '../api/shop';
@@ -10,6 +11,7 @@ import type { BackendRedemption, BackendShopItem } from '../api/shop';
 import { ApiError } from '../api/client';
 
 type RedeemStage = 'confirm' | 'loading' | 'success';
+type CatalogSource = 'backend' | 'preview';
 
 function merchPattern(itemId: string) {
     if (itemId.includes('operator')) {
@@ -24,6 +26,53 @@ function merchPattern(itemId: string) {
     return 'repeating-linear-gradient(90deg, color-mix(in srgb, var(--amber) 10%, transparent) 0 8px, transparent 8px 16px)';
 }
 
+const merchImageById: Record<string, string> = MERCH_ITEMS.reduce<Record<string, string>>((acc, item) => {
+    if (item.image) acc[item.id] = item.image;
+    return acc;
+}, {});
+
+function resolveMerchImage(item: BackendShopItem) {
+    const key = item.photo_key?.trim();
+    if (key) {
+        if (key.startsWith('http://') || key.startsWith('https://') || key.startsWith('/')) {
+            return key;
+        }
+    }
+    return merchImageById[item.id];
+}
+
+function buildPreviewCatalog(): BackendShopItem[] {
+    const now = new Date().toISOString();
+    return MERCH_ITEMS.map((item) => ({
+        id: item.id,
+        name: item.name,
+        description: item.description,
+        point_cost: item.pointsCost,
+        stock: item.stock,
+        remaining_stock: item.stock,
+        is_active: true,
+        photo_key: item.image ?? null,
+        created_at: now,
+        updated_at: now,
+    }));
+}
+
+function extractShopItems(payload: unknown): BackendShopItem[] {
+    if (Array.isArray(payload)) {
+        return payload as BackendShopItem[];
+    }
+
+    if (payload && typeof payload === 'object') {
+        const record = payload as Record<string, unknown>;
+        const arrayCandidate = [record.items, record.data, record.results].find(Array.isArray);
+        if (Array.isArray(arrayCandidate)) {
+            return arrayCandidate as BackendShopItem[];
+        }
+    }
+
+    return [];
+}
+
 export default function MerchPage() {
     const participant = useAuthStore((state) => state.participant);
     const addToast = useToastStore((state) => state.addToast);
@@ -32,6 +81,7 @@ export default function MerchPage() {
     const [redeemStage, setRedeemStage] = useState<RedeemStage>('confirm');
     const [redeemResult, setRedeemResult] = useState<BackendRedemption | null>(null);
     const [items, setItems] = useState<BackendShopItem[]>([]);
+    const [catalogSource, setCatalogSource] = useState<CatalogSource>('backend');
     const [loading, setLoading] = useState(true);
 
     const selected = selectedId ? items.find((item) => item.id === selectedId) ?? null : null;
@@ -48,15 +98,34 @@ export default function MerchPage() {
         let alive = true;
         (async () => {
             try {
-                const res = await fetchShopItems();
+                const raw = (await fetchShopItems()) as unknown;
                 if (!alive) return;
-                setItems(res.filter((item) => item.is_active));
+
+                const backendItems = extractShopItems(raw);
+                const activeItems = backendItems.filter((item) => item.is_active ?? true);
+
+                if (activeItems.length > 0) {
+                    setItems(activeItems);
+                    setCatalogSource('backend');
+                } else {
+                    setItems(buildPreviewCatalog());
+                    setCatalogSource('preview');
+                    addToast({
+                        type: 'warning',
+                        title: 'PREVIEW CATALOG MODE',
+                        body: 'Live shop returned no active items. Showing preview catalog.',
+                    });
+                }
             } catch {
                 addToast({
-                    type: 'error',
-                    title: 'MERCH UNAVAILABLE',
-                    body: 'Unable to load merch catalog.',
+                    type: 'warning',
+                    title: 'PREVIEW CATALOG MODE',
+                    body: 'Unable to load live merch catalog. Showing preview catalog.',
                 });
+                if (alive) {
+                    setItems(buildPreviewCatalog());
+                    setCatalogSource('preview');
+                }
             } finally {
                 if (alive) setLoading(false);
             }
@@ -68,6 +137,14 @@ export default function MerchPage() {
 
     const onConfirmRedeem = async () => {
         if (!selected) return;
+        if (catalogSource !== 'backend') {
+            addToast({
+                type: 'warning',
+                title: 'REDEMPTION DISABLED',
+                body: 'Live shop sync is not available yet. Please try again later.',
+            });
+            return;
+        }
         setRedeemStage('loading');
         try {
             const redeemed = await redeemShopItem(selected.id);
@@ -149,10 +226,24 @@ export default function MerchPage() {
                     </PortalCard>
                 )}
 
+                {!loading && catalogSource === 'preview' && (
+                    <PortalCard className="px-4 py-4 md:col-span-2" attr>
+                        <div className="font-portal-mono text-[10px] tracking-[0.14em] uppercase text-[color-mix(in_srgb,var(--amber)_66%,black_20%)]">
+                            LIVE SHOP SYNC UNAVAILABLE - SHOWING PREVIEW ITEMS
+                        </div>
+                    </PortalCard>
+                )}
+
                 {!loading && items.map((item) => {
                     const affordable = canAfford(item.point_cost);
                     const remaining = item.remaining_stock ?? item.stock ?? 0;
                     const outOfStock = remaining <= 0;
+                    const imageSrc = resolveMerchImage(item);
+                    const canRedeem = catalogSource === 'backend' && affordable && !outOfStock;
+                    const missing = Math.max(0, item.point_cost - points);
+                    const progress = item.point_cost > 0
+                        ? Math.min(100, Math.round((points / item.point_cost) * 100))
+                        : 100;
 
                     return (
                         <PortalCard key={item.id} className="p-0 overflow-hidden">
@@ -164,9 +255,9 @@ export default function MerchPage() {
                                           ? 'AVAILABLE'
                                           : 'NEED MORE PTS'}
                                 </ZoneTag>
-                                {item.image ? (
+                                {imageSrc ? (
                                     <img
-                                        src={item.image}
+                                        src={imageSrc}
                                         alt={item.name}
                                         className="absolute inset-0 w-full h-full object-contain p-3 sm:p-4"
                                         loading="lazy"
@@ -197,7 +288,7 @@ export default function MerchPage() {
                             </div>
 
                             <div className="px-4 pb-4">
-                                {!outOfStock ? (
+                                {canRedeem ? (
                                     <button
                                         type="button"
                                         className="w-full min-h-11 border border-[var(--amber)] text-[var(--amber)] font-portal-mono text-[11px] tracking-[0.12em] uppercase py-3 hover:bg-[color-mix(in_srgb,var(--amber)_10%,transparent)]"
@@ -210,9 +301,20 @@ export default function MerchPage() {
                                         {'REDEEM ->'}
                                     </button>
                                 ) : (
-                                    <div className="font-portal-mono text-[10px] tracking-[0.1em] uppercase text-[color-mix(in_srgb,var(--dim)_64%,white_7%)]">
-                                        CURRENTLY SOLD OUT
-                                    </div>
+                                    <>
+                                        <div className="font-portal-mono text-[10px] tracking-[0.1em] uppercase text-[color-mix(in_srgb,var(--dim)_64%,white_7%)]">
+                                            {catalogSource !== 'backend'
+                                                ? 'PREVIEW MODE - REDEMPTION DISABLED'
+                                                : outOfStock
+                                                  ? 'CURRENTLY SOLD OUT'
+                                                  : `NEED ${missing} MORE POINTS`}
+                                        </div>
+                                        {catalogSource === 'backend' && !outOfStock && !affordable && (
+                                            <div className="h-[2px] bg-[var(--border)] mt-2 overflow-hidden">
+                                                <div className="h-[2px] bg-[var(--amber)]" style={{ width: `${progress}%` }} />
+                                            </div>
+                                        )}
+                                    </>
                                 )}
                             </div>
                         </PortalCard>

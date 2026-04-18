@@ -2,6 +2,10 @@ import { useEffect, useRef } from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../stores/authStore';
 
+const DEV_BYPASS_AUTH =
+    import.meta.env.DEV
+    && ((import.meta.env.VITE_PORTAL_DEV_BYPASS_AUTH as string | undefined)?.trim() === '1');
+
 function AuthCheckShell() {
     return (
         <div className="min-h-[100dvh] bg-[var(--bg)] text-[var(--fg)] portal-grain flex items-center justify-center px-6">
@@ -20,6 +24,10 @@ export function RequireVerified() {
     const bootstrapSession = useAuthStore((state) => state.bootstrapSession);
     const location = useLocation();
     const bootstrappedRef = useRef(false);
+
+    if (DEV_BYPASS_AUTH) {
+        return <Outlet />;
+    }
 
     useEffect(() => {
         if (bootstrappedRef.current) return;
@@ -57,6 +65,10 @@ export function RequireParticipantProfile() {
     const sessionStatus = useAuthStore((state) => state.sessionStatus);
     const location = useLocation();
 
+    if (DEV_BYPASS_AUTH) {
+        return <Outlet />;
+    }
+
     if (sessionStatus !== 'authenticated') {
         return <Navigate to="/login" replace state={{ from: location.pathname }} />;
     }
@@ -75,6 +87,10 @@ export function RequireParticipantProfile() {
 export function RedirectIfVerified() {
     const sessionStatus = useAuthStore((state) => state.sessionStatus);
     const location = useLocation();
+
+    if (DEV_BYPASS_AUTH) {
+        return <Outlet />;
+    }
 
     // Keep verified users away from OTP verification, but allow opening /login explicitly.
     if (sessionStatus === 'authenticated' && location.pathname.startsWith('/verify')) {
