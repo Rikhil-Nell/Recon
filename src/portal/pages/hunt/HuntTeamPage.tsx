@@ -51,7 +51,7 @@ export default function HuntTeamPage() {
                 title: 'CREATE FAILED',
                 body:
                     err instanceof ApiError && err.status >= 500
-                        ? 'Server error — apply DB migrations (cd backend && uv run alembic upgrade head), then retry.'
+                        ? 'Server error. Please try again in a moment.'
                         : getApiErrorMessage(err, 'Could not create team.'),
             });
         } finally {
@@ -77,7 +77,7 @@ export default function HuntTeamPage() {
                 title: 'JOIN FAILED',
                 body:
                     err instanceof ApiError && err.status >= 500
-                        ? 'Server error — apply DB migrations (cd backend && uv run alembic upgrade head), then retry.'
+                        ? 'Server error. Please try again in a moment.'
                         : getApiErrorMessage(err, 'Could not join team.'),
             });
         } finally {

@@ -25,6 +25,7 @@ export default function HuntScanPage() {
     const loadMyTeam = useTeamStore((s) => s.loadMyTeam);
     const team = useTeamStore((s) => s.team);
     const teamLoadStatus = useTeamStore((s) => s.teamLoadStatus);
+    const teamError = useTeamStore((s) => s.teamError);
     const setProblemCache = useHuntScanStore((s) => s.setProblemCache);
     const addToast = useToastStore((s) => s.addToast);
 
@@ -34,6 +35,8 @@ export default function HuntScanPage() {
     const resolvingRef = useRef(false);
     const rafRef = useRef<number>(0);
     const zxingReaderRef = useRef<BrowserMultiFormatReader | null>(null);
+    /** Returned by ZXing `decodeFromVideoDevice`; must call `stop()` to end the decode loop. */
+    const zxingControlsRef = useRef<{ stop: () => void } | null>(null);
     const wakeLockRef = useRef<WakeLockSentinel | null>(null);
 
     const [ui, setUi] = useState<ScanUiState>('idle');
@@ -68,10 +71,12 @@ export default function HuntScanPage() {
             void releaseWakeLock();
             stopTracks();
             try {
-                zxingReaderRef.current = null;
+                zxingControlsRef.current?.stop();
             } catch {
                 /* ignore */
             }
+            zxingControlsRef.current = null;
+            zxingReaderRef.current = null;
         };
     }, [releaseWakeLock, stopTracks]);
 
@@ -152,18 +157,33 @@ export default function HuntScanPage() {
 
     const startZxing = useCallback(
         async (video: HTMLVideoElement) => {
+            try {
+                zxingControlsRef.current?.stop();
+            } catch {
+                /* ignore */
+            }
+            zxingControlsRef.current = null;
+
             const reader = new BrowserMultiFormatReader();
             zxingReaderRef.current = reader;
-            await reader.decodeFromVideoDevice(undefined, video, (result, err) => {
+            const controls = await reader.decodeFromVideoDevice(undefined, video, (result, err) => {
                 if (stoppedRef.current) return;
                 if (err && String(err).includes('NotFound')) return;
                 if (result) {
                     stoppedRef.current = true;
+                    try {
+                        zxingControlsRef.current?.stop();
+                    } catch {
+                        /* ignore */
+                    }
+                    zxingControlsRef.current = null;
+                    zxingReaderRef.current = null;
                     stopTracks();
                     void releaseWakeLock();
                     void resolveToken(result.getText());
                 }
             });
+            zxingControlsRef.current = controls;
         },
         [releaseWakeLock, resolveToken, stopTracks],
     );
@@ -232,6 +252,36 @@ export default function HuntScanPage() {
             </div>
         );
     }
+
+    if (teamLoadStatus === 'error') {
+        return (
+            <PortalPage className="pt-20 pb-28 px-4 max-w-xl mx-auto">
+                <div data-portal-header>
+                    <SectionLabel>-- SCAN QR --</SectionLabel>
+                    <div className="font-portal-display text-[clamp(26px,5vw,36px)] leading-none text-[var(--fg)] mt-2">
+                        Team unavailable
+                    </div>
+                </div>
+                <PortalCard className="mt-6 p-5 sm:p-6" attr>
+                    <p className="font-portal-body text-[13px] text-[var(--fg)]">
+                        {teamError ?? 'Could not load your team. Try again, or go to team setup.'}
+                    </p>
+                    <div className="mt-4 flex flex-col gap-3 sm:flex-row">
+                        <GhostButton type="button" onClick={() => void loadMyTeam()}>
+                            Retry
+                        </GhostButton>
+                        <Link
+                            to="/hunt/team"
+                            className="block w-full min-h-11 border border-[var(--border-dim)] hover:border-[var(--border)] font-portal-mono text-[11px] tracking-[0.12em] uppercase text-[var(--fg)] px-4 py-3 text-center leading-none"
+                        >
+                            Team setup
+                        </Link>
+                    </div>
+                </PortalCard>
+            </PortalPage>
+        );
+    }
+
     if (teamLoadStatus === 'ready' && !team) {
         return <Navigate to="/hunt/team" replace />;
     }
@@ -330,6 +380,13 @@ export default function HuntScanPage() {
                         onClick={() => {
                             stoppedRef.current = true;
                             cancelAnimationFrame(rafRef.current);
+                            try {
+                                zxingControlsRef.current?.stop();
+                            } catch {
+                                /* ignore */
+                            }
+                            zxingControlsRef.current = null;
+                            zxingReaderRef.current = null;
                             stopTracks();
                             void releaseWakeLock();
                             setUi('idle');

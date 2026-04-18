@@ -31,8 +31,7 @@ export const useTeamStore = create<TeamState>((set) => ({
             let msg = 'Failed to load team';
             if (e instanceof ApiError) {
                 if (e.status >= 500) {
-                    msg =
-                        'Server error (often missing DB tables). On the API machine run: cd backend && uv run alembic upgrade head';
+                    msg = 'Something went wrong on our end. Please try again in a moment.';
                 } else {
                     msg = e.message;
                 }

@@ -35,7 +35,12 @@ export function normalizeQrPayload(raw: string): string {
 
     const segments = pathname.split('/').filter(Boolean);
     const last = segments[segments.length - 1] ?? '';
-    const decoded = decodeURIComponent(last);
+    let decoded = last;
+    try {
+        decoded = decodeURIComponent(last);
+    } catch {
+        return '';
+    }
     if (isLikelyHuntQrToken(decoded)) {
         return decoded;
     }

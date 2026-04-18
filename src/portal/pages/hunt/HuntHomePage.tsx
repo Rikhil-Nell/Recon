@@ -144,7 +144,7 @@ export default function HuntHomePage() {
         );
     }
 
-    const total = progress?.total_problems ?? 10;
+    const total = progress?.total_problems ?? 0;
     const solved = progress?.solved_count ?? 0;
     const remaining = progress?.remaining_count ?? Math.max(0, total - solved);
     const rank = progress?.leaderboard_rank;
@@ -227,22 +227,18 @@ export default function HuntHomePage() {
 
             <div className="mt-6 grid gap-3">
                 {!completedAll ? (
-                    <Link to="/hunt/scan">
-                        <button
-                            type="button"
-                            className="w-full min-h-11 bg-[var(--amber)] text-[var(--bg)] hover:brightness-90 font-portal-mono text-[12px] tracking-[0.15em] uppercase px-4 py-3"
-                        >
-                            Scan next QR
-                        </button>
+                    <Link
+                        to="/hunt/scan"
+                        className="block w-full min-h-11 bg-[var(--amber)] text-[var(--bg)] hover:brightness-90 font-portal-mono text-[12px] tracking-[0.15em] uppercase px-4 py-3 text-center leading-none"
+                    >
+                        Scan next QR
                     </Link>
                 ) : (
-                    <Link to="/hunt/leaderboard">
-                        <button
-                            type="button"
-                            className="w-full min-h-11 bg-[var(--amber)] text-[var(--bg)] hover:brightness-90 font-portal-mono text-[12px] tracking-[0.15em] uppercase px-4 py-3"
-                        >
-                            View leaderboard
-                        </button>
+                    <Link
+                        to="/hunt/leaderboard"
+                        className="block w-full min-h-11 bg-[var(--amber)] text-[var(--bg)] hover:brightness-90 font-portal-mono text-[12px] tracking-[0.15em] uppercase px-4 py-3 text-center leading-none"
+                    >
+                        View leaderboard
                     </Link>
                 )}
                 <Link
