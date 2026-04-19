@@ -3,7 +3,7 @@ import PortalPage from '../components/PortalPage';
 import { PortalCard, SectionLabel, ZoneTag } from '../components/primitives';
 import { useAnnouncementStore } from '../stores/announcementStore';
 
-const FILTERS = ['ALL', 'URGENT', 'ZONE UPDATES', 'SCHEDULE', 'GENERAL'] as const;
+const FILTERS = ['ALL', 'URGENT', 'UPDATE', 'INFO', 'GENERAL'] as const;
 type Filter = (typeof FILTERS)[number];
 
 export default function AnnouncementsPage() {
@@ -23,12 +23,8 @@ export default function AnnouncementsPage() {
     const filtered = useMemo(() => {
         if (filter === 'ALL') return announcements;
         if (filter === 'URGENT') return announcements.filter((item) => item.priority === 'URGENT');
-        if (filter === 'ZONE UPDATES') {
-            return announcements.filter((item) => ['CTF', 'KOTH', 'HARDWARE', 'APPSEC'].includes(item.category));
-        }
-        if (filter === 'SCHEDULE') {
-            return announcements.filter((item) => item.category === 'SCHEDULE');
-        }
+        if (filter === 'UPDATE') return announcements.filter((item) => item.priority === 'UPDATE');
+        if (filter === 'INFO') return announcements.filter((item) => item.priority === 'INFO');
         return announcements.filter((item) => item.priority === 'GENERAL' || item.category === 'GENERAL');
     }, [announcements, filter]);
 

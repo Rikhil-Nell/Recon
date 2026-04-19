@@ -9,11 +9,12 @@ interface QrPassModalProps {
     open: boolean;
     zoneName: string;
     code: string;
+    qrToken: string;
     active: boolean;
     onClose: () => void;
 }
 
-export default function QrPassModal({ open, zoneName, code, active, onClose }: QrPassModalProps) {
+export default function QrPassModal({ open, zoneName, code, qrToken, active, onClose }: QrPassModalProps) {
     const contentRef = useRef<HTMLDivElement>(null);
     const isMobile = useMediaQuery('(max-width: 640px)');
     const qrSize = isMobile ? 210 : 260;
@@ -64,7 +65,7 @@ export default function QrPassModal({ open, zoneName, code, active, onClose }: Q
                 </div>
 
                 <div className="relative inline-block max-w-full border border-[var(--border)] p-2 sm:p-3 bg-white">
-                    <QRCodeSVG value={`${zoneName}:${code}`} size={qrSize} bgColor="#ffffff" fgColor="#111111" />
+                    <QRCodeSVG value={qrToken} size={qrSize} bgColor="#ffffff" fgColor="#111111" />
                     {!active && (
                         <div className="absolute inset-0 bg-[color-mix(in_srgb,var(--portal-red)_24%,transparent)] flex items-center justify-center">
                             <span className="font-portal-mono text-[12px] tracking-[0.16em] text-[var(--portal-red)] uppercase">

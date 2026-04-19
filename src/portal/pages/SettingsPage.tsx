@@ -4,6 +4,7 @@ import PortalPage from '../components/PortalPage';
 import { GhostButton, PortalCard, PrimaryButton, SectionLabel } from '../components/primitives';
 import { authApi } from '../../api/backend';
 import { updateMyParticipantProfile, updateMyTalentVisibility } from '../api/participants';
+import { getParticipantYearError, isValidParticipantYear, PARTICIPANT_YEAR_MAX, PARTICIPANT_YEAR_MIN } from '../lib/participantProfile';
 import { useAuthStore } from '../stores/authStore';
 import { useToastStore } from '../stores/toastStore';
 import { getApiErrorMessage } from '../lib/apiErrorMessage';
@@ -27,6 +28,7 @@ export default function SettingsPage() {
     const [talentShareable, setTalentShareable] = useState(false);
     const [loading, setLoading] = useState(false);
     const [refreshing, setRefreshing] = useState(false);
+    const yearError = getParticipantYearError(year);
 
     useEffect(() => {
         if (sessionStatus === 'authenticated' && profileStatus === 'missing') {
@@ -80,6 +82,14 @@ export default function SettingsPage() {
     const onSaveProfile = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!participantProfile || loading) return;
+        if (!isValidParticipantYear(year)) {
+            addToast({
+                type: 'error',
+                title: 'INVALID YEAR',
+                body: yearError ?? 'Year must be between 1 and 5.',
+            });
+            return;
+        }
         setLoading(true);
         try {
             await updateMyParticipantProfile({
@@ -197,11 +207,15 @@ export default function SettingsPage() {
                         </label>
                         <input
                             type="number"
-                            min={1}
+                            min={PARTICIPANT_YEAR_MIN}
+                            max={PARTICIPANT_YEAR_MAX}
                             value={year}
-                            onChange={(e) => setYear(Number(e.target.value))}
+                            onChange={(e) => setYear(e.target.value === '' ? Number.NaN : Number(e.target.value))}
                             className="w-full min-h-11 bg-[var(--bg)] border border-[var(--border-dim)] px-4 py-3 font-portal-mono text-[14px] text-[var(--fg)] outline-none focus:border-[var(--amber)]"
                         />
+                        <p className={`mt-1.5 font-portal-mono text-[10px] ${yearError ? 'text-[var(--portal-red)]' : 'text-[color-mix(in_srgb,var(--dim)_70%,white_6%)]'}`}>
+                            {yearError ?? `Use a year between ${PARTICIPANT_YEAR_MIN} and ${PARTICIPANT_YEAR_MAX}.`}
+                        </p>
                     </div>
                     <div className="grid sm:grid-cols-2 gap-4">
                         <div>
@@ -248,7 +262,7 @@ export default function SettingsPage() {
                             />
                         </div>
                     </div>
-                    <PrimaryButton type="submit" disabled={loading || !dirty}>
+                    <PrimaryButton type="submit" disabled={loading || !dirty || !isValidParticipantYear(year)}>
                         {loading ? 'SAVING…' : 'SAVE PROFILE'}
                     </PrimaryButton>
                 </form>

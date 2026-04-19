@@ -41,7 +41,10 @@ export const participantsApi = {
         apiFetch<AnyObj>('/api/v1/participants/me/talent-visibility', { method: 'PATCH', json: payload }),
     get: (participantId: string) =>
         apiFetch<AnyObj>(`/api/v1/participants/${encodeURIComponent(participantId)}`),
-    list: () => apiFetch<AnyObj[]>('/api/v1/participants/'),
+    list: (checkedIn?: boolean) => {
+        const query = checkedIn == null ? '' : `?checked_in=${checkedIn}`;
+        return apiFetch<AnyObj[]>(`/api/v1/participants/${query}`);
+    },
     checkIn: (participantId: string) =>
         apiFetch<AnyObj>(`/api/v1/participants/${encodeURIComponent(participantId)}/checkin`, { method: 'POST' }),
 };
@@ -66,6 +69,33 @@ export const zonesApi = {
         apiFetch<AnyObj>(`/api/v1/zones/${encodeURIComponent(zoneId)}/register`, { method: 'DELETE' }),
     myRegistrations: () => apiFetch<AnyObj>('/api/v1/me/registrations'),
     myPasses: () => apiFetch<AnyObj>('/api/v1/me/passes'),
+    adminScanCheckIn: (payload: AnyObj, idempotencyKey: string) =>
+        apiFetch<AnyObj>('/api/v1/admin/scans/check-in', {
+            method: 'POST',
+            json: payload,
+            headers: {
+                'X-Idempotency-Key': idempotencyKey,
+            },
+        }),
+};
+
+// teams
+export const teamsApi = {
+    create: (payload: AnyObj) => apiFetch<AnyObj>('/api/v1/teams/', { method: 'POST', json: payload }),
+    join: (payload: AnyObj) => apiFetch<AnyObj>('/api/v1/teams/join', { method: 'POST', json: payload }),
+    me: () => apiFetch<AnyObj>('/api/v1/teams/me'),
+    listAdmin: () => apiFetch<AnyObj>('/api/v1/teams/admin'),
+    createAdmin: (payload: AnyObj) => apiFetch<AnyObj>('/api/v1/teams/admin', { method: 'POST', json: payload }),
+    getAdmin: (teamId: string) => apiFetch<AnyObj>(`/api/v1/teams/admin/${encodeURIComponent(teamId)}`),
+    updateAdmin: (teamId: string, payload: AnyObj) =>
+        apiFetch<AnyObj>(`/api/v1/teams/admin/${encodeURIComponent(teamId)}`, { method: 'PATCH', json: payload }),
+    deleteAdmin: (teamId: string) =>
+        apiFetch<void>(`/api/v1/teams/admin/${encodeURIComponent(teamId)}`, { method: 'DELETE' }),
+    assignParticipant: (participantId: string, payload: AnyObj) =>
+        apiFetch<AnyObj>(`/api/v1/teams/admin/participants/${encodeURIComponent(participantId)}/team`, {
+            method: 'PUT',
+            json: payload,
+        }),
 };
 
 // storage (query params match FastAPI `s3_router`: filename, content_type, optional scope)

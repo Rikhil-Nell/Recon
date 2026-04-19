@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { announcementsApi, pointsApi, shopApi, zonesApi } from '../../../api/backend';
+import { apiFetch } from '../../../api/client';
 import { AdminPageShell } from '../../components/admin/AdminPageShell';
 import { GhostButton, PortalCard, PrimaryButton } from '../../components/primitives';
 import { getApiErrorMessage } from '../../lib/apiErrorMessage';
@@ -15,6 +16,8 @@ export default function AdminApiCoveragePage() {
     const [shopItemId, setShopItemId] = useState('');
     const [redemptionId, setRedemptionId] = useState('');
     const [idempotencyKey, setIdempotencyKey] = useState(() => `key-${Date.now()}`);
+    const [qrToken, setQrToken] = useState('');
+    const [scannerDeviceId, setScannerDeviceId] = useState('portal-admin-scanner');
 
     const run = async (title: string, fn: () => Promise<unknown>) => {
         try {
@@ -44,6 +47,8 @@ export default function AdminApiCoveragePage() {
                     <input value={shopItemId} onChange={(e) => setShopItemId(e.target.value)} placeholder="shop item_id uuid" className="min-h-10 bg-[var(--bg)] border border-[var(--border-dim)] px-3 font-portal-mono text-[11px]" />
                     <input value={redemptionId} onChange={(e) => setRedemptionId(e.target.value)} placeholder="redemption_id uuid" className="min-h-10 bg-[var(--bg)] border border-[var(--border-dim)] px-3 font-portal-mono text-[11px]" />
                     <input value={idempotencyKey} onChange={(e) => setIdempotencyKey(e.target.value)} placeholder="idempotency key" className="min-h-10 bg-[var(--bg)] border border-[var(--border-dim)] px-3 font-portal-mono text-[11px]" />
+                    <input value={scannerDeviceId} onChange={(e) => setScannerDeviceId(e.target.value)} placeholder="scanner_device_id" className="min-h-10 bg-[var(--bg)] border border-[var(--border-dim)] px-3 font-portal-mono text-[11px]" />
+                    <input value={qrToken} onChange={(e) => setQrToken(e.target.value)} placeholder="zone qr token" className="min-h-10 bg-[var(--bg)] border border-[var(--border-dim)] px-3 font-portal-mono text-[11px]" />
                 </div>
             </PortalCard>
 
@@ -56,6 +61,16 @@ export default function AdminApiCoveragePage() {
                     <GhostButton onClick={() => void run('ZONE UNREGISTER', () => zonesApi.unregister(zoneId))} disabled={!zoneId}>UNREGISTER</GhostButton>
                     <GhostButton onClick={() => void run('MY REGISTRATIONS', () => zonesApi.myRegistrations())}>MY REGISTRATIONS</GhostButton>
                     <GhostButton onClick={() => void run('MY PASSES', () => zonesApi.myPasses())}>MY PASSES</GhostButton>
+                    <GhostButton
+                        onClick={() => void run('ZONE SCAN CHECK-IN', () => zonesApi.adminScanCheckIn({
+                            qrToken,
+                            scannerDeviceId,
+                            scannedAt: new Date().toISOString(),
+                        }, `${idempotencyKey}-scan`))}
+                        disabled={!qrToken || !scannerDeviceId}
+                    >
+                        SCAN CHECK-IN
+                    </GhostButton>
                 </div>
             </PortalCard>
 
@@ -159,6 +174,18 @@ export default function AdminApiCoveragePage() {
                         disabled={!redemptionId}
                     >
                         FULFILL
+                    </GhostButton>
+                    <GhostButton
+                        onClick={() => void run('SHOP RETURN', () => apiFetch(`/api/v1/shop/redemptions/${encodeURIComponent(redemptionId)}/return`, {
+                            method: 'PATCH',
+                            json: {
+                                idempotency_key: `${idempotencyKey}-return`,
+                                return_notes: 'Returned from admin portal',
+                            },
+                        }))}
+                        disabled={!redemptionId}
+                    >
+                        RETURN
                     </GhostButton>
                 </div>
             </PortalCard>

@@ -25,6 +25,9 @@ export interface Zone {
     duration?: string;
     format?: string;
     points: number;
+    registrationRequired: boolean;
+    registrationPoints: number;
+    checkInPoints: number;
     location: string;
     registeredCount: number;
     status: ZoneStatus;
@@ -62,11 +65,17 @@ export interface Participant {
     registrationId?: string | null;
     points?: number | null;
     checkedInZones?: string[];
+    leaderboardRank?: number | null;
+    eventsRegisteredCount?: number;
+    zonesCheckedInCount?: number;
 }
 
 export interface ZoneQrCode {
     zoneId: string;
+    registrationId: string;
     code: string;
+    qrToken: string;
+    qrExpiresAt: string;
     isActive: boolean;
     checkedIn?: boolean;
     checkedInAt?: string;

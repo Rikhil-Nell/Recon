@@ -23,6 +23,7 @@ export default function ZoneDetailPage() {
     const registeredZones = useZoneStore((state) => state.registeredZones);
     const qrCodes = useZoneStore((state) => state.qrCodes);
     const registerZone = useZoneStore((state) => state.registerZone);
+    const refreshZonePass = useZoneStore((state) => state.refreshZonePass);
     const [zone, setZone] = useState<Zone | null>(null);
     const [catalog, setCatalog] = useState<Zone[]>([]);
     const [loading, setLoading] = useState(true);
@@ -94,6 +95,11 @@ export default function ZoneDetailPage() {
     const isRegistered = registeredZones.includes(zone.id);
     const isChecked = qr?.checkedIn || qr?.isActive === false;
     const zoneTags = Array.isArray(zone.tags) ? zone.tags : [];
+    const rewardLabel = !zone.registrationRequired
+        ? 'OPEN ACCESS / NO REGISTRATION'
+        : zone.checkInPoints > 0
+            ? `REGISTER +${zone.registrationPoints} / CHECK-IN +${zone.checkInPoints}`
+            : `REGISTER +${zone.registrationPoints}`;
 
     return (
         <PortalPage className="pt-20 pb-24 px-4 sm:px-5 lg:px-8 max-w-3xl mx-auto">
@@ -131,7 +137,7 @@ export default function ZoneDetailPage() {
                             ['DURATION', zone.duration ?? 'FLEX'],
                             ['TEAM SIZE', zone.teamSize],
                             ['PRIZES', zone.prizes ?? 'ZONE SWAG'],
-                            ['POINTS', `${zone.points} PTS ON CHECK-IN`],
+                            ['REWARDS', rewardLabel],
                         ].map(([label, value], idx) => (
                             <div
                                 key={label}
@@ -155,20 +161,28 @@ export default function ZoneDetailPage() {
             <PortalCard className="p-5 sm:p-6 mb-6 text-center" attr>
                 <SectionLabel className="mb-3">-- ENTRY PASS --</SectionLabel>
 
-                {!isRegistered && (
+                {!zone.registrationRequired && (
+                    <div className="max-w-sm mx-auto">
+                        <div className="font-portal-body text-[13px] text-[color-mix(in_srgb,var(--dim)_74%,white_8%)] leading-relaxed mb-4">
+                            This zone is open access. Walk in directly when the zone is live. No QR pass is required.
+                        </div>
+                    </div>
+                )}
+
+                {zone.registrationRequired && !isRegistered && (
                     <div className="max-w-sm mx-auto">
                         <div className="font-portal-body text-[13px] text-[color-mix(in_srgb,var(--dim)_74%,white_8%)] leading-relaxed mb-4">
                             You are not registered for this zone yet. Register now to generate your single-use
-                            entry pass.
+                            entry pass and claim +{zone.registrationPoints} points.
                         </div>
                         <PrimaryButton onClick={() => setModalOpen(true)}>REGISTER and GENERATE PASS</PrimaryButton>
                     </div>
                 )}
 
-                {isRegistered && !isChecked && qr && (
+                {zone.registrationRequired && isRegistered && !isChecked && qr && (
                     <>
                         <div className="inline-block border border-[var(--border)] p-4 bg-white mb-4">
-                            <QRCodeSVG value={`${zone.name}:${qr.code}`} size={qrSize} bgColor="#ffffff" fgColor="#111111" />
+                            <QRCodeSVG value={qr.qrToken} size={qrSize} bgColor="#ffffff" fgColor="#111111" />
                         </div>
                         <div className="font-portal-mono text-[11px] tracking-[0.1em] text-[var(--fg)] uppercase">
                             {zone.name}
@@ -184,7 +198,10 @@ export default function ZoneDetailPage() {
                         </div>
                         <button
                             type="button"
-                            onClick={() => setQrFullOpen(true)}
+                            onClick={() => {
+                                void refreshZonePass(zone.id).catch(() => null);
+                                setQrFullOpen(true);
+                            }}
                             className="mt-3 font-portal-mono text-[9px] tracking-[0.12em] text-[var(--amber)] hover:underline uppercase"
                         >
                             VIEW FULLSCREEN PASS
@@ -192,7 +209,7 @@ export default function ZoneDetailPage() {
                     </>
                 )}
 
-                {isRegistered && isChecked && (
+                {zone.registrationRequired && isRegistered && isChecked && (
                     <>
                         <CheckCircle2 className="size-12 text-[var(--portal-green)] mx-auto" />
                         <div className="font-portal-mono text-[13px] tracking-[0.13em] text-[var(--portal-green)] uppercase mt-3">
@@ -234,7 +251,7 @@ export default function ZoneDetailPage() {
                     {zone.name}
                 </div>
                 <div className="font-portal-body text-[13px] text-[color-mix(in_srgb,var(--dim)_74%,white_8%)] leading-relaxed mt-2">
-                    Register now to issue a backend-generated single-use pass for this zone.
+                    Register now to issue a backend-generated single-use pass for this zone and claim +{zone.registrationPoints} points.
                 </div>
                 <div className="grid gap-2 mt-5">
                     <PrimaryButton
@@ -268,6 +285,7 @@ export default function ZoneDetailPage() {
                     open={qrFullOpen}
                     zoneName={zone.name}
                     code={qr.code}
+                    qrToken={qr.qrToken}
                     active={Boolean(qr.isActive)}
                     onClose={() => setQrFullOpen(false)}
                 />

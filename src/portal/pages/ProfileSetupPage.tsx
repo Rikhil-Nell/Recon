@@ -4,6 +4,7 @@ import PortalPage from '../components/PortalPage';
 import { GhostButton, PortalCard, PrimaryButton, SectionLabel } from '../components/primitives';
 import { createMyParticipantProfile } from '../api/participants';
 import { ApiError } from '../api/client';
+import { getParticipantYearError, isValidParticipantYear, PARTICIPANT_YEAR_MAX, PARTICIPANT_YEAR_MIN } from '../lib/participantProfile';
 import { useAuthStore } from '../stores/authStore';
 import { useToastStore } from '../stores/toastStore';
 
@@ -17,9 +18,14 @@ export default function ProfileSetupPage() {
     const [institution, setInstitution] = useState('');
     const [year, setYear] = useState<number>(1);
     const [loading, setLoading] = useState(false);
+    const yearError = getParticipantYearError(year);
 
     const canSubmit = useMemo(() => {
-        return displayName.trim().length >= 3 && institution.trim().length >= 2 && Number.isFinite(year) && year >= 1;
+        return (
+            displayName.trim().length >= 3
+            && institution.trim().length >= 2
+            && isValidParticipantYear(year)
+        );
     }, [displayName, institution, year]);
 
     const onSubmit = async (e: React.FormEvent) => {
@@ -95,12 +101,15 @@ export default function ProfileSetupPage() {
                         <input
                             type="number"
                             value={year}
-                            onChange={(e) => setYear(Number(e.target.value))}
-                            min={1}
-                            max={6}
+                            onChange={(e) => setYear(e.target.value === '' ? Number.NaN : Number(e.target.value))}
+                            min={PARTICIPANT_YEAR_MIN}
+                            max={PARTICIPANT_YEAR_MAX}
                             className="w-full min-h-11 bg-[var(--bg)] border border-[var(--border-dim)] px-4 py-3 font-portal-mono text-[14px] text-[var(--fg)] outline-none focus:border-[var(--amber)]"
                             required
                         />
+                        <p className={`mt-1.5 font-portal-mono text-[10px] ${yearError ? 'text-[var(--portal-red)]' : 'text-[color-mix(in_srgb,var(--dim)_70%,white_6%)]'}`}>
+                            {yearError ?? `Use a year between ${PARTICIPANT_YEAR_MIN} and ${PARTICIPANT_YEAR_MAX}.`}
+                        </p>
                     </div>
 
                     <div className="grid gap-2 mt-2">

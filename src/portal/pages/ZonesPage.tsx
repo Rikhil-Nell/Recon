@@ -22,6 +22,7 @@ function isCheckedIn(zoneId: string, checkedInZones: string[], qrActive: boolean
 }
 
 function zoneState(zone: Zone, registered: boolean, checkedInFlag: boolean) {
+    if (!zone.registrationRequired) return 'O';
     if (!registered) return 'A';
     if (checkedInFlag) return 'C';
     return 'B';
@@ -32,6 +33,7 @@ export default function ZonesPage() {
     const registeredZonesRaw = useZoneStore((state) => state.registeredZones);
     const qrCodesRaw = useZoneStore((state) => state.qrCodes);
     const registerZone = useZoneStore((state) => state.registerZone);
+    const refreshZonePass = useZoneStore((state) => state.refreshZonePass);
     const addToast = useToastStore((state) => state.addToast);
 
     const checkedInZones = Array.isArray(checkedInZonesRaw) ? checkedInZonesRaw : [];
@@ -130,6 +132,22 @@ export default function ZonesPage() {
             );
         }
 
+        if (state === 'O') {
+            return (
+                <div className="flex items-start gap-3">
+                    <CheckCircle2 className="size-4 text-[var(--portal-blue)] mt-0.5" />
+                    <div>
+                        <div className="font-portal-mono text-[11px] tracking-[0.12em] uppercase text-[var(--portal-blue)]">
+                            OPEN ACCESS
+                        </div>
+                        <div className="font-portal-mono text-[9px] tracking-[0.08em] text-[color-mix(in_srgb,var(--dim)_65%,white_6%)] mt-1">
+                            No registration or QR pass required
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
         if (state === 'B' && qr) {
             return (
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between items-start gap-2 sm:gap-3">
@@ -137,7 +155,10 @@ export default function ZonesPage() {
                     <button
                         type="button"
                         className="font-portal-mono text-[10px] tracking-[0.12em] uppercase text-[var(--amber)] hover:underline"
-                        onClick={() => setQrZoneId(zone.id)}
+                        onClick={() => {
+                            void refreshZonePass(zone.id).catch(() => null);
+                            setQrZoneId(zone.id);
+                        }}
                     >
                         {'VIEW PASS ->'}
                     </button>
@@ -146,17 +167,17 @@ export default function ZonesPage() {
         }
 
         return (
-            <div className="flex items-start gap-3">
-                <CheckCircle2 className="size-4 text-[var(--portal-green)] mt-0.5" />
-                <div>
+                <div className="flex items-start gap-3">
+                    <CheckCircle2 className="size-4 text-[var(--portal-green)] mt-0.5" />
+                    <div>
                     <div className="font-portal-mono text-[11px] tracking-[0.12em] uppercase text-[var(--portal-green)]">
                         CHECKED IN
-                    </div>
-                    <div className="font-portal-mono text-[9px] tracking-[0.08em] text-[color-mix(in_srgb,var(--dim)_65%,white_6%)] mt-1">
-                        Points added at event end
+                        </div>
+                        <div className="font-portal-mono text-[9px] tracking-[0.08em] text-[color-mix(in_srgb,var(--dim)_65%,white_6%)] mt-1">
+                            {zone.checkInPoints > 0 ? `+${zone.checkInPoints} on check-in` : 'Pass scanned'}
+                        </div>
                     </div>
                 </div>
-            </div>
         );
     };
 
@@ -312,7 +333,9 @@ export default function ZonesPage() {
                         </div>
                         <div className="h-px bg-[var(--border-dim)] my-4" />
                         <div className="font-portal-mono text-[10px] tracking-[0.1em] text-[color-mix(in_srgb,var(--dim)_74%,white_8%)] leading-relaxed">
-                            This will register you for the selected zone and issue your backend-generated entry pass.
+                            {modalZone.registrationRequired
+                                ? `This will register you for the selected zone and issue your backend-generated entry pass. Reward: +${modalZone.registrationPoints} points.`
+                                : 'This zone is open access and does not require a pass.'}
                         </div>
 
                         <div className="mt-5 grid gap-2">
@@ -328,6 +351,7 @@ export default function ZonesPage() {
                     open={Boolean(qrZoneId)}
                     zoneName={qrZone.name}
                     code={qrPayload.code}
+                    qrToken={qrPayload.qrToken}
                     active={qrPayload.isActive}
                     onClose={() => setQrZoneId(null)}
                 />

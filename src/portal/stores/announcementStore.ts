@@ -49,6 +49,8 @@ interface AnnouncementState {
     hydrated: boolean;
     fetchAnnouncements: () => Promise<void>;
     addAnnouncement: (announcement: Announcement) => void;
+    upsertAnnouncement: (announcement: BackendAnnouncement) => void;
+    removeAnnouncement: (id: string) => void;
     markAllRead: () => void;
     markRead: (id: string) => void;
     setHighlightedAnnouncement: (id: string | null) => void;
@@ -81,6 +83,29 @@ export const useAnnouncementStore = create<AnnouncementState>()(
                 set({
                     announcements: next,
                     unreadCount: next.filter((a) => a.unread).length,
+                });
+            },
+            upsertAnnouncement: (announcement) => {
+                const mapped = mapAnnouncement(announcement);
+                const current = get().announcements;
+                const existing = current.find((item) => item.id === mapped.id);
+                const next = existing
+                    ? current.map((item) =>
+                        item.id === mapped.id
+                            ? { ...mapped, unread: item.unread || item.createdAt !== mapped.createdAt }
+                            : item,
+                    )
+                    : [{ ...mapped, unread: true }, ...current];
+                set({
+                    announcements: next,
+                    unreadCount: next.filter((a) => a.unread).length,
+                });
+            },
+            removeAnnouncement: (id) => {
+                const next = get().announcements.filter((announcement) => announcement.id !== id);
+                set({
+                    announcements: next,
+                    unreadCount: next.filter((announcement) => announcement.unread).length,
                 });
             },
             markAllRead: () => {

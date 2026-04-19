@@ -3,6 +3,7 @@ import { Outlet } from 'react-router-dom';
 import PortalNavigation from './PortalNavigation';
 import PortalToasts from './PortalToasts';
 import PortalDiagnostics from './PortalDiagnostics';
+import { getAnnouncementsWebSocketUrl, type BackendAnnouncementEvent } from '../api/announcements';
 import { useAnnouncementStore } from '../stores/announcementStore';
 import { useAuthStore } from '../stores/authStore';
 import { useToastStore } from '../stores/toastStore';
@@ -13,6 +14,8 @@ export default function PortalLayout() {
     const announcements = useAnnouncementStore((state) => state.announcements);
     const hydrated = useAnnouncementStore((state) => state.hydrated);
     const fetchAnnouncements = useAnnouncementStore((state) => state.fetchAnnouncements);
+    const upsertAnnouncement = useAnnouncementStore((state) => state.upsertAnnouncement);
+    const removeAnnouncement = useAnnouncementStore((state) => state.removeAnnouncement);
     const setHighlightedAnnouncement = useAnnouncementStore(
         (state) => state.setHighlightedAnnouncement,
     );
@@ -39,6 +42,76 @@ export default function PortalLayout() {
             });
         });
     }, [addToast, fetchAnnouncements, hydrated, sessionStatus]);
+
+    useEffect(() => {
+        if (sessionStatus !== 'authenticated') return;
+
+        let websocket: WebSocket | null = null;
+        let reconnectTimer: number | null = null;
+        let closedByUser = false;
+        let reconnectAttempts = 0;
+
+        const scheduleReconnect = () => {
+            if (closedByUser) return;
+            const delay = Math.min(10_000, 1_000 * (reconnectAttempts + 1));
+            reconnectTimer = window.setTimeout(connect, delay);
+            reconnectAttempts += 1;
+        };
+
+        const connect = () => {
+            websocket = new WebSocket(getAnnouncementsWebSocketUrl());
+
+            websocket.onopen = () => {
+                reconnectAttempts = 0;
+            };
+
+            websocket.onmessage = (event) => {
+                let payload: BackendAnnouncementEvent;
+                try {
+                    payload = JSON.parse(String(event.data)) as BackendAnnouncementEvent;
+                } catch {
+                    return;
+                }
+
+                if (!payload.announcement?.id) return;
+                if (payload.event === 'announcement.deleted') {
+                    removeAnnouncement(payload.announcement.id);
+                    return;
+                }
+                if (payload.event === 'announcement.created' || payload.event === 'announcement.updated') {
+                    upsertAnnouncement(payload.announcement as NonNullable<BackendAnnouncementEvent['announcement']> & {
+                        title: string;
+                        body: string;
+                        priority: 'urgent' | 'update' | 'info' | 'general';
+                        published_at: string;
+                        is_pinned: boolean;
+                        created_by: string;
+                        created_at: string;
+                        updated_at: string;
+                    });
+                }
+            };
+
+            websocket.onerror = () => {
+                websocket?.close();
+            };
+
+            websocket.onclose = () => {
+                websocket = null;
+                scheduleReconnect();
+            };
+        };
+
+        connect();
+
+        return () => {
+            closedByUser = true;
+            if (reconnectTimer != null) {
+                window.clearTimeout(reconnectTimer);
+            }
+            websocket?.close();
+        };
+    }, [removeAnnouncement, sessionStatus, upsertAnnouncement]);
 
     useEffect(() => {
         if (sessionStatus !== 'authenticated') return;

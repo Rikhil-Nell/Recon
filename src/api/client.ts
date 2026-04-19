@@ -49,3 +49,7 @@ export async function apiFetch<T>(
     return body as T;
 }
 
+export function buildApiUrl(path: string) {
+    return joinUrl(getApiBaseUrl(), path);
+}
+

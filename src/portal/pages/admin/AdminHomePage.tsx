@@ -6,6 +6,7 @@ const LINKS: { to: string; title: string; blurb: string }[] = [
     { to: '/admin/users', title: 'USERS', blurb: 'Create, list, update, and remove user accounts.' },
     { to: '/admin/incidents', title: 'INCIDENTS', blurb: 'Report and triage operational incidents.' },
     { to: '/admin/participants', title: 'PARTICIPANTS', blurb: 'Directory, detail lookup, and check-in.' },
+    { to: '/admin/teams', title: 'TEAMS', blurb: 'Admin team creation, roster review, and reassignment.' },
     { to: '/admin/schedule', title: 'SCHEDULE', blurb: 'Sessions, speakers, and speaker attachments.' },
     { to: '/admin/partners', title: 'PARTNERS', blurb: 'Applications, review, incentives, and assets.' },
     { to: '/admin/storage', title: 'STORAGE', blurb: 'Presigned upload and read URLs (R2).' },

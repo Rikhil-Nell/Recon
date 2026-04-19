@@ -203,9 +203,9 @@ export default function MerchPage() {
                 <SectionLabel className="mb-3">-- HOW TO EARN POINTS --</SectionLabel>
                 <div className="flex gap-3 sm:gap-6 overflow-x-auto pb-1">
                     {[
-                        { icon: Zap, text: 'Check in to zones -> 50 pts each' },
-                        { icon: Trophy, text: 'Compete in CTF or KOTH -> 200 pts' },
-                        { icon: Gift, text: 'Zone activities -> variable points' },
+                        { icon: Zap, text: 'Zone rewards are configured by the backend' },
+                        { icon: Trophy, text: 'Competition rewards settle after admin validation' },
+                        { icon: Gift, text: 'Use your dashboard balance as the source of truth' },
                     ].map(({ icon: Icon, text }) => (
                         <div key={text} className="min-w-[170px] sm:min-w-max text-center">
                             <Icon className="size-4 mx-auto text-[var(--amber)]" />

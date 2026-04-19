@@ -10,8 +10,35 @@ export interface BackendZoneCatalogItem {
     status: string;
     location: string;
     points: number;
+    registrationRequired: boolean;
+    registrationPoints: number;
+    checkInPoints: number;
     registeredCount: number;
     color: string;
+}
+
+export interface BackendEventRegistrationQr {
+    registrationId: string;
+    eventId: string;
+    qrToken: string;
+    qrExpiresAt: string;
+    pointsAwarded: number;
+    newPointsBalance?: number | null;
+}
+
+export interface BackendZonePass {
+    zoneId: string;
+    code: string;
+    isActive: boolean;
+    checkedInAt?: string | null;
+}
+
+export interface BackendMyRegistrations {
+    zoneIds: string[];
+}
+
+export interface BackendMyPasses {
+    passes: BackendZonePass[];
 }
 
 function asString(value: unknown, fallback = '') {
@@ -68,6 +95,9 @@ function normalizeZone(raw: unknown): BackendZoneCatalogItem | null {
     const status = asString(record.status ?? record.zone_status ?? (record.is_active === false ? 'closed' : 'open'), 'open').toLowerCase();
     const location = asString(record.location ?? record.venue ?? record.room, 'TBD');
     const points = asNumber(record.points ?? record.reward_points ?? record.point_cost, 0);
+    const registrationRequired = Boolean(record.registrationRequired ?? record.registration_required ?? true);
+    const registrationPoints = asNumber(record.registrationPoints ?? record.registration_points ?? points, points);
+    const checkInPoints = asNumber(record.checkInPoints ?? record.check_in_points, 0);
     const registeredCount = asNumber(record.registeredCount ?? record.registered_count ?? record.registration_count, 0);
     const color = asString(record.color ?? record.accent_color, '#8fb0ff');
 
@@ -81,6 +111,9 @@ function normalizeZone(raw: unknown): BackendZoneCatalogItem | null {
         status,
         location,
         points,
+        registrationRequired,
+        registrationPoints,
+        checkInPoints,
         registeredCount,
         color,
     };
@@ -114,3 +147,20 @@ export async function fetchZoneById(zoneId: string) {
     return zone;
 }
 
+export async function createEventRegistration(eventId: string) {
+    return apiFetch<BackendEventRegistrationQr>(`/api/v1/events/${encodeURIComponent(eventId)}/registrations`, {
+        method: 'POST',
+    });
+}
+
+export async function fetchRegistrationQr(registrationId: string) {
+    return apiFetch<BackendEventRegistrationQr>(`/api/v1/registrations/${encodeURIComponent(registrationId)}/qr`);
+}
+
+export async function fetchMyRegistrations() {
+    return apiFetch<BackendMyRegistrations>('/api/v1/me/registrations');
+}
+
+export async function fetchMyPasses() {
+    return apiFetch<BackendMyPasses>('/api/v1/me/passes');
+}

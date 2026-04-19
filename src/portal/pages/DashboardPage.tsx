@@ -24,6 +24,7 @@ export default function DashboardPage() {
     const participant = useAuthStore((state) => state.participant);
     const registeredZones = useZoneStore((state) => state.registeredZones);
     const qrCodes = useZoneStore((state) => state.qrCodes);
+    const refreshZonePass = useZoneStore((state) => state.refreshZonePass);
     const announcements = useAnnouncementStore((state) => state.announcements);
     const unreadCount = useAnnouncementStore((state) => state.unreadCount);
     const addToast = useToastStore((state) => state.addToast);
@@ -84,9 +85,9 @@ export default function DashboardPage() {
     const openPass = activePasses.find((item) => item.zoneId === openPassZoneId);
     const openZone = zones.find((zone) => zone.id === openPassZoneId);
 
-    const zonesVisited = participant?.checkedInZones?.length ?? 0;
-    const registrations = registeredZones.length;
-    const rankLabel = '--';
+    const zonesVisited = participant?.zonesCheckedInCount ?? participant?.checkedInZones?.length ?? 0;
+    const registrations = participant?.eventsRegisteredCount ?? registeredZones.length;
+    const rankLabel = participant?.leaderboardRank != null ? String(participant.leaderboardRank) : '--';
 
     return (
         <PortalPage className="pt-20 pb-24 lg:pb-8 px-4 sm:px-5 lg:px-8 max-w-5xl mx-auto">
@@ -190,14 +191,17 @@ export default function DashboardPage() {
                                 key={pass.zoneId}
                                 type="button"
                                 className="portal-card min-w-[170px] sm:min-w-[180px] p-4 text-left"
-                                onClick={() => setOpenPassZoneId(pass.zoneId)}
+                                onClick={() => {
+                                    void refreshZonePass(pass.zoneId).catch(() => null);
+                                    setOpenPassZoneId(pass.zoneId);
+                                }}
                             >
                                 <ZoneTag>{short}</ZoneTag>
                                 <div className="font-portal-mono text-[11px] mt-2 text-[var(--fg)] tracking-[0.08em] uppercase">
                                     {label}
                                 </div>
                                 <div className="mt-3 inline-block border border-[var(--border)] bg-white p-2">
-                                    <QRCodeSVG value={`${label}:${pass.code}`} size={100} bgColor="#ffffff" fgColor="#111111" />
+                                    <QRCodeSVG value={pass.qrToken} size={100} bgColor="#ffffff" fgColor="#111111" />
                                 </div>
                                 <div className="mt-3">
                                     <StatusPill tone={pass.isActive ? 'green' : 'red'} label={pass.isActive ? 'VALID' : 'USED'} />
@@ -298,6 +302,7 @@ export default function DashboardPage() {
                     open={Boolean(openPassZoneId)}
                     zoneName={openZone?.name ?? 'ENTRY PASS'}
                     code={openPass.code}
+                    qrToken={openPass.qrToken}
                     active={openPass.isActive}
                     onClose={() => setOpenPassZoneId(null)}
                 />

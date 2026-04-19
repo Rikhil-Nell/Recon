@@ -6,7 +6,7 @@ import type { BackendUserProfile } from '../api/auth';
 import { fetchMyParticipantProfile } from '../api/participants';
 import { fetchMe, logout as apiLogout } from '../api/auth';
 import { ApiError } from '../api/client';
-import { pointsApi, zonesApi } from '../../api/backend';
+import { participantsApi } from '../../api/backend';
 
 interface AuthState {
     sessionStatus: 'unknown' | 'authenticated' | 'unauthenticated';
@@ -76,20 +76,19 @@ export const useAuthStore = create<AuthState>()(
                         }
                     }
 
-                    const pointsResp =
+                    const dashboardResp =
                         profileStatus === 'present'
-                            ? await pointsApi.me().catch(() => null)
-                            : null;
-                    const regsResp =
-                        profileStatus === 'present'
-                            ? await zonesApi.myRegistrations().catch(() => null)
+                            ? await participantsApi.myDashboard().catch(() => null)
                             : null;
 
-                    const zoneIdsRaw = (regsResp as { zoneIds?: string[] } | null)?.zoneIds ?? [];
+                    const zoneIdsRaw = (dashboardResp as { checkedInZoneIds?: string[] } | null)?.checkedInZoneIds ?? [];
                     const checkedInZones = Array.isArray(zoneIdsRaw)
                         ? zoneIdsRaw.map((id) => String(id))
                         : [];
-                    const points = Number((pointsResp as { balance?: number } | null)?.balance ?? 0);
+                    const points = Number((dashboardResp as { pointsBalance?: number } | null)?.pointsBalance ?? 0);
+                    const leaderboardRank = (dashboardResp as { leaderboardRank?: number | null } | null)?.leaderboardRank ?? null;
+                    const eventsRegisteredCount = (dashboardResp as { eventsRegisteredCount?: number } | null)?.eventsRegisteredCount ?? 0;
+                    const zonesCheckedInCount = (dashboardResp as { zonesCheckedInCount?: number } | null)?.zonesCheckedInCount ?? checkedInZones.length;
 
                     set({
                         sessionStatus: 'authenticated',
@@ -104,6 +103,9 @@ export const useAuthStore = create<AuthState>()(
                                   registrationId: profile.id,
                                   points: Number.isFinite(points) ? points : 0,
                                   checkedInZones,
+                                  leaderboardRank: typeof leaderboardRank === 'number' ? leaderboardRank : null,
+                                  eventsRegisteredCount,
+                                  zonesCheckedInCount,
                               }
                             : null,
                     });
