@@ -10,6 +10,7 @@ import { useToastStore } from '../stores/toastStore';
 import { useZoneStore } from '../stores/zoneStore';
 
 export default function PortalLayout() {
+    const MAX_ANNOUNCEMENT_WS_RETRIES = 3;
     const sessionStatus = useAuthStore((state) => state.sessionStatus);
     const announcements = useAnnouncementStore((state) => state.announcements);
     const hydrated = useAnnouncementStore((state) => state.hydrated);
@@ -46,6 +47,9 @@ export default function PortalLayout() {
 
         const scheduleReconnect = () => {
             if (closedByUser) return;
+            if (reconnectAttempts >= MAX_ANNOUNCEMENT_WS_RETRIES) {
+                return;
+            }
             const delay = Math.min(10_000, 1_000 * (reconnectAttempts + 1));
             reconnectTimer = window.setTimeout(connect, delay);
             reconnectAttempts += 1;

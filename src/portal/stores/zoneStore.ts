@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { ZoneQrCode } from '../lib/types';
+import { ZONES } from '../lib/data';
 import { ApiError } from '../api/client';
 import {
     createEventRegistration,
@@ -32,6 +33,51 @@ const baseState = {
     qrCodes: [] as ZoneQrCode[],
     hydrated: false,
 };
+
+type ZoneRegistrationTarget = {
+    zoneId: string;
+    eventId: string;
+};
+
+function normalizeZoneKey(value: string) {
+    return value.trim().toLowerCase();
+}
+
+function resolveZoneRegistrationTarget(
+    zoneIdentifier: string,
+    catalog: BackendZoneCatalogItem[],
+): ZoneRegistrationTarget | null {
+    const normalized = normalizeZoneKey(zoneIdentifier);
+    if (!normalized) return null;
+
+    const liveZone = catalog.find((item) => {
+        const itemId = normalizeZoneKey(String(item.id));
+        const itemShortName = normalizeZoneKey(String(item.shortName));
+        const itemName = normalizeZoneKey(String(item.name));
+        return itemId === normalized || itemShortName === normalized || itemName === normalized;
+    });
+    if (liveZone) {
+        return {
+            zoneId: String(liveZone.id),
+            eventId: String(liveZone.shortName),
+        };
+    }
+
+    const fallbackZone = ZONES.find((item) => {
+        const itemId = normalizeZoneKey(String(item.id));
+        const itemShortName = normalizeZoneKey(String(item.shortName));
+        const itemName = normalizeZoneKey(String(item.name));
+        return itemId === normalized || itemShortName === normalized || itemName === normalized;
+    });
+    if (fallbackZone) {
+        return {
+            zoneId: String(fallbackZone.id),
+            eventId: String(fallbackZone.shortName),
+        };
+    }
+
+    return null;
+}
 
 function normalizePasses(
     registrations: BackendMyRegistrations,
@@ -96,14 +142,40 @@ export const useZoneStore = create<ZoneState>()(
                 });
             },
             registerZone: async (zoneId) => {
-                const catalog = await fetchZonesCatalog();
-                const zone = catalog.find((item) => String(item.id) === zoneId);
-                if (!zone) {
+                const catalog = await fetchZonesCatalog().catch(() => []);
+                const target = resolveZoneRegistrationTarget(zoneId, catalog);
+                if (!target) {
                     throw new ApiError('Zone not found in catalog.', 404, null);
                 }
-                await createEventRegistration(zone.shortName);
-                await get().hydrateZones();
-                const pass = get().qrCodes.find((q) => q.zoneId === zoneId);
+                const registration = await createEventRegistration(target.eventId);
+
+                try {
+                    await get().hydrateZones();
+                } catch {
+                    const provisionalPass: ZoneQrCode = {
+                        zoneId: target.zoneId,
+                        registrationId: registration.registrationId,
+                        code: target.eventId,
+                        qrToken: registration.qrToken,
+                        qrExpiresAt: registration.qrExpiresAt,
+                        isActive: true,
+                        checkedIn: false,
+                    };
+                    set((state) => ({
+                        registeredZones: state.registeredZones.includes(target.zoneId)
+                            ? state.registeredZones
+                            : [...state.registeredZones, target.zoneId],
+                        qrCodes: [
+                            ...state.qrCodes.filter((q) => q.zoneId !== target.zoneId),
+                            provisionalPass,
+                        ],
+                    }));
+                    return provisionalPass;
+                }
+
+                const pass = get().qrCodes.find(
+                    (q) => q.zoneId === target.zoneId || q.registrationId === registration.registrationId,
+                );
                 if (!pass) {
                     throw new ApiError('Registration succeeded but no pass returned.', 500, null);
                 }
