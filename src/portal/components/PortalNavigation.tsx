@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Bell, Crosshair, Home, Map, ShoppingBag, User2, Zap } from 'lucide-react';
+import { Bell, Crosshair, Home, Map, RefreshCw, ShoppingBag, User2, Zap } from 'lucide-react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../stores/authStore';
 import { isPrivilegedUser } from '../lib/admin';
@@ -74,6 +74,13 @@ export default function PortalNavigation() {
         if (to === '/dashboard') return pathname === '/dashboard';
         if (to === '/hunt') return pathname.startsWith('/hunt');
         return pathname === to || pathname.startsWith(`${to}/`);
+    };
+
+    const refreshPortal = () => {
+        resetZones();
+        resetAnnouncements();
+        sessionStorage.removeItem('recon-portal-ann-toast-fired');
+        window.location.reload();
     };
 
     return (
@@ -168,6 +175,17 @@ export default function PortalNavigation() {
                                         }}
                                     >
                                         SETTINGS
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className="mt-2 w-full min-h-10 border border-[var(--border-dim)] hover:border-[var(--amber)] font-portal-mono text-[10px] tracking-[0.12em] uppercase text-[var(--fg)] inline-flex items-center justify-center gap-2"
+                                        onClick={() => {
+                                            setMenuOpen(false);
+                                            refreshPortal();
+                                        }}
+                                    >
+                                        <RefreshCw className="size-3.5" />
+                                        REFRESH APP
                                     </button>
                                     {isPrivilegedUser(user) && (
                                         <button

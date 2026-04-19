@@ -13,15 +13,19 @@ import { ApiError } from '../api/client';
 type RedeemStage = 'confirm' | 'loading' | 'success';
 type CatalogSource = 'backend' | 'preview';
 
-function merchPattern(itemId: string) {
-    if (itemId.includes('operator')) {
+function merchPattern(item: BackendShopItem) {
+    const key = `${item.id} ${item.name} ${item.photo_key ?? ''}`.toLowerCase();
+    if (key.includes('operator')) {
         return 'linear-gradient(135deg, color-mix(in srgb, var(--amber) 14%, transparent), transparent 72%)';
     }
-    if (itemId.includes('stealth')) {
+    if (key.includes('osen') || key.includes('stealth')) {
         return 'linear-gradient(180deg, color-mix(in srgb, var(--fg) 10%, transparent), transparent 70%)';
     }
-    if (itemId.includes('cap')) {
+    if (key.includes('cap')) {
         return 'radial-gradient(circle at center, color-mix(in srgb, var(--amber) 16%, transparent), transparent 72%)';
+    }
+    if (key.includes('caido')) {
+        return 'radial-gradient(circle at top, color-mix(in srgb, var(--portal-blue) 16%, transparent), transparent 68%)';
     }
     return 'repeating-linear-gradient(90deg, color-mix(in srgb, var(--amber) 10%, transparent) 0 8px, transparent 8px 16px)';
 }
@@ -247,7 +251,7 @@ export default function MerchPage() {
 
                     return (
                         <PortalCard key={item.id} className="p-0 overflow-hidden">
-                            <div className="h-44 sm:h-52 bg-[var(--surface-2)] relative" style={{ backgroundImage: merchPattern(item.id) }}>
+                            <div className="h-44 sm:h-52 bg-[var(--surface-2)] relative" style={{ backgroundImage: merchPattern(item) }}>
                                 <ZoneTag className="absolute top-3 right-3">
                                     {outOfStock
                                         ? 'SOLD OUT'
