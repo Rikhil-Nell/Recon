@@ -1,20 +1,31 @@
+const PROD_API_FALLBACK = 'https://api.reconhq.tech';
+
+type ResolveApiBaseUrlOptions = {
+    envUrl?: string | undefined;
+    isProd: boolean;
+    hostname?: string | undefined;
+};
+
 /**
  * Resolves the FastAPI base URL for browser fetches.
- * - VITE_API_BASE_URL wins when set (preferred in CI / Vercel).
- * - Production on reconhq.tech without env: use api subdomain so credentialed calls hit the API
- *   (relative `/api/...` on Vercel would go to the static host and omit api.reconhq.tech cookies).
+ * - `VITE_API_BASE_URL` wins when set.
+ * - Local dev uses the local FastAPI origin.
+ * - Production defaults to the canonical API host even on preview/custom frontend hosts so
+ *   auth and credentialed API calls do not get routed back into the static SPA host.
  */
-export function getApiBaseUrl(): string {
-    const envUrl = (import.meta.env.VITE_API_BASE_URL as string | undefined)?.trim();
-    if (envUrl) return envUrl;
-    if (!import.meta.env.PROD) {
+export function resolveApiBaseUrl({ envUrl, isProd }: ResolveApiBaseUrlOptions): string {
+    const normalizedEnvUrl = envUrl?.trim();
+    if (normalizedEnvUrl) return normalizedEnvUrl;
+    if (!isProd) {
         return 'http://localhost:8000';
     }
-    if (typeof window !== 'undefined') {
-        const host = window.location.hostname;
-        if (host === 'www.reconhq.tech' || host === 'reconhq.tech') {
-            return 'https://api.reconhq.tech';
-        }
-    }
-    return '';
+    return PROD_API_FALLBACK;
+}
+
+export function getApiBaseUrl(): string {
+    return resolveApiBaseUrl({
+        envUrl: import.meta.env.VITE_API_BASE_URL as string | undefined,
+        isProd: import.meta.env.PROD,
+        hostname: typeof window !== 'undefined' ? window.location.hostname : undefined,
+    });
 }
