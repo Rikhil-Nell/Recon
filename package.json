@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "build:ci": "npx -y node@22 node_modules/typescript/bin/tsc --noEmit && npx -y node@22 node_modules/vite/bin/vite.js build",
     "preview": "vite preview",
     "test": "vitest run",
     "test:e2e": "playwright test"
