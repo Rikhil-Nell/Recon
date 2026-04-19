@@ -57,6 +57,20 @@ function asNumber(value: unknown, fallback = 0) {
     return Number.isFinite(num) ? num : fallback;
 }
 
+function asBoolean(value: unknown, fallback = false) {
+    if (typeof value === 'boolean') return value;
+    if (typeof value === 'string') {
+        const normalized = value.trim().toLowerCase();
+        if (normalized === 'true') return true;
+        if (normalized === 'false') return false;
+    }
+    if (typeof value === 'number') {
+        if (value === 1) return true;
+        if (value === 0) return false;
+    }
+    return fallback;
+}
+
 function asStringArray(value: unknown) {
     if (Array.isArray(value)) {
         return value.map((entry) => String(entry).trim()).filter(Boolean);
@@ -95,7 +109,7 @@ function normalizeZone(raw: unknown): BackendZoneCatalogItem | null {
     const status = asString(record.status ?? record.zone_status ?? (record.is_active === false ? 'closed' : 'open'), 'open').toLowerCase();
     const location = asString(record.location ?? record.venue ?? record.room, 'TBD');
     const points = asNumber(record.points ?? record.reward_points ?? record.point_cost, 0);
-    const registrationRequired = Boolean(record.registrationRequired ?? record.registration_required ?? true);
+    const registrationRequired = asBoolean(record.registrationRequired ?? record.registration_required, true);
     const registrationPoints = asNumber(record.registrationPoints ?? record.registration_points ?? points, points);
     const checkInPoints = asNumber(record.checkInPoints ?? record.check_in_points, 0);
     const registeredCount = asNumber(record.registeredCount ?? record.registered_count ?? record.registration_count, 0);
