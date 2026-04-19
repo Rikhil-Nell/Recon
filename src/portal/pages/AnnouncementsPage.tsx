@@ -108,6 +108,16 @@ export default function AnnouncementsPage() {
                         </PortalCard>
                     );
                 })}
+                {filtered.length === 0 && (
+                    <PortalCard className="px-4 sm:px-5 py-8">
+                        <div className="font-portal-mono text-[11px] tracking-[0.12em] uppercase text-[color-mix(in_srgb,var(--dim)_72%,white_8%)]">
+                            No active announcements
+                        </div>
+                        <div className="font-portal-body text-[13px] leading-[1.7] text-[color-mix(in_srgb,var(--dim)_72%,white_8%)] mt-2">
+                            The live feed is empty right now or this filter has no matching updates.
+                        </div>
+                    </PortalCard>
+                )}
             </div>
         </PortalPage>
     );

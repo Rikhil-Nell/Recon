@@ -132,6 +132,20 @@ export const useAnnouncementStore = create<AnnouncementState>()(
         }),
         {
             name: 'recon-portal-announcements',
+            partialize: (state) => ({
+                announcements: state.announcements,
+                unreadCount: state.unreadCount,
+            }),
+            merge: (persistedState, currentState) => {
+                const persisted = (persistedState ?? {}) as Partial<AnnouncementState>;
+                return {
+                    ...currentState,
+                    announcements: persisted.announcements ?? currentState.announcements,
+                    unreadCount: persisted.unreadCount ?? currentState.unreadCount,
+                    highlightedAnnouncementId: null,
+                    hydrated: false,
+                };
+            },
         },
     ),
 );
