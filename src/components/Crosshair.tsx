@@ -26,7 +26,7 @@ export default function Crosshair() {
     }, []);
 
     return (
-        <div className="fixed inset-0 z-9999 pointer-events-none hidden md:block" aria-hidden="true">
+        <div className="fixed inset-0 z-9999 pointer-events-none hidden [@media(pointer:fine)]:block" aria-hidden="true">
             {/* Vertical line */}
             <div
                 ref={vLineRef}
