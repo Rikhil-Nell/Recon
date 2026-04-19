@@ -1,3 +1,5 @@
+import { buildApiUrl } from '../../api/client';
+
 export { ApiError, apiFetch, buildApiUrl } from '../../api/client';
 
 export function getBackendAuthLoginUrl() {
