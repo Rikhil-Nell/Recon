@@ -34,6 +34,9 @@ import AdminStoragePage from './portal/pages/admin/AdminStoragePage';
 import AdminApiCoveragePage from './portal/pages/admin/AdminApiCoveragePage';
 import AdminTeamsPage from './portal/pages/admin/AdminTeamsPage';
 import AdminZoneScannerPage from './portal/pages/admin/AdminZoneScannerPage';
+import AdminAnnouncementsPage from './portal/pages/admin/AdminAnnouncementsPage';
+import AdminShopPage from './portal/pages/admin/AdminShopPage';
+import AdminPointsPage from './portal/pages/admin/AdminPointsPage';
 import { useAuthStore } from './portal/stores/authStore';
 import HuntHomePage from './portal/pages/hunt/HuntHomePage';
 import HuntTeamPage from './portal/pages/hunt/HuntTeamPage';
@@ -130,6 +133,9 @@ export default function App() {
                             <Route path="/admin/participants" element={<AdminParticipantsPage />} />
                             <Route path="/admin/zone-scanner" element={<AdminZoneScannerPage />} />
                             <Route path="/admin/teams" element={<AdminTeamsPage />} />
+                            <Route path="/admin/announcements" element={<AdminAnnouncementsPage />} />
+                            <Route path="/admin/shop" element={<AdminShopPage />} />
+                            <Route path="/admin/points" element={<AdminPointsPage />} />
                             <Route path="/admin/schedule" element={<AdminSchedulePage />} />
                             <Route path="/admin/partners" element={<AdminPartnersPage />} />
                             <Route path="/admin/storage" element={<AdminStoragePage />} />

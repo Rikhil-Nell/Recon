@@ -17,7 +17,7 @@ export default function AdminParticipantsPage() {
     const load = useCallback(async () => {
         setLoading(true);
         try {
-            const list = await participantsApi.list();
+            const list = await participantsApi.list({ limit: 500 });
             setRows(Array.isArray(list) ? list : []);
         } catch (err) {
             addToast({ type: 'error', title: 'LIST FAILED', body: getApiErrorMessage(err, 'Could not load participants.') });

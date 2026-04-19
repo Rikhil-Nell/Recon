@@ -8,10 +8,13 @@ const LINKS: { to: string; title: string; blurb: string }[] = [
     { to: '/admin/participants', title: 'PARTICIPANTS', blurb: 'Directory, detail lookup, and check-in.' },
     { to: '/admin/zone-scanner', title: 'ZONE SCANNER', blurb: 'Scan participant zone passes and award check-in points.' },
     { to: '/admin/teams', title: 'TEAMS', blurb: 'Admin team creation, roster review, and reassignment.' },
+    { to: '/admin/announcements', title: 'ANNOUNCEMENTS', blurb: 'Publish, pin, expire, and remove live announcements.' },
+    { to: '/admin/shop', title: 'SHOP OPS', blurb: 'Manage merch items, fulfillment, and returns.' },
+    { to: '/admin/points', title: 'POINTS OPS', blurb: 'Award participant points and run team-event settlements.' },
     { to: '/admin/schedule', title: 'SCHEDULE', blurb: 'Sessions, speakers, and speaker attachments.' },
     { to: '/admin/partners', title: 'PARTNERS', blurb: 'Applications, review, incentives, and assets.' },
     { to: '/admin/storage', title: 'STORAGE', blurb: 'Presigned upload and read URLs (R2).' },
-    { to: '/admin/api-coverage', title: 'API COVERAGE', blurb: 'Zones, points, announcements, and shop endpoints.' },
+    { to: '/admin/api-coverage', title: 'DEBUG CONSOLE', blurb: 'Low-level API runners for edge-case verification.' },
 ];
 
 export default function AdminHomePage() {

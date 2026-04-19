@@ -44,7 +44,13 @@ export const authApi = {
 // users
 export const usersApi = {
     create: (payload: AnyObj) => apiFetch<AnyObj>('/api/v1/users/', { method: 'POST', json: payload }),
-    list: () => apiFetch<AnyObj[]>('/api/v1/users/'),
+    list: (params?: { skip?: number; limit?: number }) => {
+        const query = new URLSearchParams();
+        if (params?.skip != null) query.set('skip', String(params.skip));
+        if (params?.limit != null) query.set('limit', String(params.limit));
+        const suffix = query.size > 0 ? `?${query.toString()}` : '';
+        return apiFetch<AnyObj[]>(`/api/v1/users/${suffix}`);
+    },
     get: (userId: string) => apiFetch<AnyObj>(`/api/v1/users/${encodeURIComponent(userId)}`),
     update: (userId: string, payload: AnyObj) =>
         apiFetch<AnyObj>(`/api/v1/users/${encodeURIComponent(userId)}`, { method: 'PATCH', json: payload }),
@@ -71,9 +77,13 @@ export const participantsApi = {
         apiFetch<AnyObj>('/api/v1/participants/me/talent-visibility', { method: 'PATCH', json: payload }),
     get: (participantId: string) =>
         apiFetch<AnyObj>(`/api/v1/participants/${encodeURIComponent(participantId)}`),
-    list: (checkedIn?: boolean) => {
-        const query = checkedIn == null ? '' : `?checked_in=${checkedIn}`;
-        return apiFetch<AnyObj[]>(`/api/v1/participants/${query}`);
+    list: (params?: { checkedIn?: boolean; skip?: number; limit?: number }) => {
+        const query = new URLSearchParams();
+        if (params?.checkedIn != null) query.set('checked_in', String(params.checkedIn));
+        if (params?.skip != null) query.set('skip', String(params.skip));
+        if (params?.limit != null) query.set('limit', String(params.limit));
+        const suffix = query.size > 0 ? `?${query.toString()}` : '';
+        return apiFetch<AnyObj[]>(`/api/v1/participants/${suffix}`);
     },
     checkIn: (participantId: string) =>
         apiFetch<AnyObj>(`/api/v1/participants/${encodeURIComponent(participantId)}/checkin`, { method: 'POST' }),
@@ -87,6 +97,30 @@ export const pointsApi = {
         apiFetch<AnyObj>(`/api/v1/points/leaderboard?skip=${skip}&limit=${limit}`),
     leaderboardMe: () => apiFetch<AnyObj>('/api/v1/points/leaderboard/me'),
     transactions: (params: URLSearchParams) => apiFetch<AnyObj>(`/api/v1/points/transactions?${params.toString()}`),
+    teamAwardDelta: (payload: AnyObj) =>
+        apiFetch<AnyObj>('/api/v1/points/team-events/award-delta', { method: 'POST', json: payload }),
+    teamIngestSnapshot: (payload: AnyObj) =>
+        apiFetch<AnyObj>('/api/v1/points/team-events/ingest-snapshot', { method: 'POST', json: payload }),
+    teamLeaderboard: (eventKey?: string, skip = 0, limit = 50) => {
+        const query = new URLSearchParams({ skip: String(skip), limit: String(limit) });
+        if (eventKey) query.set('event_key', eventKey);
+        return apiFetch<AnyObj>(`/api/v1/points/team-events/leaderboard?${query.toString()}`);
+    },
+    teamMe: () => apiFetch<AnyObj>('/api/v1/points/team-events/me'),
+    teamRules: () => apiFetch<AnyObj>('/api/v1/points/team-events/rules'),
+    previewSettlement: (payload: AnyObj) =>
+        apiFetch<AnyObj>('/api/v1/points/team-events/settlements/preview', { method: 'POST', json: payload }),
+    finalizeSettlement: (payload: AnyObj) =>
+        apiFetch<AnyObj>('/api/v1/points/team-events/settlements', { method: 'POST', json: payload }),
+    listSettlements: (params?: { teamId?: string; eventKey?: string }) => {
+        const query = new URLSearchParams();
+        if (params?.teamId) query.set('team_id', params.teamId);
+        if (params?.eventKey) query.set('event_key', params.eventKey);
+        const suffix = query.size > 0 ? `?${query.toString()}` : '';
+        return apiFetch<AnyObj>(`/api/v1/points/team-events/settlements${suffix}`);
+    },
+    getSettlement: (settlementId: string) =>
+        apiFetch<AnyObj>(`/api/v1/points/team-events/settlements/${encodeURIComponent(settlementId)}`),
 };
 
 // zones
@@ -210,12 +244,20 @@ export const shopApi = {
     redeem: (itemId: string, payload: AnyObj) =>
         apiFetch<AnyObj>(`/api/v1/shop/${encodeURIComponent(itemId)}/redeem`, { method: 'POST', json: payload }),
     myRedemptions: () => apiFetch<AnyObj[]>('/api/v1/shop/me/redemptions'),
-    redemptions: (fulfilled?: boolean) => {
-        const q = fulfilled == null ? '' : `?fulfilled=${fulfilled}`;
-        return apiFetch<AnyObj[]>(`/api/v1/shop/redemptions${q}`);
+    redemptions: (params?: { fulfilled?: boolean; returned?: boolean }) => {
+        const query = new URLSearchParams();
+        if (params?.fulfilled != null) query.set('fulfilled', String(params.fulfilled));
+        if (params?.returned != null) query.set('returned', String(params.returned));
+        const suffix = query.size > 0 ? `?${query.toString()}` : '';
+        return apiFetch<AnyObj[]>(`/api/v1/shop/redemptions${suffix}`);
     },
     fulfill: (redemptionId: string, payload: AnyObj) =>
         apiFetch<AnyObj>(`/api/v1/shop/redemptions/${encodeURIComponent(redemptionId)}/fulfill`, {
+            method: 'PATCH',
+            json: payload,
+        }),
+    returnRedemption: (redemptionId: string, payload: AnyObj) =>
+        apiFetch<AnyObj>(`/api/v1/shop/redemptions/${encodeURIComponent(redemptionId)}/return`, {
             method: 'PATCH',
             json: payload,
         }),
