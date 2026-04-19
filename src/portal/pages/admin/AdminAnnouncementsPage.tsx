@@ -17,6 +17,37 @@ type AnnouncementRow = {
 
 const PRIORITY_OPTIONS = ['info', 'warning', 'critical'] as const;
 
+function pad(value: number) {
+    return String(value).padStart(2, '0');
+}
+
+function toLocalDateTimeInput(value?: string | null) {
+    if (!value) return '';
+    const parsed = new Date(value);
+    if (Number.isNaN(parsed.getTime())) return '';
+    return `${parsed.getFullYear()}-${pad(parsed.getMonth() + 1)}-${pad(parsed.getDate())}T${pad(parsed.getHours())}:${pad(parsed.getMinutes())}`;
+}
+
+function toLocalDateTimeLabel(value: string) {
+    if (!value) return 'Not scheduled';
+    const parsed = new Date(value);
+    if (Number.isNaN(parsed.getTime())) return 'Invalid date';
+    return `${parsed.getFullYear()}-${pad(parsed.getMonth() + 1)}-${pad(parsed.getDate())} ${pad(parsed.getHours())}:${pad(parsed.getMinutes())} local`;
+}
+
+function toIsoFromLocalInput(value: string) {
+    if (!value) return undefined;
+    const parsed = new Date(value);
+    if (Number.isNaN(parsed.getTime())) return undefined;
+    return parsed.toISOString();
+}
+
+function nowAsLocalInput() {
+    const now = new Date();
+    now.setSeconds(0, 0);
+    return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
+}
+
 export default function AdminAnnouncementsPage() {
     const addToast = useToastStore((s) => s.addToast);
     const [rows, setRows] = useState<AnnouncementRow[]>([]);
@@ -49,8 +80,8 @@ export default function AdminAnnouncementsPage() {
         setTitle(row.title);
         setBody(row.body);
         setPriority((PRIORITY_OPTIONS.includes(row.priority as (typeof PRIORITY_OPTIONS)[number]) ? row.priority : 'info') as (typeof PRIORITY_OPTIONS)[number]);
-        setPublishedAt(row.published_at ? row.published_at.slice(0, 16) : '');
-        setExpiresAt(row.expires_at ? row.expires_at.slice(0, 16) : '');
+        setPublishedAt(toLocalDateTimeInput(row.published_at));
+        setExpiresAt(toLocalDateTimeInput(row.expires_at));
         setIsPinned(Boolean(row.is_pinned));
     }, []);
 
@@ -80,8 +111,8 @@ export default function AdminAnnouncementsPage() {
         body: body.trim(),
         priority,
         is_pinned: isPinned,
-        published_at: publishedAt ? new Date(publishedAt).toISOString() : undefined,
-        expires_at: expiresAt ? new Date(expiresAt).toISOString() : null,
+        published_at: toIsoFromLocalInput(publishedAt),
+        expires_at: expiresAt ? toIsoFromLocalInput(expiresAt) : null,
     });
 
     const onCreate = async (event: React.FormEvent) => {
@@ -175,29 +206,65 @@ export default function AdminAnnouncementsPage() {
                         required
                     />
                     <div className="grid gap-3 md:grid-cols-3">
-                        <select
-                            value={priority}
-                            onChange={(event) => setPriority(event.target.value as (typeof PRIORITY_OPTIONS)[number])}
-                            className="min-h-11 bg-[var(--bg)] border border-[var(--border-dim)] px-3 font-portal-mono text-[12px] text-[var(--fg)]"
-                        >
-                            {PRIORITY_OPTIONS.map((option) => (
-                                <option key={option} value={option}>
-                                    {option}
-                                </option>
-                            ))}
-                        </select>
-                        <input
-                            type="datetime-local"
-                            value={publishedAt}
-                            onChange={(event) => setPublishedAt(event.target.value)}
-                            className="min-h-11 bg-[var(--bg)] border border-[var(--border-dim)] px-3 font-portal-mono text-[12px] text-[var(--fg)]"
-                        />
-                        <input
-                            type="datetime-local"
-                            value={expiresAt}
-                            onChange={(event) => setExpiresAt(event.target.value)}
-                            className="min-h-11 bg-[var(--bg)] border border-[var(--border-dim)] px-3 font-portal-mono text-[12px] text-[var(--fg)]"
-                        />
+                        <label className="block font-portal-mono text-[9px] uppercase text-[var(--dim)]">
+                            priority
+                            <select
+                                value={priority}
+                                onChange={(event) => setPriority(event.target.value as (typeof PRIORITY_OPTIONS)[number])}
+                                className="mt-1 min-h-11 w-full bg-[var(--bg)] border border-[var(--border-dim)] px-3 font-portal-mono text-[12px] text-[var(--fg)]"
+                            >
+                                {PRIORITY_OPTIONS.map((option) => (
+                                    <option key={option} value={option}>
+                                        {option}
+                                    </option>
+                                ))}
+                            </select>
+                        </label>
+                        <label className="block font-portal-mono text-[9px] uppercase text-[var(--dim)]">
+                            publish at
+                            <div className="mt-1 flex gap-2">
+                                <input
+                                    aria-label="publish at"
+                                    type="datetime-local"
+                                    value={publishedAt}
+                                    onChange={(event) => setPublishedAt(event.target.value)}
+                                    className="min-h-11 flex-1 bg-[var(--bg)] border border-[var(--border-dim)] px-3 font-portal-mono text-[12px] text-[var(--fg)]"
+                                />
+                                <GhostButton type="button" className="!w-auto min-h-11 px-4" onClick={() => setPublishedAt(nowAsLocalInput())}>
+                                    NOW
+                                </GhostButton>
+                                <GhostButton type="button" className="!w-auto min-h-11 px-4" onClick={() => setPublishedAt('')}>
+                                    CLEAR
+                                </GhostButton>
+                            </div>
+                            <div className="mt-2 font-portal-mono text-[10px] normal-case tracking-normal text-[var(--dim)]">
+                                Leave blank to publish immediately. Stored in UTC, shown here in your local time.
+                            </div>
+                            <div className="mt-1 font-portal-mono text-[10px] normal-case tracking-normal text-[var(--fg)]">
+                                {toLocalDateTimeLabel(publishedAt)}
+                            </div>
+                        </label>
+                        <label className="block font-portal-mono text-[9px] uppercase text-[var(--dim)]">
+                            expires at
+                            <div className="mt-1 flex gap-2">
+                                <input
+                                    aria-label="expires at"
+                                    type="datetime-local"
+                                    value={expiresAt}
+                                    onChange={(event) => setExpiresAt(event.target.value)}
+                                    className="min-h-11 flex-1 bg-[var(--bg)] border border-[var(--border-dim)] px-3 font-portal-mono text-[12px] text-[var(--fg)]"
+                                />
+                                <GhostButton type="button" className="!w-auto min-h-11 px-4" onClick={() => setExpiresAt('')}>
+                                    CLEAR
+                                </GhostButton>
+                            </div>
+                            <div className="mt-2 font-portal-mono text-[10px] normal-case tracking-normal text-[var(--dim)]">
+                                Optional. Leave blank if the announcement should stay active until manually removed.
+                            </div>
+                            <div className="mt-1 font-portal-mono text-[10px] normal-case tracking-normal text-[var(--fg)]">
+                                {toLocalDateTimeLabel(expiresAt)}
+                            </div>
+                        </label>
                     </div>
                     <label className="flex items-center gap-2 font-portal-mono text-[11px] text-[var(--fg)]">
                         <input type="checkbox" checked={isPinned} onChange={(event) => setIsPinned(event.target.checked)} />
