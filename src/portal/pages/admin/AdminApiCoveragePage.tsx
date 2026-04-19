@@ -10,7 +10,7 @@ export default function AdminApiCoveragePage() {
     const addToast = useToastStore((s) => s.addToast);
     const [output, setOutput] = useState('Ready.');
 
-    const [zoneId, setZoneId] = useState('');
+    const [zoneIdentifier, setZoneIdentifier] = useState('');
     const [participantId, setParticipantId] = useState('');
     const [announcementId, setAnnouncementId] = useState('');
     const [shopItemId, setShopItemId] = useState('');
@@ -41,7 +41,7 @@ export default function AdminApiCoveragePage() {
                     INPUTS
                 </div>
                 <div className="grid md:grid-cols-2 gap-2">
-                    <input value={zoneId} onChange={(e) => setZoneId(e.target.value)} placeholder="zone_id uuid" className="min-h-10 bg-[var(--bg)] border border-[var(--border-dim)] px-3 font-portal-mono text-[11px]" />
+                    <input value={zoneIdentifier} onChange={(e) => setZoneIdentifier(e.target.value)} placeholder="zone short_name or uuid" className="min-h-10 bg-[var(--bg)] border border-[var(--border-dim)] px-3 font-portal-mono text-[11px]" />
                     <input value={participantId} onChange={(e) => setParticipantId(e.target.value)} placeholder="participant_id uuid" className="min-h-10 bg-[var(--bg)] border border-[var(--border-dim)] px-3 font-portal-mono text-[11px]" />
                     <input value={announcementId} onChange={(e) => setAnnouncementId(e.target.value)} placeholder="announcement_id uuid" className="min-h-10 bg-[var(--bg)] border border-[var(--border-dim)] px-3 font-portal-mono text-[11px]" />
                     <input value={shopItemId} onChange={(e) => setShopItemId(e.target.value)} placeholder="shop item_id uuid" className="min-h-10 bg-[var(--bg)] border border-[var(--border-dim)] px-3 font-portal-mono text-[11px]" />
@@ -56,9 +56,9 @@ export default function AdminApiCoveragePage() {
                 <div className="font-portal-mono text-[10px] tracking-[0.2em] uppercase text-[var(--amber)] mb-3">ZONES</div>
                 <div className="grid md:grid-cols-3 gap-2">
                     <GhostButton onClick={() => void run('ZONES LIST', () => zonesApi.list())}>LIST ZONES</GhostButton>
-                    <GhostButton onClick={() => void run('ZONE GET', () => zonesApi.get(zoneId))} disabled={!zoneId}>GET ZONE</GhostButton>
-                    <GhostButton onClick={() => void run('ZONE REGISTER', () => zonesApi.register(zoneId))} disabled={!zoneId}>REGISTER</GhostButton>
-                    <GhostButton onClick={() => void run('ZONE UNREGISTER', () => zonesApi.unregister(zoneId))} disabled={!zoneId}>UNREGISTER</GhostButton>
+                    <GhostButton onClick={() => void run('ZONE GET', () => zonesApi.get(zoneIdentifier))} disabled={!zoneIdentifier}>GET ZONE</GhostButton>
+                    <GhostButton onClick={() => void run('EVENT REGISTER', () => zonesApi.register(zoneIdentifier))} disabled={!zoneIdentifier}>REGISTER</GhostButton>
+                    <GhostButton onClick={() => void run('ZONE UNREGISTER', () => zonesApi.unregister(zoneIdentifier))} disabled={!zoneIdentifier}>UNREGISTER</GhostButton>
                     <GhostButton onClick={() => void run('MY REGISTRATIONS', () => zonesApi.myRegistrations())}>MY REGISTRATIONS</GhostButton>
                     <GhostButton onClick={() => void run('MY PASSES', () => zonesApi.myPasses())}>MY PASSES</GhostButton>
                     <GhostButton

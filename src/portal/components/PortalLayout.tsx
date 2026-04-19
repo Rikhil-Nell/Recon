@@ -24,13 +24,6 @@ export default function PortalLayout() {
     const addToast = useToastStore((state) => state.addToast);
 
     useEffect(() => {
-        document.body.dataset.portal = 'true';
-        return () => {
-            delete document.body.dataset.portal;
-        };
-    }, []);
-
-    useEffect(() => {
         if (sessionStatus !== 'authenticated') return;
         if (hydrated) return;
         void fetchAnnouncements().catch((err) => {
@@ -149,11 +142,17 @@ export default function PortalLayout() {
     }, [addToast, announcements, setHighlightedAnnouncement]);
 
     return (
-        <div className="min-h-[100dvh] bg-[var(--bg)] text-[var(--fg)] portal-grain overflow-x-hidden">
+        <div className="h-[100dvh] bg-[var(--bg)] text-[var(--fg)] portal-grain overflow-hidden">
             <PortalNavigation />
             <PortalToasts />
             <PortalDiagnostics />
-            <Outlet />
+            <main
+                className="h-full overflow-y-auto overscroll-none overflow-x-hidden app-shell-scroll"
+                data-portal-scroll-root
+                style={{ paddingTop: 'env(safe-area-inset-top)' }}
+            >
+                <Outlet />
+            </main>
         </div>
     );
 }

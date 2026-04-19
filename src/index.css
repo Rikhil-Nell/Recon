@@ -41,6 +41,12 @@
     --font-portal-body: "Lora", "Georgia", serif;
 }
 
+html,
+body,
+#root {
+    min-height: 100%;
+}
+
 html {
     scroll-snap-type: y proximity;
     scroll-behavior: smooth;
@@ -55,6 +61,32 @@ body[data-portal='true'] {
     cursor: auto !important;
     background: var(--bg);
     color: var(--fg);
+    height: 100dvh;
+    overflow: hidden;
+    overscroll-behavior: none;
+    touch-action: pan-x pan-y;
+}
+
+body[data-portal='true'] #root {
+    height: 100dvh;
+    overflow: hidden;
+}
+
+.app-shell-scroll {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+}
+
+@media (display-mode: standalone) {
+    html,
+    body,
+    #root {
+        height: 100%;
+    }
+
+    body {
+        overscroll-behavior: none;
+    }
 }
 
 @media (pointer: coarse) {

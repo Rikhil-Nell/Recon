@@ -78,8 +78,15 @@ export default function PortalNavigation() {
 
     return (
         <>
-            <header className="fixed top-0 inset-x-0 z-50 h-14 sm:h-16 border-b border-[var(--border-dim)] bg-[rgba(8,8,7,0.95)] backdrop-blur-md px-3 sm:px-4 lg:px-8">
-                <div className="h-full max-w-6xl mx-auto flex items-center justify-between gap-3">
+            <header
+                className="fixed top-0 inset-x-0 z-50 border-b border-[var(--border-dim)] bg-[rgba(8,8,7,0.95)] backdrop-blur-md px-3 sm:px-4 lg:px-8"
+                style={{
+                    height: 'calc(4rem + env(safe-area-inset-top))',
+                    paddingTop: 'env(safe-area-inset-top)',
+                    boxSizing: 'border-box',
+                }}
+            >
+                <div className="h-16 max-w-6xl mx-auto flex items-center justify-between gap-3">
                     <button type="button" className="text-left" onClick={() => navigate('/dashboard')}>
                         <div className="font-portal-display text-[18px] sm:text-[20px] leading-none tracking-[0.04em] text-[var(--fg)]">
                             RECON <span className="text-[var(--amber)]">2026</span>

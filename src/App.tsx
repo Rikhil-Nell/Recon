@@ -41,6 +41,8 @@ import HuntProblemPage from './portal/pages/hunt/HuntProblemPage';
 import HuntProgressPage from './portal/pages/hunt/HuntProgressPage';
 import HuntLeaderboardPage from './portal/pages/hunt/HuntLeaderboardPage';
 import HuntDisplayPage from './portal/pages/hunt/HuntDisplayPage';
+import PwaInstallPrompt from './pwa/PwaInstallPrompt';
+import { isPortalPath } from './pwa/routes';
 
 function ScrollToTop() {
     const { pathname } = useLocation();
@@ -52,23 +54,30 @@ function ScrollToTop() {
     return null;
 }
 
+function AppEnvironment() {
+    const { pathname } = useLocation();
+    const portalPath = isPortalPath(pathname);
+
+    useEffect(() => {
+        if (portalPath) {
+            document.body.dataset.portal = 'true';
+        } else {
+            delete document.body.dataset.portal;
+        }
+
+        return () => {
+            delete document.body.dataset.portal;
+        };
+    }, [portalPath]);
+
+    return <PwaInstallPrompt portalRoute={portalPath} />;
+}
+
 function ConditionalPreloader() {
     const { pathname } = useLocation();
-    const isPortalPath =
-        pathname.startsWith('/login')
-        || pathname.startsWith('/verify')
-        || pathname.startsWith('/auth/callback')
-        || pathname.startsWith('/dashboard')
-        || pathname.startsWith('/zones')
-        || pathname.startsWith('/map')
-        || pathname.startsWith('/merch')
-        || pathname.startsWith('/announcements')
-        || pathname.startsWith('/settings')
-        || pathname.startsWith('/admin')
-        || pathname.startsWith('/profile')
-        || pathname.startsWith('/hunt');
+    const portalPath = isPortalPath(pathname);
 
-    if (isPortalPath) return null;
+    if (portalPath) return null;
     return <Preloader />;
 }
 
@@ -86,6 +95,7 @@ export default function App() {
         <BrowserRouter>
             <ConditionalPreloader />
             <ScrollToTop />
+            <AppEnvironment />
             <Routes>
                 <Route element={<RedirectIfVerified />}>
                     <Route path="/login" element={<LoginPage />} />

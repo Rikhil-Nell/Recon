@@ -2,6 +2,36 @@ import { apiFetch } from './client';
 
 type AnyObj = Record<string, unknown>;
 
+const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+function isUuidLike(value: string) {
+    return UUID_PATTERN.test(value.trim());
+}
+
+async function resolveZoneRegistrationIdentifiers(zoneIdentifier: string) {
+    const normalized = zoneIdentifier.trim();
+    if (!normalized) {
+        throw new Error('Zone identifier is required.');
+    }
+
+    if (!isUuidLike(normalized)) {
+        const zone = await apiFetch<AnyObj>(`/api/v1/zones/${encodeURIComponent(normalized)}`);
+        const zoneId = String(zone.id ?? '').trim();
+        const eventId = String(zone.shortName ?? '').trim();
+        if (!zoneId || !eventId) {
+            throw new Error('Zone lookup did not return the identifiers required for registration.');
+        }
+        return { zoneId, eventId };
+    }
+
+    const zone = await apiFetch<AnyObj>(`/api/v1/zones/${encodeURIComponent(normalized)}`);
+    const eventId = String(zone.shortName ?? '').trim();
+    if (!eventId) {
+        throw new Error('Zone lookup did not return a short name for registration.');
+    }
+    return { zoneId: normalized, eventId };
+}
+
 // auth
 export const authApi = {
     googleLoginUrl: '/api/v1/auth/google/login',
@@ -63,10 +93,14 @@ export const pointsApi = {
 export const zonesApi = {
     list: () => apiFetch<AnyObj[]>('/api/v1/zones'),
     get: (zoneId: string) => apiFetch<AnyObj>(`/api/v1/zones/${encodeURIComponent(zoneId)}`),
-    register: (zoneId: string) =>
-        apiFetch<AnyObj>(`/api/v1/zones/${encodeURIComponent(zoneId)}/register`, { method: 'POST' }),
-    unregister: (zoneId: string) =>
-        apiFetch<AnyObj>(`/api/v1/zones/${encodeURIComponent(zoneId)}/register`, { method: 'DELETE' }),
+    register: async (zoneIdentifier: string) => {
+        const { eventId } = await resolveZoneRegistrationIdentifiers(zoneIdentifier);
+        return apiFetch<AnyObj>(`/api/v1/events/${encodeURIComponent(eventId)}/registrations`, { method: 'POST' });
+    },
+    unregister: async (zoneIdentifier: string) => {
+        const { zoneId } = await resolveZoneRegistrationIdentifiers(zoneIdentifier);
+        return apiFetch<AnyObj>(`/api/v1/zones/${encodeURIComponent(zoneId)}/register`, { method: 'DELETE' });
+    },
     myRegistrations: () => apiFetch<AnyObj>('/api/v1/me/registrations'),
     myPasses: () => apiFetch<AnyObj>('/api/v1/me/passes'),
     adminScanCheckIn: (payload: AnyObj, idempotencyKey: string) =>
