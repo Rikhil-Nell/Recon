@@ -33,6 +33,7 @@ import AdminPartnersPage from './portal/pages/admin/AdminPartnersPage';
 import AdminStoragePage from './portal/pages/admin/AdminStoragePage';
 import AdminApiCoveragePage from './portal/pages/admin/AdminApiCoveragePage';
 import AdminTeamsPage from './portal/pages/admin/AdminTeamsPage';
+import AdminZoneScannerPage from './portal/pages/admin/AdminZoneScannerPage';
 import { useAuthStore } from './portal/stores/authStore';
 import HuntHomePage from './portal/pages/hunt/HuntHomePage';
 import HuntTeamPage from './portal/pages/hunt/HuntTeamPage';
@@ -127,6 +128,7 @@ export default function App() {
                             <Route path="/admin/users" element={<AdminUsersPage />} />
                             <Route path="/admin/incidents" element={<AdminIncidentsPage />} />
                             <Route path="/admin/participants" element={<AdminParticipantsPage />} />
+                            <Route path="/admin/zone-scanner" element={<AdminZoneScannerPage />} />
                             <Route path="/admin/teams" element={<AdminTeamsPage />} />
                             <Route path="/admin/schedule" element={<AdminSchedulePage />} />
                             <Route path="/admin/partners" element={<AdminPartnersPage />} />

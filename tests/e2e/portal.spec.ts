@@ -5,6 +5,11 @@ type RouteContext = {
     updatedProfiles: unknown[];
     eventRegistrations: string[];
     createdTeams: unknown[];
+    joinedTeams: unknown[];
+    updatedTeams: unknown[];
+    deletedTeams: string[];
+    adminAssignments: unknown[];
+    scanRequests: unknown[];
 };
 
 async function stubPortalApi(page: import('@playwright/test').Page, options?: {
@@ -14,8 +19,9 @@ async function stubPortalApi(page: import('@playwright/test').Page, options?: {
     registrations?: string[];
     passes?: Array<Record<string, unknown>>;
     teams?: Array<Record<string, unknown>>;
+    myTeam?: Record<string, unknown> | null;
     participants?: Array<Record<string, unknown>>;
-    teamDetail?: Record<string, unknown> | null;
+    huntProgress?: Record<string, unknown>;
     isAdmin?: boolean;
 }) {
     const ctx: RouteContext = {
@@ -23,6 +29,11 @@ async function stubPortalApi(page: import('@playwright/test').Page, options?: {
         updatedProfiles: [],
         eventRegistrations: [],
         createdTeams: [],
+        joinedTeams: [],
+        updatedTeams: [],
+        deletedTeams: [],
+        adminAssignments: [],
+        scanRequests: [],
     };
 
     const participantProfile = options?.participantProfile ?? null;
@@ -83,6 +94,8 @@ async function stubPortalApi(page: import('@playwright/test').Page, options?: {
             id: 'team-1',
             name: 'Zero Cool',
             invite_code: 'AB12CD',
+            created_by_participant_id: 'participant-1',
+            created_at: '2026-04-19T08:00:00Z',
             members: [{ participant_id: 'participant-1', display_name: 'Ciphercat', joined_at: '2026-04-19T08:00:00Z' }],
         },
     ];
@@ -90,6 +103,31 @@ async function stubPortalApi(page: import('@playwright/test').Page, options?: {
         { id: 'participant-1', display_name: 'Ciphercat', institution: 'VIT-AP' },
         { id: 'participant-2', display_name: 'Shellfox', institution: 'VIT-AP' },
     ];
+    let currentRegistrations = [...registrations];
+    let currentPasses = [...passes];
+    let currentTeams = teams.map((team) => ({ ...team, members: [...(team.members ?? [])] }));
+    let currentMyTeam = options?.myTeam === undefined
+        ? (currentTeams[0] ?? null)
+        : (options.myTeam ? { ...options.myTeam, members: [...((options.myTeam.members as Array<Record<string, unknown>> | undefined) ?? [])] } : null);
+    let currentPointsBalance = Number(dashboard.pointsBalance ?? 120);
+    const currentParticipantId = String(participantProfile?.id ?? 'participant-1');
+    const currentParticipantName = String(participantProfile?.display_name ?? 'Ciphercat');
+    const currentHuntProgress = options?.huntProgress ?? {
+        team_id: String(currentMyTeam?.id ?? 'team-1'),
+        team_name: String(currentMyTeam?.name ?? 'Zero Cool'),
+        solved_count: 0,
+        total_problems: 10,
+        remaining_count: 10,
+        leaderboard_rank: 4,
+        last_solved_at: null,
+        completed_at: null,
+        finish_rank: null,
+        problems: [],
+    };
+    const registrationLookup = new Map<string, { registrationId: string; eventId: string; zoneId: string }>();
+
+    const findZone = (identifier: string) =>
+        zones.find((zone) => zone.id === identifier || String(zone.shortName).toLowerCase() === identifier.toLowerCase()) ?? null;
 
     await page.route('**/api/v1/**', async (route) => {
         const request = route.request();
@@ -183,11 +221,21 @@ async function stubPortalApi(page: import('@playwright/test').Page, options?: {
             });
         }
 
+        if (path.includes('/zones/') && method === 'GET') {
+            const identifier = decodeURIComponent(path.split('/zones/')[1] ?? '');
+            const zone = findZone(identifier);
+            return route.fulfill({
+                status: zone ? 200 : 404,
+                contentType: 'application/json',
+                body: JSON.stringify(zone ?? { detail: 'Zone not found' }),
+            });
+        }
+
         if (path.endsWith('/me/registrations')) {
             return route.fulfill({
                 status: 200,
                 contentType: 'application/json',
-                body: JSON.stringify({ zoneIds: registrations }),
+                body: JSON.stringify({ zoneIds: currentRegistrations }),
             });
         }
 
@@ -195,24 +243,171 @@ async function stubPortalApi(page: import('@playwright/test').Page, options?: {
             return route.fulfill({
                 status: 200,
                 contentType: 'application/json',
-                body: JSON.stringify({ passes }),
+                body: JSON.stringify({ passes: currentPasses }),
             });
         }
 
         if (path.includes('/events/') && path.endsWith('/registrations')) {
             const eventId = path.split('/events/')[1].split('/registrations')[0];
+            const zone = findZone(eventId);
+            const zoneId = String(zone?.id ?? eventId);
+            const registrationId = `registration-${eventId}`;
             ctx.eventRegistrations.push(eventId);
+            if (!currentRegistrations.includes(zoneId)) {
+                currentRegistrations = [...currentRegistrations, zoneId];
+            }
+            currentPasses = currentPasses.filter((pass) => String(pass.zoneId) !== zoneId);
+            currentPasses.push({
+                zoneId,
+                code: `PASS-${eventId.toUpperCase()}`,
+                isActive: true,
+                checkedInAt: null,
+            });
+            registrationLookup.set(registrationId, { registrationId, eventId, zoneId });
             return route.fulfill({
-                status: 200,
+                status: 201,
                 contentType: 'application/json',
                 body: JSON.stringify({
-                    registrationId: `registration-${eventId}`,
+                    registrationId,
                     eventId,
                     qrToken: `signed-token-${eventId}`,
                     qrExpiresAt: '2026-04-20T08:00:00Z',
                     pointsAwarded: 0,
-                    newPointsBalance: 120,
+                    newPointsBalance: currentPointsBalance,
                 }),
+            });
+        }
+
+        if (path.includes('/registrations/') && path.endsWith('/qr')) {
+            const registrationId = path.split('/registrations/')[1].split('/qr')[0];
+            const registration = registrationLookup.get(registrationId);
+            return route.fulfill({
+                status: registration ? 200 : 404,
+                contentType: 'application/json',
+                body: JSON.stringify(
+                    registration
+                        ? {
+                            registrationId,
+                            eventId: registration.eventId,
+                            qrToken: `signed-token-${registration.eventId}`,
+                            qrExpiresAt: '2026-04-20T08:00:00Z',
+                            pointsAwarded: 0,
+                            newPointsBalance: currentPointsBalance,
+                        }
+                        : { detail: 'Registration not found' },
+                ),
+            });
+        }
+
+        if (path.endsWith('/points/me')) {
+            return route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify({
+                    participant_id: currentParticipantId,
+                    balance: currentPointsBalance,
+                }),
+            });
+        }
+
+        if (path.endsWith('/admin/scans/check-in') && method === 'POST') {
+            const payload = request.postDataJSON() as Record<string, unknown>;
+            ctx.scanRequests.push(payload);
+            const token = String(payload.qrToken ?? '');
+            const eventId = token.replace('signed-token-', '');
+            const zone = findZone(eventId);
+            const awarded = Number(zone?.checkInPoints ?? 0);
+            currentPointsBalance += awarded;
+            currentPasses = currentPasses.map((pass) => (
+                String(pass.zoneId) === String(zone?.id)
+                    ? { ...pass, isActive: false, checkedInAt: '2026-04-19T11:00:00Z' }
+                    : pass
+            ));
+            return route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify({
+                    status: 'checked_in',
+                    checkInId: `checkin-${eventId}`,
+                    participantId: currentParticipantId,
+                    participantName: currentParticipantName,
+                    eventId,
+                    eventName: zone?.name ?? eventId,
+                    pointsAwarded: awarded,
+                    newPointsBalance: currentPointsBalance,
+                    checkedInAt: '2026-04-19T11:00:00Z',
+                }),
+            });
+        }
+
+        if (path.endsWith('/teams/me') && method === 'GET') {
+            if (!currentMyTeam) {
+                return route.fulfill({
+                    status: 404,
+                    contentType: 'application/json',
+                    body: JSON.stringify({ detail: 'Participant is not part of a team' }),
+                });
+            }
+            return route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify(currentMyTeam),
+            });
+        }
+
+        if (path.endsWith('/teams/join') && method === 'POST') {
+            const payload = request.postDataJSON() as Record<string, unknown>;
+            ctx.joinedTeams.push(payload);
+            const inviteCode = String(payload.invite_code ?? '').trim().toUpperCase();
+            const matched = currentTeams.find((team) => String(team.invite_code).toUpperCase() === inviteCode);
+            if (!matched) {
+                return route.fulfill({
+                    status: 404,
+                    contentType: 'application/json',
+                    body: JSON.stringify({ detail: 'Team not found' }),
+                });
+            }
+            const nextMember = {
+                participant_id: currentParticipantId,
+                display_name: currentParticipantName,
+                joined_at: '2026-04-19T09:00:00Z',
+            };
+            const dedupedMembers = [
+                ...matched.members.filter((member: Record<string, unknown>) => String(member.participant_id) !== currentParticipantId),
+                nextMember,
+            ];
+            currentMyTeam = { ...matched, members: dedupedMembers };
+            currentTeams = currentTeams.map((team) => team.id === matched.id ? currentMyTeam as Record<string, unknown> : team);
+            return route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify(currentMyTeam),
+            });
+        }
+
+        if (path.endsWith('/teams/') && method === 'POST') {
+            const payload = request.postDataJSON() as Record<string, unknown>;
+            ctx.createdTeams.push(payload);
+            const created = {
+                id: `team-${currentTeams.length + 1}`,
+                name: String(payload.name ?? 'New Team'),
+                invite_code: 'ZX90QP',
+                created_by_participant_id: currentParticipantId,
+                created_at: '2026-04-19T08:30:00Z',
+                members: [
+                    {
+                        participant_id: currentParticipantId,
+                        display_name: currentParticipantName,
+                        joined_at: '2026-04-19T08:30:00Z',
+                    },
+                ],
+            };
+            currentTeams = [...currentTeams, created];
+            currentMyTeam = created;
+            return route.fulfill({
+                status: 201,
+                contentType: 'application/json',
+                body: JSON.stringify(created),
             });
         }
 
@@ -220,7 +415,7 @@ async function stubPortalApi(page: import('@playwright/test').Page, options?: {
             return route.fulfill({
                 status: 200,
                 contentType: 'application/json',
-                body: JSON.stringify({ teams }),
+                body: JSON.stringify({ teams: currentTeams }),
             });
         }
 
@@ -233,31 +428,100 @@ async function stubPortalApi(page: import('@playwright/test').Page, options?: {
         }
 
         if (path.endsWith('/teams/admin') && method === 'POST') {
-            ctx.createdTeams.push(request.postDataJSON());
+            const payload = request.postDataJSON() as Record<string, unknown>;
+            ctx.createdTeams.push(payload);
+            const created = {
+                id: `team-${currentTeams.length + 1}`,
+                name: String(payload.name ?? 'Admin Team'),
+                invite_code: 'MN45PQ',
+                created_by_participant_id: payload.created_by_participant_id ?? null,
+                created_at: '2026-04-19T08:45:00Z',
+                members: [],
+            };
+            currentTeams = [...currentTeams, created];
             return route.fulfill({
                 status: 201,
                 contentType: 'application/json',
-                body: JSON.stringify(teams[0]),
+                body: JSON.stringify(created),
             });
         }
 
         if (path.includes('/teams/admin/participants/') && path.endsWith('/team')) {
+            const payload = request.postDataJSON() as Record<string, unknown>;
+            const participantId = path.split('/teams/admin/participants/')[1].split('/team')[0];
+            ctx.adminAssignments.push({ participantId, ...payload });
+            const targetTeamId = String(payload.target_team_id ?? '');
+            currentTeams = currentTeams.map((team) => ({
+                ...team,
+                members: team.members.filter((member: Record<string, unknown>) => String(member.participant_id) !== participantId),
+            }));
+            if (targetTeamId) {
+                currentTeams = currentTeams.map((team) => (
+                    team.id === targetTeamId
+                        ? {
+                            ...team,
+                            members: [
+                                ...team.members,
+                                {
+                                    participant_id: participantId,
+                                    display_name: participants.find((participant) => participant.id === participantId)?.display_name ?? 'Participant',
+                                    joined_at: '2026-04-19T09:05:00Z',
+                                },
+                            ],
+                        }
+                        : team
+                ));
+            }
             return route.fulfill({
                 status: 200,
                 contentType: 'application/json',
                 body: JSON.stringify({
-                    participant_id: 'participant-2',
-                    team_id: 'team-1',
-                    team_name: 'Zero Cool',
+                    participant_id: participantId,
+                    team_id: targetTeamId || null,
+                    team_name: currentTeams.find((team) => team.id === targetTeamId)?.name ?? null,
                 }),
             });
         }
 
         if (path.includes('/teams/admin/') && method === 'PATCH') {
+            const payload = request.postDataJSON() as Record<string, unknown>;
+            const teamId = path.split('/teams/admin/')[1];
+            ctx.updatedTeams.push({ teamId, ...payload });
+            currentTeams = currentTeams.map((team) => (
+                team.id === teamId
+                    ? {
+                        ...team,
+                        name: String(payload.name ?? team.name),
+                        invite_code: Boolean(payload.regenerate_invite_code) ? 'RG56ST' : String(payload.invite_code ?? team.invite_code),
+                    }
+                    : team
+            ));
             return route.fulfill({
                 status: 200,
                 contentType: 'application/json',
-                body: JSON.stringify(teams[0]),
+                body: JSON.stringify(currentTeams.find((team) => team.id === teamId)),
+            });
+        }
+
+        if (path.includes('/teams/admin/') && method === 'DELETE') {
+            const teamId = path.split('/teams/admin/')[1];
+            ctx.deletedTeams.push(teamId);
+            currentTeams = currentTeams.filter((team) => team.id !== teamId);
+            return route.fulfill({
+                status: 204,
+                body: '',
+            });
+        }
+
+        if (path.endsWith('/treasure-hunt/me/progress')) {
+            return route.fulfill({
+                status: 200,
+                contentType: 'application/json',
+                body: JSON.stringify({
+                    ...currentHuntProgress,
+                    team_id: String(currentMyTeam?.id ?? currentHuntProgress.team_id),
+                    team_name: String(currentMyTeam?.name ?? currentHuntProgress.team_name),
+                }),
             });
         }
 
@@ -272,7 +536,7 @@ async function stubPortalApi(page: import('@playwright/test').Page, options?: {
         return route.fulfill({
             status: 200,
             contentType: 'application/json',
-            body: JSON.stringify(options?.teamDetail ?? {}),
+            body: JSON.stringify({}),
         });
     });
 
@@ -367,6 +631,7 @@ test('dashboard shows backend rank and zone registration uses canonical event en
     await page.getByRole('button', { name: 'ACKNOWLEDGE ->' }).click();
 
     await expect.poll(() => ctx.eventRegistrations.includes('FOREN')).toBeTruthy();
+    await expect(page.getByRole('button', { name: 'VIEW PASS ->' })).toHaveCount(1);
 });
 
 test('admin teams page creates and reassigns teams', async ({ page }) => {
@@ -381,5 +646,76 @@ test('admin teams page creates and reassigns teams', async ({ page }) => {
 
     await page.getByRole('button', { name: /Zero Cool/ }).click();
     await page.getByPlaceholder('participant uuid').fill('participant-2');
+    await page.locator('select').selectOption('team-1');
     await page.getByRole('button', { name: 'APPLY ASSIGNMENT' }).click();
+
+    await expect.poll(() => ctx.adminAssignments.length).toBe(1);
+    expect(ctx.adminAssignments[0]).toMatchObject({ participantId: 'participant-2', target_team_id: 'team-1' });
+
+    await page.getByRole('button', { name: /Zero Cool/ }).click();
+    await page.locator('input[placeholder="team name"]').last().fill('Zero Cool Elite');
+    await page.getByRole('button', { name: 'SAVE TEAM' }).click();
+
+    await expect.poll(() => ctx.updatedTeams.length).toBe(1);
+    expect(ctx.updatedTeams[0]).toMatchObject({ teamId: 'team-1', name: 'Zero Cool Elite' });
+
+    page.once('dialog', async (dialog) => {
+        expect(dialog.message()).toContain('Delete this team?');
+        await dialog.accept();
+    });
+    await page.getByRole('button', { name: 'DELETE TEAM' }).click();
+    await expect.poll(() => ctx.deletedTeams).toContain('team-1');
+});
+
+test('hunt team join accepts invite code and redirects into the hunt flow', async ({ page }) => {
+    const profile = {
+        id: 'participant-2',
+        user_id: 'user-2',
+        display_name: 'Shellfox',
+        institution: 'VIT-AP',
+        year: 2,
+        talent_visible: false,
+        talent_contact_shareable: false,
+        created_at: '2026-04-19T08:00:00Z',
+        can_edit: true,
+        is_self: true,
+    };
+    const ctx = await stubPortalApi(page, {
+        participantProfile: profile,
+        myTeam: null,
+        teams: [
+            {
+                id: 'team-join',
+                name: 'Packet Ninjas',
+                invite_code: 'AB12CD',
+                created_by_participant_id: 'participant-1',
+                created_at: '2026-04-19T08:00:00Z',
+                members: [{ participant_id: 'participant-1', display_name: 'lead', joined_at: '2026-04-19T08:00:00Z' }],
+            },
+        ],
+    });
+
+    await page.goto('/hunt/team');
+    await page.getByPlaceholder('AB12CD').fill(' ab12cd ');
+    await page.getByRole('button', { name: 'JOIN TEAM' }).click();
+
+    await expect.poll(() => ctx.joinedTeams.length).toBe(1);
+    expect(ctx.joinedTeams[0]).toMatchObject({ invite_code: 'AB12CD' });
+    await expect(page).toHaveURL(/\/hunt$/);
+    await expect(page.locator('main').getByText('Packet Ninjas').last()).toBeVisible();
+});
+
+test('admin zone scanner awards points when a registered event pass is scanned', async ({ page }) => {
+    const ctx = await stubPortalApi(page, { participantProfile: null, isAdmin: true });
+
+    await page.goto('/admin/zone-scanner');
+    await expect(page.getByText('ZONE SCANNER').first()).toBeVisible();
+    await page.locator('textarea[placeholder="paste the backend-issued qr token or a URL containing it"]').fill('signed-token-FOREN');
+    await page.getByRole('button', { name: 'SUBMIT TOKEN' }).click();
+
+    await expect.poll(() => ctx.scanRequests.length).toBe(1);
+    await expect(page.getByText('Forensics Sprint')).toBeVisible();
+    await expect(page.getByText('Ciphercat earned 20 points.')).toBeVisible();
+    await expect(page.getByText('20', { exact: true })).toBeVisible();
+    await expect(page.getByText('140', { exact: true })).toBeVisible();
 });

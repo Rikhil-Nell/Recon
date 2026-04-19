@@ -334,7 +334,7 @@ export default function ZonesPage() {
                         <div className="h-px bg-[var(--border-dim)] my-4" />
                         <div className="font-portal-mono text-[10px] tracking-[0.1em] text-[color-mix(in_srgb,var(--dim)_74%,white_8%)] leading-relaxed">
                             {modalZone.registrationRequired
-                                ? `This will register you for the selected zone and issue your backend-generated entry pass. Reward: +${modalZone.registrationPoints} points.`
+                                ? `This will register you for the selected zone and issue your backend-generated entry pass. Reward: +${modalZone.checkInPoints} points after admin scan.`
                                 : 'This zone is open access and does not require a pass.'}
                         </div>
 

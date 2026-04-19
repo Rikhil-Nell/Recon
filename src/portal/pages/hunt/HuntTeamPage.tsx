@@ -40,7 +40,9 @@ export default function HuntTeamPage() {
         try {
             const t = await createTeam({ name: createName.trim() });
             setTeam(t);
+            setCreateName('');
             addToast({ type: 'success', title: 'TEAM CREATED', body: t.name });
+            navigate('/hunt');
         } catch (err) {
             if (err instanceof ApiError && err.status === 401) {
                 navigate('/login', { state: { from: '/hunt/team' } });
@@ -66,7 +68,9 @@ export default function HuntTeamPage() {
         try {
             const t = await joinTeam({ invite_code: joinCode.trim().toUpperCase() });
             setTeam(t);
+            setJoinCode('');
             addToast({ type: 'success', title: 'JOINED TEAM', body: t.name });
+            navigate('/hunt');
         } catch (err) {
             if (err instanceof ApiError && err.status === 401) {
                 navigate('/login', { state: { from: '/hunt/team' } });

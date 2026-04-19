@@ -98,8 +98,8 @@ export default function ZoneDetailPage() {
     const rewardLabel = !zone.registrationRequired
         ? 'OPEN ACCESS / NO REGISTRATION'
         : zone.checkInPoints > 0
-            ? `REGISTER +${zone.registrationPoints} / CHECK-IN +${zone.checkInPoints}`
-            : `REGISTER +${zone.registrationPoints}`;
+            ? `PASS REQUIRED / CHECK-IN +${zone.checkInPoints}`
+            : 'PASS REQUIRED / NO POINT REWARD';
 
     return (
         <PortalPage className="pt-20 pb-24 px-4 sm:px-5 lg:px-8 max-w-3xl mx-auto">
@@ -173,7 +173,7 @@ export default function ZoneDetailPage() {
                     <div className="max-w-sm mx-auto">
                         <div className="font-portal-body text-[13px] text-[color-mix(in_srgb,var(--dim)_74%,white_8%)] leading-relaxed mb-4">
                             You are not registered for this zone yet. Register now to generate your single-use
-                            entry pass and claim +{zone.registrationPoints} points.
+                            entry pass. Points are awarded only after an admin scans your pass at the zone.
                         </div>
                         <PrimaryButton onClick={() => setModalOpen(true)}>REGISTER and GENERATE PASS</PrimaryButton>
                     </div>
@@ -251,7 +251,7 @@ export default function ZoneDetailPage() {
                     {zone.name}
                 </div>
                 <div className="font-portal-body text-[13px] text-[color-mix(in_srgb,var(--dim)_74%,white_8%)] leading-relaxed mt-2">
-                    Register now to issue a backend-generated single-use pass for this zone and claim +{zone.registrationPoints} points.
+                    Register now to issue a backend-generated single-use pass for this zone. The reward is applied when an admin scans your QR at the zone entrance.
                 </div>
                 <div className="grid gap-2 mt-5">
                     <PrimaryButton
