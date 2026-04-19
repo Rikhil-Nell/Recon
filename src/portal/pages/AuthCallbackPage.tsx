@@ -11,13 +11,6 @@ export default function AuthCallbackPage() {
     const profileStatus = useAuthStore((state) => state.profileStatus);
 
     useEffect(() => {
-        document.body.dataset.portal = 'true';
-        return () => {
-            delete document.body.dataset.portal;
-        };
-    }, []);
-
-    useEffect(() => {
         void bootstrapSession();
     }, [bootstrapSession]);
 

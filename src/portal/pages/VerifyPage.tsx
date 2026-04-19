@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import PortalDiagnostics from '../components/PortalDiagnostics';
 import { PrimaryButton } from '../components/primitives';
@@ -6,13 +5,6 @@ import { EVENT_DATE_RANGE_LABEL } from '../lib/data';
 
 export default function VerifyPage() {
     const navigate = useNavigate();
-
-    useEffect(() => {
-        document.body.dataset.portal = 'true';
-        return () => {
-            delete document.body.dataset.portal;
-        };
-    }, []);
 
     return (
         <div className="min-h-[100dvh] bg-[var(--bg)] portal-grain relative px-4 sm:px-6 py-8 sm:py-10 flex flex-col items-center justify-center overflow-y-auto">

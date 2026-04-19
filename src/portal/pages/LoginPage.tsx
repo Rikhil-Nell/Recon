@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { Link } from 'react-router-dom';
 import BootSequence from '../components/BootSequence';
@@ -18,13 +18,6 @@ export default function LoginPage() {
     const [bootDone, setBootDone] = useState(false);
     const formRef = useRef<HTMLDivElement>(null);
     const buttonRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        document.body.dataset.portal = 'true';
-        return () => {
-            delete document.body.dataset.portal;
-        };
-    }, []);
 
     useLayoutEffect(() => {
         if (!bootDone || !formRef.current || !buttonRef.current) return;
