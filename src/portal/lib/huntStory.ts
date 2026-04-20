@@ -5,72 +5,52 @@ export interface HuntStoryBeat {
 
 export const HUNT_STORY_BEATS: Record<number, HuntStoryBeat> = {
     1: {
-        title: 'NFCC START',
+        title: 'Cipher Strip',
         lines: [
-            'The flaws were not in the tools. They were in the applications.',
+            'Start with the oldest field cipher in the folder.',
+            'The men are dancing for a reason.',
         ],
     },
     2: {
-        title: 'Trace One',
+        title: 'Unknown Symbols',
         lines: [
-            'They left their mark where no one looks for logic.',
+            'Not every alphabet looks like letters.',
+            'Some of them came out of a cartridge.',
         ],
     },
     3: {
-        title: 'Trace Two',
+        title: 'Signal Posture',
         lines: [
-            'They modified the system. But traces do not disappear.',
+            'Read the positions, not the costume.',
+            'The body is the message.',
         ],
     },
     4: {
-        title: 'False Calm',
+        title: 'Moon Script',
         lines: [
-            'No exploits. No traces.',
-            'Just a player... or so it seemed.',
+            'Curves, crescents, and fragments.',
+            'Translate the pattern before you move on.',
         ],
     },
     5: {
-        title: 'Room Player',
+        title: 'Dot Matrix',
         lines: [
-            'Everyone played the game.',
-            'One played the room.',
-            'Look for the guy with the hidden QR on his shirt.',
+            'The page looks silent until you read the dots.',
+            'Optical ciphers still count as ciphers.',
         ],
     },
     6: {
-        title: 'Vertical Move',
+        title: 'Decoy Scan',
         lines: [
-            'They did not stay on one level.',
-            'Neither should you.',
+            'The first scan is supposed to waste your time.',
+            'Look past the obvious payload.',
         ],
     },
     7: {
-        title: 'Blind Spot',
+        title: 'Metadata Trail',
         lines: [
-            "You've seen this a hundred times.",
-            'Never looked twice.',
-        ],
-    },
-    8: {
-        title: 'Obvious Trap',
-        lines: [
-            'Somewhere dumb.',
-            'Should it be this obvious??',
-        ],
-    },
-    9: {
-        title: 'Backtrack',
-        lines: [
-            'Not everything moves forward.',
-            'Ah shit, here we go again.',
-            'Back at the dock.',
-        ],
-    },
-    10: {
-        title: 'Final Sweep',
-        lines: [
-            'You now have all the traces.',
-            'Reconstruct the path and finish the hunt.',
+            'The image is only half the evidence.',
+            'The rest is hiding in the file itself.',
         ],
     },
 };

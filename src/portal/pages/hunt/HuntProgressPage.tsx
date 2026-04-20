@@ -3,6 +3,7 @@ import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { getMyProgress } from '../../api/treasureHunt';
 import { ApiError } from '../../api/client';
 import { getApiErrorMessage } from '../../lib/apiErrorMessage';
+import { getDisplayedHuntProblemCount } from '../../lib/huntMeta';
 import type { TreasureHuntTeamProgressRead } from '../../lib/treasureHuntTypes';
 import PortalPage from '../../components/PortalPage';
 import { GhostButton, PortalCard, SectionLabel, StatusPill } from '../../components/primitives';
@@ -135,7 +136,7 @@ export default function HuntProgressPage() {
         return <Navigate to="/hunt/team" replace />;
     }
 
-    const total = progress?.total_problems ?? 0;
+    const total = getDisplayedHuntProblemCount(ordered.length, progress?.total_problems);
     const solved = progress?.solved_count ?? 0;
     const finishRank = progress?.finish_rank ?? null;
 
@@ -147,7 +148,7 @@ export default function HuntProgressPage() {
                     Progress
                 </div>
                 <p className="font-portal-body text-[13px] leading-relaxed text-[color-mix(in_srgb,var(--dim)_78%,white_8%)] mt-3">
-                    Tap a challenge to open it. Full prompt text appears after you open that challenge&apos;s QR route.
+                    Tap a challenge to open it. This hunt uses the 7 problems from the CTF puzzle bank.
                 </p>
             </div>
 
