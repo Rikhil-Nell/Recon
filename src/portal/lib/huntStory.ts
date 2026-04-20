@@ -10,6 +10,7 @@ export const HUNT_NEXT_HINTS: Record<number, string> = {
     4: 'No exploits. No traces. Just a player... or so it seemed.',
     5: "They didn't stay on one level. Neither should you.",
     6: 'Not everything moves forward. Ah shit here we go again.',
+    7: 'Before messages were seen, they were heard.',
 };
 
 export const HUNT_STORY_BEATS: Record<number, HuntStoryBeat> = {
@@ -60,6 +61,13 @@ export const HUNT_STORY_BEATS: Record<number, HuntStoryBeat> = {
         lines: [
             'The image is only half the evidence.',
             'The rest is hiding in the file itself.',
+        ],
+    },
+    8: {
+        title: 'Lost Signals',
+        lines: [
+            'Every press used to announce itself.',
+            'Read the keypad rhythm, not the waveform.',
         ],
     },
 };

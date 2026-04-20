@@ -164,7 +164,7 @@ export default function HuntHomePage() {
                     <span className="font-portal-mono text-[var(--amber)]">{team.invite_code}</span>
                 </p>
                 <p className="font-portal-mono text-[10px] tracking-[0.16em] uppercase text-[color-mix(in_srgb,var(--amber)_58%,black_12%)] mt-3">
-                    7 challenge CTF hunt
+                    8 challenge CTF hunt
                 </p>
             </div>
 

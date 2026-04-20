@@ -148,7 +148,7 @@ export default function HuntProgressPage() {
                     Progress
                 </div>
                 <p className="font-portal-body text-[13px] leading-relaxed text-[color-mix(in_srgb,var(--dim)_78%,white_8%)] mt-3">
-                    Tap a challenge to open it. This hunt uses the 7 problems from the CTF puzzle bank.
+                    Tap a challenge to open it. This hunt uses the 8 problems from the CTF puzzle bank.
                 </p>
             </div>
 

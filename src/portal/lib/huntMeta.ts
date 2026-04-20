@@ -1,4 +1,4 @@
-export const HUNT_UI_PROBLEM_COUNT = 7;
+export const HUNT_UI_PROBLEM_COUNT = 8;
 
 export function getDisplayedHuntProblemCount(
     listCount?: number | null,
