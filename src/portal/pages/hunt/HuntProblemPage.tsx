@@ -2,20 +2,22 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { getMyProgress, submitFlag } from '../../api/treasureHunt';
+import { getMyProgress, scanProblemByRouteHash, submitFlag } from '../../api/treasureHunt';
 import { ApiError } from '../../api/client';
 import { getApiErrorMessage } from '../../lib/apiErrorMessage';
+import { getHuntStoryBeat } from '../../lib/huntStory';
 import type { TreasureHuntProblemRead, TreasureHuntFlagSubmitRead } from '../../lib/treasureHuntTypes';
 import PortalPage from '../../components/PortalPage';
 import { GhostButton, PortalCard, PrimaryButton, SectionLabel, StatusPill } from '../../components/primitives';
 import PortalModal from '../../components/PortalModal';
 import { useHuntScanStore } from '../../stores/huntScanStore';
+import Seo from '../../../components/Seo';
 
 const mdBase =
     'prose prose-invert max-w-none prose-p:font-portal-body prose-p:text-[var(--fg)] prose-p:text-[14px] prose-p:leading-relaxed prose-headings:font-portal-display prose-h1:text-[var(--fg)] prose-h2:text-[var(--fg)] prose-p:my-2 prose-pre:bg-[var(--bg)] prose-pre:border prose-pre:border-[var(--border-dim)] prose-pre:p-3 prose-pre:text-[13px]';
 
 export default function HuntProblemPage() {
-    const { problemId } = useParams<{ problemId: string }>();
+    const { problemId, routeHash } = useParams<{ problemId: string; routeHash: string }>();
     const navigate = useNavigate();
     const location = useLocation();
     const getProblemCache = useHuntScanStore((s) => s.getProblemCache);
@@ -47,10 +49,10 @@ export default function HuntProblemPage() {
         lastFlagTrimmedRef.current = '';
         setHintOpen(false);
         setCelebrationOpen(false);
-    }, [problemId]);
+    }, [problemId, routeHash]);
 
     useEffect(() => {
-        if (!problemId) {
+        if (!problemId && !routeHash) {
             setLoadError('Missing problem id.');
             setLoading(false);
             return;
@@ -61,6 +63,44 @@ export default function HuntProblemPage() {
 
         const resolve = async () => {
             setLoadError(null);
+            if (routeHash) {
+                if (stateProblem && stateProblem.route_hash === routeHash) {
+                    setProblem(stateProblem);
+                    setProblemCache(stateProblem);
+                    setLoading(false);
+                    return;
+                }
+
+                setProblem(null);
+                setLoading(true);
+                try {
+                    const scanned = await scanProblemByRouteHash(routeHash);
+                    if (cancelled) return;
+                    setProblem(scanned);
+                    setProblemCache(scanned);
+                } catch (err) {
+                    if (cancelled) return;
+                    if (err instanceof ApiError && err.status === 401) {
+                        navigate('/login', { state: { from: location.pathname } });
+                        return;
+                    }
+                    if (err instanceof ApiError && err.status === 404) {
+                        setLoadError('This QR route is not active for the hunt.');
+                    } else {
+                        setLoadError(getApiErrorMessage(err, 'Could not load challenge.'));
+                    }
+                } finally {
+                    if (!cancelled) setLoading(false);
+                }
+                return;
+            }
+
+            if (!problemId) {
+                setLoadError('Missing problem id.');
+                setLoading(false);
+                return;
+            }
+
             if (stateProblem && stateProblem.id === problemId) {
                 setProblem(stateProblem);
                 setProblemCache(stateProblem);
@@ -100,6 +140,7 @@ export default function HuntProblemPage() {
                     body_markdown: '',
                     hint_markdown: null,
                     qr_token: '',
+                    route_hash: row.route_hash,
                     sort_order: row.sort_order,
                     already_solved: row.solved,
                     solved_at: row.solved_at,
@@ -120,9 +161,10 @@ export default function HuntProblemPage() {
         return () => {
             cancelled = true;
         };
-    }, [problemId, location.state, location.pathname, getProblemCache, setProblemCache, navigate]);
+    }, [problemId, routeHash, location.state, location.pathname, getProblemCache, setProblemCache, navigate]);
 
     const problemReady = useMemo(() => problem != null && problem.body_markdown.length > 0, [problem]);
+    const storyBeat = useMemo(() => (problem ? getHuntStoryBeat(problem.sort_order) : null), [problem]);
 
     const getOrCreateIdempotencyKey = (trimmedFlag: string) => {
         if (trimmedFlag !== lastFlagTrimmedRef.current) {
@@ -195,21 +237,35 @@ export default function HuntProblemPage() {
 
     if (loading) {
         return (
-            <div className="min-h-[40dvh] flex items-center justify-center">
-                <span className="font-portal-mono text-[10px] uppercase text-[color-mix(in_srgb,var(--amber)_60%,black_18%)]">
-                    Loading…
-                </span>
-            </div>
+            <>
+                <Seo
+                    title="Treasure Hunt Challenge"
+                    description="QR-only treasure hunt challenge route."
+                    path={location.pathname}
+                    noIndex
+                />
+                <div className="min-h-[40dvh] flex items-center justify-center">
+                    <span className="font-portal-mono text-[10px] uppercase text-[color-mix(in_srgb,var(--amber)_60%,black_18%)]">
+                        Loading…
+                    </span>
+                </div>
+            </>
         );
     }
 
     if (!problem) {
         return (
             <PortalPage className="pt-20 pb-28 px-4 max-w-xl mx-auto">
+                <Seo
+                    title="Treasure Hunt Challenge"
+                    description="QR-only treasure hunt challenge route."
+                    path={location.pathname}
+                    noIndex
+                />
                 <PortalCard className="p-5" attr>
                     <p className="font-portal-body text-[13px] text-[var(--fg)]">{loadError ?? 'Unknown problem.'}</p>
-                    <Link to="/hunt/scan" className="mt-4 inline-block font-portal-mono text-[10px] uppercase text-[var(--amber)]">
-                        Go to scanner →
+                    <Link to="/hunt" className="mt-4 inline-block font-portal-mono text-[10px] uppercase text-[var(--amber)]">
+                        Go to hunt home →
                     </Link>
                 </PortalCard>
             </PortalPage>
@@ -218,6 +274,12 @@ export default function HuntProblemPage() {
 
     return (
         <PortalPage className="pt-20 pb-28 lg:pb-8 px-4 sm:px-5 lg:px-8 max-w-xl mx-auto">
+            <Seo
+                title={`Treasure Hunt · ${problem.title}`}
+                description="QR-only treasure hunt challenge route."
+                path={location.pathname}
+                noIndex
+            />
             <div data-portal-header>
                 <SectionLabel>-- CHALLENGE --</SectionLabel>
                 <div className="font-portal-display text-[clamp(28px,6vw,40px)] leading-none text-[var(--fg)] mt-2">
@@ -241,6 +303,22 @@ export default function HuntProblemPage() {
                 <div className="mt-4">
                     <StatusPill label="Solved" tone="green" />
                 </div>
+            )}
+
+            {storyBeat && (
+                <PortalCard className="mt-6 p-5 sm:p-6" attr>
+                    <SectionLabel>{`-- FIELD NOTE ${problem.sort_order.toString().padStart(2, '0')} --`}</SectionLabel>
+                    <div className="mt-2 font-portal-display text-[22px] leading-tight text-[var(--amber)]">
+                        {storyBeat.title}
+                    </div>
+                    <div className="mt-3 grid gap-2">
+                        {storyBeat.lines.map((line) => (
+                            <p key={line} className="font-portal-body text-[14px] leading-relaxed text-[var(--fg)]">
+                                "{line}"
+                            </p>
+                        ))}
+                    </div>
+                </PortalCard>
             )}
 
             {problemReady ? (
@@ -272,8 +350,8 @@ export default function HuntProblemPage() {
                     <p className="font-portal-body text-[13px] text-[color-mix(in_srgb,var(--dim)_85%,white_8%)]">
                         {loadError}
                     </p>
-                    <PrimaryButton type="button" className="mt-4" onClick={() => navigate('/hunt/scan')}>
-                        Open scanner
+                    <PrimaryButton type="button" className="mt-4" onClick={() => navigate('/hunt')}>
+                        Hunt home
                     </PrimaryButton>
                 </PortalCard>
             )}

@@ -31,6 +31,7 @@ export interface TreasureHuntProblemRead {
     body_markdown: string;
     hint_markdown: string | null;
     qr_token: string;
+    route_hash: string;
     sort_order: number;
     already_solved: boolean;
     solved_at: string | null;
@@ -40,6 +41,7 @@ export interface TreasureHuntProblemStatusRead {
     problem_id: string;
     slug: string;
     title: string;
+    route_hash: string;
     sort_order: number;
     solved: boolean;
     solved_at: string | null;

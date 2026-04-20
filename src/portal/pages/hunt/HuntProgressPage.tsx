@@ -147,8 +147,7 @@ export default function HuntProgressPage() {
                     Progress
                 </div>
                 <p className="font-portal-body text-[13px] leading-relaxed text-[color-mix(in_srgb,var(--dim)_78%,white_8%)] mt-3">
-                    Tap a challenge to open it. Full prompt text appears after you scan that challenge&apos;s QR or paste its
-                    token.
+                    Tap a challenge to open it. Full prompt text appears after you open that challenge&apos;s QR route.
                 </p>
             </div>
 
@@ -191,7 +190,7 @@ export default function HuntProgressPage() {
                     {ordered.map((row) => (
                         <li key={row.problem_id}>
                             <Link
-                                to={`/hunt/problem/${row.problem_id}`}
+                                to={row.route_hash ? `/hunt/r/${row.route_hash}` : `/hunt/problem/${row.problem_id}`}
                                 className="block portal-card p-4 sm:p-5 no-underline text-[var(--fg)] hover:border-[var(--amber)] border border-[var(--border-dim)] transition-colors"
                             >
                                 <div className="flex items-start justify-between gap-3">
