@@ -42,7 +42,7 @@ export default function AdminShopPage() {
     const [redemptions, setRedemptions] = useState<RedemptionRow[]>([]);
     const [loading, setLoading] = useState(true);
     const [selectedItemId, setSelectedItemId] = useState('');
-    const [redemptionFilter, setRedemptionFilter] = useState<'all' | 'fulfilled' | 'returned' | 'pending'>('all');
+    const [redemptionFilter, setRedemptionFilter] = useState<'all' | 'fulfilled' | 'returned' | 'pending'>('pending');
 
     const [itemName, setItemName] = useState('');
     const [itemDescription, setItemDescription] = useState('');
@@ -109,6 +109,11 @@ export default function AdminShopPage() {
         }
         return redemptions.filter((row) => !row.fulfilled_at && !row.returned_at);
     }, [redemptionFilter, redemptions]);
+
+    const pendingRedemptionsCount = useMemo(
+        () => redemptions.filter((row) => !row.fulfilled_at && !row.returned_at).length,
+        [redemptions],
+    );
 
     const buildBaseItemPayload = () => ({
         name: itemName.trim(),
@@ -270,7 +275,9 @@ export default function AdminShopPage() {
             <PortalCard className="p-5">
                 <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
                     <span className="font-portal-mono text-[10px] tracking-[0.2em] uppercase text-[var(--amber)]">
-                        REDEMPTIONS ({filteredRedemptions.length})
+                        {redemptionFilter === 'pending'
+                            ? `AWAITING COLLECTION (${filteredRedemptions.length})`
+                            : `REDEMPTIONS (${filteredRedemptions.length})`}
                     </span>
                     <select
                         value={redemptionFilter}
@@ -282,6 +289,9 @@ export default function AdminShopPage() {
                         <option value="fulfilled">fulfilled</option>
                         <option value="returned">returned</option>
                     </select>
+                </div>
+                <div className="font-portal-mono text-[10px] text-[var(--dim)] mb-4">
+                    pending total: {pendingRedemptionsCount}
                 </div>
 
                 <div className="grid gap-3 md:grid-cols-2 mb-4">
