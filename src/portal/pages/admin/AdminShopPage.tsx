@@ -19,6 +19,9 @@ type ShopItemRow = {
 type RedemptionRow = {
     id: string;
     participant_id: string;
+    participant_display_name?: string | null;
+    participant_email?: string | null;
+    participant_username?: string | null;
     item_id: string;
     item_name: string;
     point_cost: number;
@@ -309,9 +312,23 @@ export default function AdminShopPage() {
                                     <StatusPill label="pending" tone="amber" />
                                 )}
                             </div>
-                            <div className="font-portal-mono text-[10px] text-[var(--dim)] mt-2">
-                                participant {row.participant_id} · {row.point_cost} pts
+                            <div className="font-portal-mono text-[10px] text-[var(--dim)] mt-2 leading-relaxed">
+                                buyer {row.participant_display_name ?? row.participant_username ?? row.participant_id}
+                                {row.participant_email ? ` · ${row.participant_email}` : ''}
                             </div>
+                            <div className="font-portal-mono text-[10px] text-[var(--dim)] mt-1 leading-relaxed">
+                                redemption {row.id} · {row.point_cost} pts · redeemed {new Date(row.redeemed_at).toLocaleString()}
+                            </div>
+                            {row.fulfillment_notes ? (
+                                <div className="font-portal-mono text-[10px] text-[var(--dim)] mt-1 leading-relaxed">
+                                    fulfill note: {row.fulfillment_notes}
+                                </div>
+                            ) : null}
+                            {row.return_notes ? (
+                                <div className="font-portal-mono text-[10px] text-[var(--dim)] mt-1 leading-relaxed">
+                                    return note: {row.return_notes}
+                                </div>
+                            ) : null}
                             <div className="flex flex-wrap gap-2 mt-3">
                                 <GhostButton
                                     type="button"
