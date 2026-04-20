@@ -387,7 +387,7 @@ export default function HuntProblemPage() {
                                 onChange={(e) => setFlag(e.target.value)}
                                 disabled={problem.already_solved || submitBusy}
                                 className="w-full min-h-11 bg-[var(--bg)] border border-[var(--border-dim)] px-4 py-3 font-portal-mono text-[14px] text-[var(--fg)] outline-none focus:border-[var(--amber)] disabled:opacity-60"
-                                placeholder="RECON{...}"
+                                placeholder="Enter decoded flag"
                                 autoComplete="off"
                             />
                         </div>
@@ -404,6 +404,17 @@ export default function HuntProblemPage() {
                                 {submitBanner.text}
                             </p>
                         )}
+                        {(lastSubmit?.status === 'solved' || lastSubmit?.status === 'already_solved') &&
+                            lastSubmit?.next_hint && (
+                                <div className="border border-[var(--amber)] bg-[color-mix(in_srgb,var(--amber)_14%,transparent)] px-4 py-3">
+                                    <p className="font-portal-mono text-[10px] tracking-[0.18em] uppercase text-[var(--amber)]">
+                                        Next clue
+                                    </p>
+                                    <p className="mt-1 font-portal-body text-[13px] leading-relaxed text-[var(--fg)]">
+                                        {lastSubmit.next_hint}
+                                    </p>
+                                </div>
+                            )}
                         <PrimaryButton type="submit" disabled={submitBusy || problem.already_solved}>
                             {submitBusy ? 'SUBMITTING…' : 'Submit flag'}
                         </PrimaryButton>

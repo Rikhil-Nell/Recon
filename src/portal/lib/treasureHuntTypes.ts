@@ -59,6 +59,7 @@ export interface TreasureHuntFlagSubmitRead {
     status: TreasureHuntSubmitStatus;
     team_id: string;
     problem_id: string;
+    next_hint: string | null;
     solved_count: number;
     total_problems: number;
     completed_at: string | null;
