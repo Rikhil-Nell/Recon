@@ -3,6 +3,15 @@ export interface HuntStoryBeat {
     lines: string[];
 }
 
+export const HUNT_NEXT_HINTS: Record<number, string> = {
+    1: "The flaws weren't in the tools. They were in the applications.",
+    2: 'They left their mark where no one looks for logic.',
+    3: 'Everyone played the game. One played the room.',
+    4: 'No exploits. No traces. Just a player... or so it seemed.',
+    5: "They didn't stay on one level. Neither should you.",
+    6: 'Not everything moves forward. Ah shit here we go again.',
+};
+
 export const HUNT_STORY_BEATS: Record<number, HuntStoryBeat> = {
     1: {
         title: 'Cipher Strip',
@@ -57,4 +66,8 @@ export const HUNT_STORY_BEATS: Record<number, HuntStoryBeat> = {
 
 export function getHuntStoryBeat(sortOrder: number): HuntStoryBeat | null {
     return HUNT_STORY_BEATS[sortOrder] ?? null;
+}
+
+export function getNextHuntHint(sortOrder: number): string | null {
+    return HUNT_NEXT_HINTS[sortOrder] ?? null;
 }

@@ -5,7 +5,7 @@ import remarkGfm from 'remark-gfm';
 import { getMyProgress, scanProblemByRouteHash, submitFlag } from '../../api/treasureHunt';
 import { ApiError } from '../../api/client';
 import { getApiErrorMessage } from '../../lib/apiErrorMessage';
-import { getHuntStoryBeat } from '../../lib/huntStory';
+import { getHuntStoryBeat, getNextHuntHint } from '../../lib/huntStory';
 import type { TreasureHuntProblemRead, TreasureHuntFlagSubmitRead } from '../../lib/treasureHuntTypes';
 import PortalPage from '../../components/PortalPage';
 import { GhostButton, PortalCard, PrimaryButton, SectionLabel, StatusPill } from '../../components/primitives';
@@ -165,6 +165,10 @@ export default function HuntProblemPage() {
 
     const problemReady = useMemo(() => problem != null && problem.body_markdown.length > 0, [problem]);
     const storyBeat = useMemo(() => (problem ? getHuntStoryBeat(problem.sort_order) : null), [problem]);
+    const postSolveHint = useMemo(() => {
+        if (!problem) return null;
+        return lastSubmit?.next_hint ?? (problem.already_solved ? getNextHuntHint(problem.sort_order) : null);
+    }, [lastSubmit?.next_hint, problem]);
 
     const getOrCreateIdempotencyKey = (trimmedFlag: string) => {
         if (trimmedFlag !== lastFlagTrimmedRef.current) {
@@ -404,14 +408,13 @@ export default function HuntProblemPage() {
                                 {submitBanner.text}
                             </p>
                         )}
-                        {(lastSubmit?.status === 'solved' || lastSubmit?.status === 'already_solved') &&
-                            lastSubmit?.next_hint && (
+                        {postSolveHint && (
                                 <div className="border border-[var(--amber)] bg-[color-mix(in_srgb,var(--amber)_14%,transparent)] px-4 py-3">
                                     <p className="font-portal-mono text-[10px] tracking-[0.18em] uppercase text-[var(--amber)]">
                                         Next clue
                                     </p>
                                     <p className="mt-1 font-portal-body text-[13px] leading-relaxed text-[var(--fg)]">
-                                        {lastSubmit.next_hint}
+                                        {postSolveHint}
                                     </p>
                                 </div>
                             )}

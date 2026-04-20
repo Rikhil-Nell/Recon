@@ -200,8 +200,18 @@ export default function HuntScanPage() {
                 navigate('/hunt/team', { replace: true });
                 return;
             }
+            if (!navigator.mediaDevices?.getUserMedia) {
+                setUi('camera_unavailable');
+                setApiError('Camera API is not available in this browser. Use manual token entry.');
+                return;
+            }
+            const insecureContext = !window.isSecureContext;
             setUi('requesting_permission');
-            setApiError(null);
+            setApiError(
+                insecureContext
+                    ? 'Camera access requires HTTPS (or localhost). If camera fails, use manual token entry.'
+                    : null,
+            );
             stoppedRef.current = false;
 
             const stream = await navigator.mediaDevices.getUserMedia({
@@ -244,8 +254,14 @@ export default function HuntScanPage() {
 
     const onManualSubmit = (e: React.FormEvent) => {
         e.preventDefault();
+        const trimmed = manual.trim();
+        if (!trimmed) {
+            setApiError('Enter a QR URL, route hash, or token before submitting.');
+            setUi('invalid_code');
+            return;
+        }
         stoppedRef.current = false;
-        void resolveToken(manual);
+        void resolveToken(trimmed);
     };
 
     if (teamLoadStatus === 'loading' || teamLoadStatus === 'idle') {
@@ -413,12 +429,15 @@ export default function HuntScanPage() {
                 <form onSubmit={onManualSubmit} className="grid gap-3">
                     <input
                         value={manual}
-                        onChange={(e) => setManual(e.target.value)}
+                        onChange={(e) => {
+                            setManual(e.target.value);
+                            if (apiError) setApiError(null);
+                        }}
                         placeholder="paste QR URL, route hash, or token"
                         className="w-full min-h-11 bg-[var(--bg)] border border-[var(--border-dim)] px-4 py-3 font-portal-mono text-[13px] text-[var(--fg)] outline-none focus:border-[var(--amber)]"
                         autoComplete="off"
                     />
-                    <PrimaryButton type="submit" disabled={ui === 'resolving_token'}>
+                    <PrimaryButton type="submit" disabled={ui === 'resolving_token' || manual.trim().length === 0}>
                         {ui === 'resolving_token' ? 'LOADING…' : 'Load challenge'}
                     </PrimaryButton>
                 </form>
